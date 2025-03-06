@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: './',
+  base: '/bdgeegakw1/',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
@@ -22,7 +22,7 @@ export default defineConfig({
   },
   server: {
     port: 3000,
-    open: true, // automatically open browser
+    open: false, // do not automatically open browser
     host: true, // listen on all local IPs
   }
 })
