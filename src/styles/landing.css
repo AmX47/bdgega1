@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'Arabic';
+  src: url('/fonts/arabic.woff2') format('woff2');
+}
+
+.rtl {
+  direction: rtl;
+}
+
+.arabic-text {
+  font-family: 'Arabic', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom gradient animation */
+.gradient-animate {
+  background-size: 200% 200%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
