@@ -20,6 +20,8 @@ interface Question {
   buttonIndex: number;
 }
 
+type HelpType = 'callFriend' | 'doublePoints' | 'twoAnswers';
+
 export function GameBoard({
   categoryIds,
   gameName,
@@ -36,26 +38,41 @@ export function GameBoard({
   const [showQuestionView, setShowQuestionView] = useState(false);
   const [showResultView, setShowResultView] = useState(false);
   const [showEndGameConfirm, setShowEndGameConfirm] = useState(false);
-  const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([]);
+  const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set());
   const [currentTeamTurn, setCurrentTeamTurn] = useState(1);
+  const [team1Helps, setTeam1Helps] = useState({
+    callFriend: true,
+    doublePoints: true,
+    twoAnswers: true
+  });
+  const [team2Helps, setTeam2Helps] = useState({
+    callFriend: true,
+    doublePoints: true,
+    twoAnswers: true
+  });
+  const [activeHelpMethod, setActiveHelpMethod] = useState<HelpType | null>(null);
 
   const selectedCategories = categories.filter(cat => categoryIds.includes(cat.id));
   const totalQuestions = selectedCategories.reduce((total, cat) => total + cat.questions.length, 0);
-  const isGameComplete = answeredQuestions.length === totalQuestions;
+  const isGameComplete = usedQuestions.size === totalQuestions;
 
   const handleQuestionClick = (categoryId: number, points: number, buttonIndex: number) => {
     const category = selectedCategories.find((c) => c.id === categoryId);
     if (category) {
-      // Find questions with matching points
-      const availableQuestions = category.questions.filter(q => q.points === points);
-      // Get a random question from available questions
-      const randomIndex = Math.floor(Math.random() * availableQuestions.length);
-      const question = availableQuestions[randomIndex];
-      
-      if (question) {
+      // Find questions matching the points and button index
+      const availableQuestions = category.questions.filter(q => 
+        q.points === points && 
+        q.buttonIndex === buttonIndex &&
+        !usedQuestions.has(`${categoryId}-${points}-${buttonIndex}`)
+      );
+
+      if (availableQuestions.length > 0) {
+        const question = availableQuestions[0];
         setSelectedQuestion({ id: `${categoryId}-${points}-${buttonIndex}`, points, isAnswered: false, buttonIndex });
         setCurrentQuestion(question);
         setShowQuestionView(true);
+        // Mark this question as used
+        setUsedQuestions(prev => new Set([...prev, `${categoryId}-${points}-${buttonIndex}`]));
       }
     }
   };
@@ -67,7 +84,6 @@ export function GameBoard({
       } else {
         setTeam2Score(prev => prev + selectedQuestion.points);
       }
-      setAnsweredQuestions(prev => [...prev, selectedQuestion.id]);
     }
     setCurrentTeamTurn(current => current === 1 ? 2 : 1);
     setShowQuestionView(false);
@@ -75,14 +91,15 @@ export function GameBoard({
     setCurrentQuestion(null);
 
     // Check if game is complete after answering
-    if (answeredQuestions.length + 1 === totalQuestions) {
+    if (usedQuestions.size + 1 === totalQuestions) {
       setShowResultView(true);
     }
   };
 
   const handleQuestionBack = () => {
     if (selectedQuestion) {
-      setAnsweredQuestions(prev => [...prev, selectedQuestion.id]);
+      // Mark this question as used
+      setUsedQuestions(prev => new Set([...prev, selectedQuestion.id]));
     }
     setCurrentTeamTurn(current => current === 1 ? 2 : 1);
     setShowQuestionView(false);
@@ -90,7 +107,7 @@ export function GameBoard({
     setCurrentQuestion(null);
 
     // Check if game is complete after skipping
-    if (answeredQuestions.length + 1 === totalQuestions) {
+    if (usedQuestions.size + 1 === totalQuestions) {
       setShowResultView(true);
     }
   };
@@ -111,10 +128,31 @@ export function GameBoard({
     // Reset game state
     setShowResultView(true);
     setShowEndGameConfirm(false);
-    setAnsweredQuestions([]);
+    setUsedQuestions(new Set());
     setSelectedQuestion(null);
     setCurrentQuestion(null);
     setCurrentTeamTurn(1);
+  };
+
+  const handleUseHelp = (team: number, helpType: HelpType) => {
+    // Only allow current team to use help methods
+    if (team !== currentTeamTurn) {
+      return;
+    }
+
+    const helpState = team === 1 ? team1Helps : team2Helps;
+    if (!helpState[helpType]) {
+      return;
+    }
+
+    if (team === 1) {
+      setTeam1Helps({ ...team1Helps, [helpType]: false });
+    } else {
+      setTeam2Helps({ ...team2Helps, [helpType]: false });
+    }
+
+    // Pass the help type to QuestionView
+    setActiveHelpMethod(helpType);
   };
 
   if (showResultView) {
@@ -147,18 +185,37 @@ export function GameBoard({
           ]}
           onScorePoint={handleScorePoint}
           onBack={handleQuestionBack}
+          activeHelpMethod={activeHelpMethod}
+          currentTeam={currentTeamTurn}
         />
       ) : (
         <>
           {/* Header */}
           <div className="bg-[#7A288A] text-white p-4 flex justify-between items-center">
-            <button onClick={onHome} className="text-white hover:text-gray-200">
-              ارجع الى صفحة الرئيسية
-            </button>
+            <div className="flex items-center gap-2">
+              <img 
+                src="https://i.postimg.cc/NfP1DWbv/bdgeega-removebg-preview.png" 
+                alt="Bdgeega Logo" 
+                className="h-12 cursor-pointer hover:opacity-80 transition-opacity" 
+                onClick={() => window.location.reload()}
+              />
+              <button 
+                onClick={onHome} 
+                className="bg-[#4A1458] hover:bg-[#3A1048] px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+              >
+                <span>خروج</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 0v14h10V3H5z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M11.293 7.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L12.586 10l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            
             <h1 className="text-2xl font-bold">Bdgeega</h1>
+            
             <button
               onClick={handleEndGameClick}
-              className="bg-[#5A1868] hover:bg-[#4A1458] px-4 py-2 rounded-lg transition-colors"
+              className="bg-[#4A1458] hover:bg-[#3A1048] px-4 py-2 rounded-lg transition-colors"
             >
               إنهاء اللعبة
             </button>
@@ -207,14 +264,15 @@ export function GameBoard({
                     return Array(2).fill(points).map((pointValue, buttonIndex) => {
                       const actualButtonIndex = index * 2 + buttonIndex;
                       const questionId = `${category.id}-${pointValue}-${actualButtonIndex}`;
-                      const isAnswered = answeredQuestions.includes(questionId);
+                      const isUsed = usedQuestions.has(questionId);
+                      
                       return (
                         <button
                           key={`${category.id}-${pointValue}-${actualButtonIndex}`}
                           onClick={() => handleQuestionClick(category.id, pointValue, actualButtonIndex)}
-                          disabled={isAnswered}
+                          disabled={isUsed}
                           className={`w-full py-2 mb-2 rounded-lg text-lg font-bold transition-colors ${
-                            isAnswered
+                            isUsed
                               ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                               : 'bg-[#7A288A] text-white hover:bg-[#5A1868]'
                           }`}
@@ -232,7 +290,7 @@ export function GameBoard({
           {/* Footer Score Bar */}
           <div className="fixed bottom-0 left-0 right-0 bg-[#7A288A] text-white py-4">
             <div className="container mx-auto px-4">
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center relative">
                 {/* Team Turn Indicator */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full">
                   <div className="bg-[#7A288A] rounded-t-lg px-8 py-3 shadow-lg text-center min-w-[200px]">
@@ -241,41 +299,132 @@ export function GameBoard({
                   </div>
                 </div>
 
+                {/* Vertical Line */}
+                <div className="absolute left-1/2 -translate-x-1/2 h-full w-[2px] bg-[#4A1458]"></div>
+
                 <div className="text-center space-y-2">
                   <h3 className="text-xl font-bold">{team1Name}</h3>
-                  <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                    <button 
-                      onClick={() => handleScoreAdjust(1, -100)}
-                      className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                    >
-                      -
-                    </button>
-                    <p className="text-2xl font-bold min-w-[80px]">{team1Score}</p>
-                    <button 
-                      onClick={() => handleScoreAdjust(1, 100)}
-                      className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                    >
-                      +
-                    </button>
+                  <div className="flex items-center gap-2">
+                    <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
+                      <button 
+                        onClick={() => handleScoreAdjust(1, -100)}
+                        className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
+                      >
+                        -
+                      </button>
+                      <p className="text-2xl font-bold min-w-[80px]">{team1Score}</p>
+                      <button 
+                        onClick={() => handleScoreAdjust(1, 100)}
+                        className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
+                    {/* Team 1 Help Methods */}
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-sm font-bold text-white">وسائل المساعدة</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleUseHelp(1, 'callFriend')}
+                          disabled={!team1Helps.callFriend}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team1Helps.callFriend 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="اتصال بصديق"
+                        >
+                          📞
+                        </button>
+                        <button
+                          onClick={() => handleUseHelp(1, 'doublePoints')}
+                          disabled={!team1Helps.doublePoints}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team1Helps.doublePoints 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="دبل نقاط"
+                        >
+                          ✨
+                        </button>
+                        <button
+                          onClick={() => handleUseHelp(1, 'twoAnswers')}
+                          disabled={!team1Helps.twoAnswers}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team1Helps.twoAnswers 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="جاوب جوابين"
+                        >
+                          🎯
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 <div className="text-center space-y-2">
                   <h3 className="text-xl font-bold">{team2Name}</h3>
-                  <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                    <button 
-                      onClick={() => handleScoreAdjust(2, -100)}
-                      className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                    >
-                      -
-                    </button>
-                    <p className="text-2xl font-bold min-w-[80px]">{team2Score}</p>
-                    <button 
-                      onClick={() => handleScoreAdjust(2, 100)}
-                      className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                    >
-                      +
-                    </button>
+                  <div className="flex items-center gap-2">
+                    {/* Team 2 Help Methods */}
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-sm font-bold text-white">وسائل المساعدة</p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => handleUseHelp(2, 'callFriend')}
+                          disabled={!team2Helps.callFriend}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team2Helps.callFriend 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="اتصال بصديق"
+                        >
+                          📞
+                        </button>
+                        <button
+                          onClick={() => handleUseHelp(2, 'doublePoints')}
+                          disabled={!team2Helps.doublePoints}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team2Helps.doublePoints 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="دبل نقاط"
+                        >
+                          ✨
+                        </button>
+                        <button
+                          onClick={() => handleUseHelp(2, 'twoAnswers')}
+                          disabled={!team2Helps.twoAnswers}
+                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
+                            team2Helps.twoAnswers 
+                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
+                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                          }`}
+                          title="جاوب جوابين"
+                        >
+                          🎯
+                        </button>
+                      </div>
+                    </div>
+                    <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
+                      <button 
+                        onClick={() => handleScoreAdjust(2, -100)}
+                        className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
+                      >
+                        -
+                      </button>
+                      <p className="text-2xl font-bold min-w-[80px]">{team2Score}</p>
+                      <button 
+                        onClick={() => handleScoreAdjust(2, 100)}
+                        className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

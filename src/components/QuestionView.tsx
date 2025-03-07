@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import AudioPlayer from './AudioPlayer';
 
 interface Question {
   id: number;
@@ -6,13 +7,13 @@ interface Question {
   correctAnswer: string;
   points: number;
   image?: string;
+  audio?: string;
   buttonIndex: number;
 }
 
 interface Team {
   id: number;
   name: string;
-  score: number;
 }
 
 interface QuestionViewProps {
@@ -20,6 +21,8 @@ interface QuestionViewProps {
   teams: Team[];
   onScorePoint: (teamId: number) => void;
   onBack: () => void;
+  activeHelpMethod: 'callFriend' | 'doublePoints' | 'twoAnswers' | null;
+  currentTeam: number;
 }
 
 const QuestionView: React.FC<QuestionViewProps> = ({
@@ -27,11 +30,19 @@ const QuestionView: React.FC<QuestionViewProps> = ({
   teams,
   onScorePoint,
   onBack,
+  activeHelpMethod,
+  currentTeam,
 }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [showTeamSelection, setShowTeamSelection] = useState(false);
   const [timer, setTimer] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
+
+  const helpMethodDescriptions = {
+    callFriend: "اتصل بصديق: يمكنك الاتصال بصديق للمساعدة في الإجابة",
+    doublePoints: "دبل نقاط: ستحصل على ضعف النقاط إذا كانت إجابتك صحيحة",
+    twoAnswers: "جاوب جوابين: لديك فرصتان للإجابة على هذا السؤال"
+  };
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -57,6 +68,10 @@ const QuestionView: React.FC<QuestionViewProps> = ({
 
   const toggleTimer = () => {
     setIsTimerRunning(!isTimerRunning);
+  };
+
+  const handleNoAnswer = () => {
+    onBack();
   };
 
   return (
@@ -99,50 +114,69 @@ const QuestionView: React.FC<QuestionViewProps> = ({
                 />
               </div>
             )}
-            <div className="mt-12 text-center">
+            {question.audio && (
+              <div className="my-4">
+                <AudioPlayer src={question.audio} />
+              </div>
+            )}
+            <div className="flex justify-center mt-8">
               <button
                 onClick={() => setShowAnswer(true)}
-                className="bg-white text-[#7A288A] text-2xl px-12 py-6 rounded-lg transition-colors hover:bg-gray-100"
+                className="bg-[#5A1868] hover:bg-[#4A1458] text-white px-8 py-4 rounded-lg text-xl font-semibold transition-colors"
               >
-                إظهار الإجابة
+                اظهر الإجابة
               </button>
             </div>
+            
+            {/* Help Method Description */}
+            {activeHelpMethod && (
+              <div className="mt-6">
+                <div className="border-2 border-[#5A1868] rounded-lg p-4 text-center">
+                  <p className="text-white text-lg">
+                    {helpMethodDescriptions[activeHelpMethod]}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {showAnswer && !showTeamSelection && (
           <div className="bg-[#7A288A] rounded-2xl p-12 shadow-lg">
-            <h3 className="text-3xl font-bold mb-8 text-white text-center">الإجابة</h3>
-            <div className="bg-[#5A1868] rounded-lg p-6 mb-8">
-              <p className="text-2xl text-white text-center font-bold">{question.correctAnswer}</p>
+            <h2 className="text-4xl font-bold mb-8 text-center text-white">الإجابة</h2>
+            <div className="bg-[#5A1868] rounded-lg p-8 mb-8">
+              <p className="text-2xl text-white text-center">{question.correctAnswer}</p>
             </div>
-            <div className="text-center">
+            <div className="flex justify-center mt-8">
               <button
                 onClick={() => setShowTeamSelection(true)}
-                className="bg-white text-[#7A288A] text-2xl px-12 py-6 rounded-lg transition-colors hover:bg-gray-100"
+                className="bg-[#5A1868] hover:bg-[#4A1458] text-white px-8 py-4 rounded-lg text-xl font-semibold transition-colors"
               >
-                منو جاوب؟
+                التالي
               </button>
             </div>
           </div>
         )}
 
         {showTeamSelection && (
-          <div className="space-y-8">
-            <h3 className="text-3xl font-bold text-[#7A288A] text-center mb-12">اختر الفريق الفائز</h3>
-            <div className="grid grid-cols-1 gap-6 max-w-2xl mx-auto">
+          <div className="bg-[#7A288A] rounded-2xl p-12 shadow-lg">
+            <h2 className="text-4xl font-bold mb-8 text-center text-white">اختر الفريق</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {teams.map((team) => (
                 <button
                   key={team.id}
                   onClick={() => onScorePoint(team.id)}
-                  className="bg-[#7A288A] hover:bg-[#4A1458] text-white text-2xl px-8 py-6 rounded-lg transition-colors w-full"
+                  className="bg-[#5A1868] hover:bg-[#4A1458] text-white p-8 rounded-lg text-2xl font-semibold transition-colors"
                 >
                   {team.name}
                 </button>
               ))}
+            </div>
+            {/* No Answer Button */}
+            <div className="flex justify-center mt-8">
               <button
-                onClick={onBack}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-700 text-2xl px-8 py-6 rounded-lg transition-colors w-full"
+                onClick={handleNoAnswer}
+                className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-lg text-xl font-semibold transition-colors"
               >
                 محد جاوب
               </button>
@@ -152,6 +186,6 @@ const QuestionView: React.FC<QuestionViewProps> = ({
       </div>
     </div>
   );
-};
+}
 
 export default QuestionView;

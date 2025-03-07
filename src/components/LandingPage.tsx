@@ -42,22 +42,22 @@ export function LandingPage({ onPlay }: LandingPageProps) {
         <div className="absolute inset-0 bg-gradient-to-br from-[#8B5CF6] to-[#A78BFA] opacity-90"></div>
         
         {/* Content */}
-        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-8 lg:px-16">
           {/* Logo */}
-          <div className="absolute top-4 right-4">
+          <div className="absolute top-4 right-4 md:top-6 md:right-6">
             <img 
               src="https://i.postimg.cc/NfP1DWbv/bdgeega-removebg-preview.png" 
               alt="Bdgeega Logo" 
-              className="w-32 h-auto"
+              className="w-24 h-auto md:w-32 lg:w-40"
             />
           </div>
 
           {/* Auth Buttons */}
-          <div className="absolute top-4 left-4 flex gap-4">
+          <div className="absolute top-4 left-4 md:top-6 md:left-6 flex flex-col md:flex-row gap-2 md:gap-4">
             {user ? (
               <button
                 onClick={handleLogout}
-                className="px-6 py-2 bg-white text-[#8B5CF6] rounded-full font-bold hover:bg-opacity-90 transition-all"
+                className="px-4 py-2 md:px-6 bg-white text-[#8B5CF6] rounded-full font-bold hover:bg-opacity-90 transition-all text-sm md:text-base"
               >
                 تسجيل الخروج
               </button>
@@ -65,13 +65,13 @@ export function LandingPage({ onPlay }: LandingPageProps) {
               <>
                 <button
                   onClick={() => handleAuthClick('login')}
-                  className="px-6 py-2 bg-white text-[#8B5CF6] rounded-full font-bold hover:bg-opacity-90 transition-all"
+                  className="px-4 py-2 md:px-6 bg-white text-[#8B5CF6] rounded-full font-bold hover:bg-opacity-90 transition-all text-sm md:text-base"
                 >
                   تسجيل الدخول
                 </button>
                 <button
                   onClick={() => handleAuthClick('register')}
-                  className="px-6 py-2 bg-[#8B5CF6] text-white rounded-full font-bold hover:bg-[#A78BFA] transition-all"
+                  className="px-4 py-2 md:px-6 bg-[#8B5CF6] text-white rounded-full font-bold hover:bg-[#A78BFA] transition-all text-sm md:text-base"
                 >
                   إنشاء حساب
                 </button>
@@ -80,45 +80,45 @@ export function LandingPage({ onPlay }: LandingPageProps) {
           </div>
 
           {/* Logo and Title */}
-          <div className="text-center mb-8">
-            <h1 className="text-6xl font-bold text-white mb-4">العب بدقيقة</h1>
-            <p className="text-xl text-white opacity-90">
-              العب واختبر معلوماتك مع الأصدقاء
+          <div className="text-center mb-6 md:mb-8">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-2 md:mb-4">العب بدقيقة</h1>
+            <p className="text-lg md:text-xl lg:text-2xl text-white opacity-90">
+              تقدر تجاوب بدقيقة ؟
             </p>
           </div>
 
           {/* Play Button */}
           <button
             onClick={onPlay}
-            className="bg-white text-purple-600 px-8 py-3 rounded-full text-xl font-semibold hover:bg-opacity-90 transition-all mb-16"
+            className="bg-white text-purple-600 px-6 md:px-8 py-2 md:py-3 rounded-full text-lg md:text-xl font-semibold hover:bg-opacity-90 transition-all mb-8 md:mb-16"
           >
             ابدأ اللعب
           </button>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-3 gap-8 mt-12">
-            <div className="bg-[#5B21B6] p-6 rounded-lg text-center text-white shadow-lg">
-              <div className="flex justify-center mb-4">
-                <div className="text-5xl h-20 flex items-center">📚</div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8 mt-8 md:mt-12 px-4 md:px-8">
+            <div className="bg-[#5B21B6] p-4 md:p-6 rounded-lg text-center text-white shadow-lg transform hover:scale-105 transition-transform">
+              <div className="flex justify-center mb-3 md:mb-4">
+                <span className="text-3xl md:text-4xl">🎮</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">تعلم واستمتع</h3>
-              <p className="text-sm text-gray-200">اختبر معلوماتك في مختلف المجالات</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">العب مع ربعك</h3>
+              <p className="text-sm md:text-base opacity-90">استمتع باللعب مع أصدقائك في وقت واحد</p>
             </div>
 
-            <div className="bg-[#5B21B6] p-6 rounded-lg text-center text-white shadow-lg">
-              <div className="flex justify-center mb-4">
-                <div className="text-5xl h-20 flex items-center">🎮</div>
+            <div className="bg-[#5B21B6] p-4 md:p-6 rounded-lg text-center text-white shadow-lg transform hover:scale-105 transition-transform">
+              <div className="flex justify-center mb-3 md:mb-4">
+                <span className="text-3xl md:text-4xl">🏆</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">اللعب مع الأصدقاء</h3>
-              <p className="text-sm text-gray-200">تحدى أصدقائك في مباريات ممتعة</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">تنافس على المراكز</h3>
+              <p className="text-sm md:text-base opacity-90">اجمع النقاط وتنافس على المراكز الأولى</p>
             </div>
 
-            <div className="bg-[#5B21B6] p-6 rounded-lg text-center text-white shadow-lg">
-              <div className="flex justify-center mb-4">
-                <div className="text-5xl h-20 flex items-center">🏆</div>
+            <div className="bg-[#5B21B6] p-4 md:p-6 rounded-lg text-center text-white shadow-lg transform hover:scale-105 transition-transform">
+              <div className="flex justify-center mb-3 md:mb-4">
+                <span className="text-3xl md:text-4xl">🧠</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">اجمع النقاط</h3>
-              <p className="text-sm text-gray-200">اربح نقاط واكسب المباريات</p>
+              <h3 className="text-lg md:text-xl font-semibold mb-2">تعلم واختبر معرفتك</h3>
+              <p className="text-sm md:text-base opacity-90">اختبر معلوماتك في مختلف المجالات</p>
             </div>
           </div>
         </div>
@@ -198,28 +198,36 @@ export function LandingPage({ onPlay }: LandingPageProps) {
             <div className="text-sm mb-2 md:mb-0">
               &copy; {new Date().getFullYear()} Bdgeega - جميع الحقوق محفوظة
             </div>
-            <div className="flex items-center space-x-4 rtl:space-x-reverse">
-              <span className="text-sm">
-                Developed by{' '}
-                <a 
-                  href="https://www.instagram.com/xxvur_/" 
-                  target="_blank" 
+            <div className="text-center text-white mt-4 space-y-3">
+              <p className="text-xl font-bold">Bdgeega Team</p>
+              
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-sm">Developed by Ali Alenezi</p>
+                <a
+                  href="https://instagram.com/bdgeega"
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium hover:text-white/80 transition-colors"
+                  className="text-white hover:text-purple-300 transition-colors"
                 >
-                  Ali Alenezi
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
                 </a>
-              </span>
-              <a 
-                href="https://www.instagram.com/xxvur_/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-white hover:text-white/80 transition-colors"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
+              </div>
+
+              <div className="flex items-center justify-center gap-2">
+                <p className="text-sm">Creative Ideation Developer Abdullah Alenezi</p>
+                <a
+                  href="https://instagram.com/bdgeega"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-purple-300 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
           </div>
         </div>

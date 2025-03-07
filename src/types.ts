@@ -7,11 +7,13 @@ export interface Category {
 }
 
 export interface Question {
-  id: string;
+  id: number;
   text: string;
+  correctAnswer: string;
   points: number;
-  options: string[];
-  correctAnswer: number;
+  image?: string;
+  audio?: string;
+  buttonIndex: number;
 }
 
 export interface Team {

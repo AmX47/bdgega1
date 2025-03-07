@@ -21,15 +21,15 @@ export const questions = [
       },
       {
         id: 3,
-        text: "ما هو أقدم مسجد في الكويت؟",
-        correctAnswer: "مسجد بن بحر",
+        text: "متى تم حل مجلس الأمة ؟",
+        correctAnswer: "10 مايو 2024",
         points: 300,
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "في أي عام تم افتتاح أبراج الكويت؟",
-        correctAnswer: "1979",
+        text: "كم يبلغ طول جسر جابر ؟",
+        correctAnswer: "48.5",
         points: 300,
         buttonIndex: 3
       },
@@ -99,15 +99,15 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "كم عدد أيام السنة الكبيسة؟",
-        correctAnswer: "366 يوم",
+        text: "ما هي عصامة مصر ؟",
+        correctAnswer: "القاهرة",
         points: 300,
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "ما هو أكبر محيط في العالم؟",
-        correctAnswer: "المحيط الهادئ",
+        text: "من هو العالم الذي وضع نظرية النسبية ؟",
+        correctAnswer: "ألبرت أينشتاين",
         points: 300,
         buttonIndex: 1
       },
@@ -127,15 +127,15 @@ export const questions = [
       },
       {
         id: 5,
-        text: "من هو مخترع المصباح الكهربائي؟",
-        correctAnswer: "توماس إديسون",
+        text: "من هو الشاعر الذي لقب ب(امير الشعراء ) في الأدب العربي ؟",
+        correctAnswer: "احمد شوقتي",
         points: 700,
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما هو أكبر كوكب في المجموعة الشمسية؟",
-        correctAnswer: "المشتري",
+        text: "ما هي الدولة التي تعتبر مهد الحضارة السومرية ؟",
+        correctAnswer: "العراق",
         points: 700,
         buttonIndex: 5
       }
@@ -213,8 +213,8 @@ export const questions = [
       },
       {
         id: 3,
-        text: "ما هي أكبر صحراء في العالم؟",
-        correctAnswer: "الصحراء الكبرى",
+        text: "ما هي الدولة التي تمتلك اكبر عدد من الجزر ؟",
+        correctAnswer: "السويد , 267,570 جزيرة.",
         points: 500,
         buttonIndex: 2
       },
@@ -235,7 +235,7 @@ export const questions = [
       {
         id: 6,
         text: "ما هي أكبر جزيرة في العالم؟",
-        correctAnswer: "جرينلاند",
+        correctAnswer: "GreenLand",
         points: 700,
         buttonIndex: 5
       }
@@ -355,48 +355,51 @@ export const questions = [
   },
   {
     id: 7,
-    name: "منتجات كويتية",
-    description: "أسئلة عن المنتجات والمشروبات الكويتية",
+    name: "منتجات ",
+    description: "أسئلة عن المنتجات ",
     image: "https://i.postimg.cc/rwNpVqLx/mntjat.webp",
     questions: [
       {
         id: 1,
-        text: "ما هو أشهر منتج ألبان كويتي؟",
-        correctAnswer: "كي دي دي",
+        text: "ما هي شركة هذا المنتج ؟",
+        correctAnswer: "امريكانا",
         points: 300,
+        image: "https://i.postimg.cc/FRdttWdr/523280-main1.jpg",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "ما هي أقدم شركة مياه كويتية؟",
-        correctAnswer: "كاظمة",
+        text: "ما هي شركة هذا المنتج ؟",
+        correctAnswer: "شكرة مطاحن الدقيق والمخابز الكويتية",
         points: 300,
+        image: "https://i.postimg.cc/1zTmNNDz/12958b48-8938-4742-bb77-96643792d844-size3840-crop-Center.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "ما هي أشهر شركة حلويات كويتية؟",
-        correctAnswer: "الأمريكانا",
+        text: "ما هي شركة هذا المنتج ؟",
+        correctAnswer: "فيمتو - vimto",
         points: 500,
+        image: "https://i.postimg.cc/rmFHchD0/image.png",
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "ما هي أشهر شركة معجنات كويتية؟",
+        text: "ما هي شركة هذا المنتج ؟",
         correctAnswer: "البيت الكويتي",
         points: 500,
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "ما هو أشهر مصنع شوكولاتة كويتي؟",
+        text: "ما هي شركة هذا المنتج ؟",
         correctAnswer: "بيت الشوكولاتة",
         points: 700,
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما هي أول شركة مثلجات كويتية؟",
+        text: "ما هي شركة هذا المنتج ؟",
         correctAnswer: "الكويتية للمثلجات",
         points: 700,
         buttonIndex: 5
@@ -405,56 +408,56 @@ export const questions = [
   },
   {
     id: 8,
-    name: "فورتنايت",
-    description: "أسئلة عن لعبة فورتنايت",
+    name: "اماكن",
+    description: "أسئلة عن اماكن الكويت",
     image: "https://i.postimg.cc/KvdVb7Rw/fortnite.webp",
     questions: [
       {
         id: 1,
-        text: "في أي عام تم إطلاق لعبة فورتنايت؟",
-        correctAnswer: "2017",
+        text: "في اي مكان يقع هذا الفرع ؟",
+        correctAnswer: "شويخ",
         points: 300,
-        image: "https://img.freepik.com/free-vector/game-launch-illustration_23-2148642194.jpg",
+        image: "https://i.postimg.cc/9FRw5NN0/VOL-1-SHUWAIKH-868x1024.jpg",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "ما هو أشهر رقصة في فورتنايت؟",
-        correctAnswer: "Floss",
+        text: "في اي منطقة يقع هذا الفرع ؟",
+        correctAnswer: "الجهراء",
         points: 300,
-        image: "https://img.freepik.com/free-vector/dance-moves-illustration_23-2148642195.jpg",
+        image: "https://i.postimg.cc/QxcDLQs1/image-1.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "كم لاعب يشارك في المباراة الواحدة؟",
-        correctAnswer: "100",
+        text: "اي منطقة يقع هذا الفرع ؟",
+        correctAnswer: "شرق",
         points: 500,
-        image: "https://img.freepik.com/free-vector/multiplayer-game-illustration_23-2148642196.jpg",
+        image: "https://i.postimg.cc/02zfrnrK/image-2.png",
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "ما هو اسم العملة في اللعبة؟",
-        correctAnswer: "V-Bucks",
+        text: "اين يقع هذا الفرع ؟",
+        correctAnswer: "المنطقة العشاره (المهبولة)",
         points: 500,
-        image: "https://img.freepik.com/free-vector/game-currency-illustration_23-2148642197.jpg",
+        image: "https://i.postimg.cc/SR1fDTN8/image-3.png",
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "من هو أول لاعب فاز بمليون دولار في بطولة فورتنايت؟",
-        correctAnswer: "Bugha",
+        text: "ما اسم هذا المطعم ؟",
+        correctAnswer: "بابل اللبناني",
         points: 700,
-        image: "https://img.freepik.com/free-vector/esports-champion-illustration_23-2148642198.jpg",
+        image: "https://i.postimg.cc/hjtBmvJj/image-4.png",
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما هو اسم أول موسم في فورتنايت؟",
-        correctAnswer: "Chapter 1 Season 1",
+        text: "ما اسم المكان وفي اي منطقه ؟",
+        correctAnswer: "العبدلي ( Olea )",
         points: 700,
-        image: "https://img.freepik.com/free-vector/game-season-illustration_23-2148642199.jpg",
+        image: "https://i.postimg.cc/QMLgVKyQ/image-5.png",
         buttonIndex: 5
       }
     ]
@@ -667,43 +670,45 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "اكمل المثل: الطيور على اشكالها...",
-        correctAnswer: "تقع",
+        text: "ما اسم هذا المثال ؟",
+        correctAnswer: "لا تبوق لا تخاف",
         points: 300,
+        image: "https://i.postimg.cc/6qPhvgG8/file-MY9i-PLAmgb-Wft-Bqe-CWb-Vr-S.png",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "ما هو الشيء الذي يزداد كلما أخذت منه؟",
-        correctAnswer: "الحفرة",
+        text: "ما اسم هذا المثال ؟",
+        correctAnswer: "الي مايعرف الصقر يشويه",
         points: 300,
+        image: "https://i.postimg.cc/4yg35kYY/DALL-E-2025-03-07-06-59-08-A-minimalistic-black-and-white-stick-figure-illustration-depicting-a-pe.webp",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "اكمل المثل: اللي ما يعرف الصقر...",
-        correctAnswer: "يشويه",
+        text: "• شيء صافٍ كالماء ومولود في النار وإذا مات استقرّ على الأرض؟",
+        correctAnswer: "الزجاج",
         points: 500,
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "ما هو الشيء الذي يرتفع إلى أعلى عندما يمتلئ بالماء؟",
-        correctAnswer: "الإسفنج",
+        text: "شيء له أوراق لكنه ليس نبات، وله جلد لكنه ليس حيوان، لديه عِلم لكنه ليس إنسان فما هو؟",
+        correctAnswer: "الكتاب",
         points: 500,
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "اكمل المثل الكويتي: اللي ما يطيع...",
-        correctAnswer: "يضيع",
+        text: "ما هو الشيء الذي يكون أخضر في الأرض، وأسود في السوق، وأحمر في البيت؟",
+        correctAnswer: "الشاي",
         points: 700,
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما هو الشيء الذي كلما طال قصر؟",
-        correctAnswer: "العمر",
+        text: "• بيت بلا أبواب ولا نوافذ، فما هو؟",
+        correctAnswer: "بيت الشعر",
         points: 700,
         buttonIndex: 5
       }
@@ -1119,6 +1124,62 @@ export const questions = [
         text: "في أي عام تأسست فرقة ميامي الكويتية؟",
         correctAnswer: "1973",
         points: 700,
+        buttonIndex: 5
+      }
+    ]
+  },
+  {
+    id: 22,
+    name: "اغاني عراقية",
+    description: "تحدي معرفة الأغاني العراقية",
+    image: "https://i.postimg.cc/qRwZY1rG/music.webp",
+    questions: [
+      {
+        id: 1,
+        text: "من هو مغني هذه الأغنية؟",
+        correctAnswer: "كاظم الساهر - علمني حبك",
+        points: 300,
+        audio: "https://example.com/audio/kazem-alamni.mp3", // You'll need to replace with actual audio URL
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما اسم هذه الأغنية؟",
+        correctAnswer: "حاتم العراقي - شكو ماكو",
+        points: 300,
+        audio: "https://example.com/audio/hatem-shako.mp3", // You'll need to replace with actual audio URL
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "من يغني هذه الأغنية؟",
+        correctAnswer: "ماجد المهندس - تناديك",
+        points: 500,
+        audio: "https://example.com/audio/majid-tonadik.mp3", // You'll need to replace with actual audio URL
+        buttonIndex: 2
+      },
+      {
+        id: 4,
+        text: "ما اسم هذه الأغنية ومن يغنيها؟",
+        correctAnswer: "محمد السالم - نعم انته",
+        points: 500,
+        audio: "https://example.com/audio/salem-naam.mp3", // You'll need to replace with actual audio URL
+        buttonIndex: 3
+      },
+      {
+        id: 5,
+        text: "من صاحب هذه الأغنية؟",
+        correctAnswer: "سيف نبيل - غريبة",
+        points: 700,
+        audio: "https://example.com/audio/saif-ghariba.mp3", // You'll need to replace with actual audio URL
+        buttonIndex: 4
+      },
+      {
+        id: 6,
+        text: "ما اسم الأغنية ومن يغنيها؟",
+        correctAnswer: "نور الزين - يا ربي",
+        points: 700,
+        audio: "https://example.com/audio/noor-yarabi.mp3", // You'll need to replace with actual audio URL
         buttonIndex: 5
       }
     ]
