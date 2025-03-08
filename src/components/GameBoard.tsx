@@ -8,8 +8,7 @@ interface GameBoardProps {
   gameName: string;
   team1Name: string;
   team2Name: string;
-  team1Players: number;
-  team2Players: number;
+  helpers: string[];
   onHome: () => void;
 }
 
@@ -22,15 +21,14 @@ interface Question {
 
 type HelpType = 'callFriend' | 'doublePoints' | 'twoAnswers';
 
-export function GameBoard({
+const GameBoard: React.FC<GameBoardProps> = ({
   categoryIds,
   gameName,
   team1Name,
   team2Name,
-  team1Players,
-  team2Players,
+  helpers,
   onHome,
-}: GameBoardProps) {
+}) => {
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
@@ -38,6 +36,7 @@ export function GameBoard({
   const [showQuestionView, setShowQuestionView] = useState(false);
   const [showResultView, setShowResultView] = useState(false);
   const [showEndGameConfirm, setShowEndGameConfirm] = useState(false);
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [usedQuestions, setUsedQuestions] = useState<Set<string>>(new Set());
   const [currentTeamTurn, setCurrentTeamTurn] = useState(1);
   const [team1Helps, setTeam1Helps] = useState({
@@ -57,6 +56,13 @@ export function GameBoard({
   const isGameComplete = usedQuestions.size === totalQuestions;
 
   const handleQuestionClick = (categoryId: number, points: number, buttonIndex: number) => {
+    const questionKey = `${categoryId}-${points}-${buttonIndex}`;
+    
+    // Check if question is already used
+    if (usedQuestions.has(questionKey)) {
+      return;
+    }
+
     const category = selectedCategories.find((c) => c.id === categoryId);
     if (category) {
       // Find questions matching the points and button index
@@ -68,46 +74,76 @@ export function GameBoard({
 
       if (availableQuestions.length > 0) {
         const question = availableQuestions[0];
-        setSelectedQuestion({ id: `${categoryId}-${points}-${buttonIndex}`, points, isAnswered: false, buttonIndex });
+        setSelectedQuestion({ id: `${categoryId}`, points, isAnswered: false, buttonIndex });
         setCurrentQuestion(question);
         setShowQuestionView(true);
-        // Mark this question as used
-        setUsedQuestions(prev => new Set([...prev, `${categoryId}-${points}-${buttonIndex}`]));
       }
-    }
-  };
-
-  const handleScorePoint = (teamId: number) => {
-    if (selectedQuestion) {
-      if (teamId === 1) {
-        setTeam1Score(prev => prev + selectedQuestion.points);
-      } else {
-        setTeam2Score(prev => prev + selectedQuestion.points);
-      }
-    }
-    setCurrentTeamTurn(current => current === 1 ? 2 : 1);
-    setShowQuestionView(false);
-    setSelectedQuestion(null);
-    setCurrentQuestion(null);
-
-    // Check if game is complete after answering
-    if (usedQuestions.size + 1 === totalQuestions) {
-      setShowResultView(true);
     }
   };
 
   const handleQuestionBack = () => {
-    if (selectedQuestion) {
-      // Mark this question as used
-      setUsedQuestions(prev => new Set([...prev, selectedQuestion.id]));
-    }
-    setCurrentTeamTurn(current => current === 1 ? 2 : 1);
     setShowQuestionView(false);
-    setSelectedQuestion(null);
     setCurrentQuestion(null);
+    setSelectedQuestion(null);
+    setActiveHelpMethod(null);
+  };
 
-    // Check if game is complete after skipping
-    if (usedQuestions.size + 1 === totalQuestions) {
+  const handleScorePoint = (teamId: number, isCorrect: boolean) => {
+    if (!selectedQuestion) return;
+
+    const points = selectedQuestion.points;
+    const questionKey = `${selectedQuestion.id}-${points}-${selectedQuestion.buttonIndex}`;
+    
+    // Mark question as used
+    const newUsedQuestions = new Set(usedQuestions);
+    newUsedQuestions.add(questionKey);
+    setUsedQuestions(newUsedQuestions);
+
+    // Award points to team only if they answered correctly
+    if (isCorrect) {
+      if (teamId === 1) {
+        setTeam1Score(prev => prev + points);
+      } else if (teamId === 2) {
+        setTeam2Score(prev => prev + points);
+      }
+    }
+
+    // Reset question view
+    setShowQuestionView(false);
+    setCurrentQuestion(null);
+    setSelectedQuestion(null);
+    setActiveHelpMethod(null);
+    
+    // Switch turns
+    setCurrentTeamTurn(currentTeamTurn === 1 ? 2 : 1);
+
+    // Check if game is complete
+    if (newUsedQuestions.size === totalQuestions) {
+      setShowResultView(true);
+    }
+  };
+
+  const handleNoAnswer = () => {
+    if (!selectedQuestion) return;
+
+    const questionKey = `${selectedQuestion.id}-${selectedQuestion.points}-${selectedQuestion.buttonIndex}`;
+    
+    // Mark question as used
+    const newUsedQuestions = new Set(usedQuestions);
+    newUsedQuestions.add(questionKey);
+    setUsedQuestions(newUsedQuestions);
+
+    // Reset question view
+    setShowQuestionView(false);
+    setCurrentQuestion(null);
+    setSelectedQuestion(null);
+    setActiveHelpMethod(null);
+    
+    // Switch turns
+    setCurrentTeamTurn(currentTeamTurn === 1 ? 2 : 1);
+
+    // Check if game is complete
+    if (newUsedQuestions.size === totalQuestions) {
       setShowResultView(true);
     }
   };
@@ -122,6 +158,10 @@ export function GameBoard({
 
   const handleEndGameClick = () => {
     setShowEndGameConfirm(true);
+  };
+
+  const handleExitClick = () => {
+    setShowExitConfirm(true);
   };
 
   const handleEndGameConfirm = () => {
@@ -168,7 +208,7 @@ export function GameBoard({
   }
 
   return (
-    <div className="min-h-screen bg-gray-100" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-[#afafaf] via-[#afafaf] to-[#afafaf]" dir="rtl">
       {showQuestionView && currentQuestion ? (
         <QuestionView
           question={{
@@ -183,60 +223,312 @@ export function GameBoard({
             { id: 1, name: team1Name, score: team1Score },
             { id: 2, name: team2Name, score: team2Score }
           ]}
-          onScorePoint={handleScorePoint}
+          onScorePoint={(teamId, isCorrect) => handleScorePoint(teamId, isCorrect)}
+          onNoAnswer={handleNoAnswer}
           onBack={handleQuestionBack}
           activeHelpMethod={activeHelpMethod}
           currentTeam={currentTeamTurn}
         />
       ) : (
         <>
-          {/* Header */}
-          <div className="bg-[#7A288A] text-white p-4 flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <img 
-                src="https://i.postimg.cc/NfP1DWbv/bdgeega-removebg-preview.png" 
-                alt="Bdgeega Logo" 
-                className="h-12 cursor-pointer hover:opacity-80 transition-opacity" 
-                onClick={() => window.location.reload()}
-              />
+          {/* Top Bar */}
+          <div className="bg-[#800020] shadow-lg py-4 px-6 mb-6">
+            <div className="flex justify-between items-center">
               <button 
-                onClick={onHome} 
-                className="bg-[#4A1458] hover:bg-[#3A1048] px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+                onClick={handleExitClick}
+                className="flex items-center gap-2 border-2 border-[#F5DEB3] text-[#F5DEB3] px-4 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
               >
+                <span>🚪</span>
                 <span>خروج</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M3 3a1 1 0 011-1h12a1 1 0 011 1v14a1 1 0 01-1 1H4a1 1 0 01-1-1V3zm2 0v14h10V3H5z" clipRule="evenodd" />
-                  <path fillRule="evenodd" d="M11.293 7.293a1 1 0 011.414 0l2 2a1 1 0 010 1.414l-2 2a1 1 0 01-1.414-1.414L12.586 10l-1.293-1.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
+              </button>
+              <h1 className="text-3xl font-bold text-[#F5DEB3] drop-shadow-lg">{gameName}</h1>
+              <button 
+                onClick={handleEndGameClick}
+                className="flex items-center gap-2 border-2 border-[#F5DEB3] text-[#F5DEB3] px-4 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+              >
+                <span>🏁</span>
+                <span>إنهاء اللعبة</span>
               </button>
             </div>
-            
-            <h1 className="text-2xl font-bold">Bdgeega</h1>
-            
-            <button
-              onClick={handleEndGameClick}
-              className="bg-[#4A1458] hover:bg-[#3A1048] px-4 py-2 rounded-lg transition-colors"
-            >
-              إنهاء اللعبة
-            </button>
           </div>
 
-          {/* End Game Confirmation Modal */}
-          {showEndGameConfirm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 text-center">
-                <h2 className="text-2xl font-bold text-[#7A288A] mb-4">تأكيد إنهاء اللعبة</h2>
-                <p className="text-gray-600 mb-6">هل أنت متأكد من إنهاء اللعبة وعرض النتائج؟</p>
-                <div className="flex gap-4 justify-center">
+          <div className="p-4">
+            <div className="flex gap-6">
+              {/* Left Side - Teams and Progress */}
+              <div className="w-[280px] flex flex-col gap-4">
+                {/* Progress Bar */}
+                <div className="bg-[#800020] bg-opacity-50 rounded-lg p-4 shadow-lg">
+                  <div className="text-center text-[#F5DEB3]">
+                    <div className="text-xl mb-4 font-bold drop-shadow-lg">تقدم اللعبة</div>
+                    <div className="w-full h-2 bg-[#F5DEB3] bg-opacity-20 rounded-full">
+                      <div 
+                        className="h-full bg-[#F5DEB3] rounded-full shadow-lg"
+                        style={{ width: `${(Array.from(usedQuestions).length / (selectedCategories.length * 6)) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="mt-2 font-bold">{Array.from(usedQuestions).length} / {selectedCategories.length * 6}</div>
+                  </div>
+                </div>
+
+                {/* Team 1 */}
+                <div className={`${currentTeamTurn === 1 ? 'border-[#F5DEB3] shadow-[0_0_15px_#F5DEB3]' : 'border-[#F5DEB3] border-opacity-50'} border-4 rounded-lg p-4 text-[#F5DEB3] bg-[#800020] bg-opacity-50`}>
+                  <h2 className="text-xl font-bold mb-3">{team1Name}</h2>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2">
+                      {Object.entries(team1Helps).map(([help, isAvailable]) => (
+                        <button
+                          key={help}
+                          onClick={() => handleUseHelp(1, help as HelpType)}
+                          disabled={!isAvailable || currentTeamTurn !== 1}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                            isAvailable ? 'bg-[#F5DEB3] text-[#800020]' : 'bg-[#A0455A] text-[#F5DEB3]'
+                          }`}
+                        >
+                          {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="text-3xl font-bold text-[#F5DEB3]">{team1Score}</div>
+                  </div>
+                </div>
+
+                {/* Team 2 */}
+                <div className={`${currentTeamTurn === 2 ? 'border-[#F5DEB3] shadow-[0_0_15px_#F5DEB3]' : 'border-[#F5DEB3] border-opacity-50'} border-4 rounded-lg p-4 text-[#F5DEB3] bg-[#800020] bg-opacity-50`}>
+                  <h2 className="text-xl font-bold mb-3">{team2Name}</h2>
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2">
+                      {Object.entries(team2Helps).map(([help, isAvailable]) => (
+                        <button
+                          key={help}
+                          onClick={() => handleUseHelp(2, help as HelpType)}
+                          disabled={!isAvailable || currentTeamTurn !== 2}
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                            isAvailable ? 'bg-[#F5DEB3] text-[#800020]' : 'bg-[#A0455A] text-[#F5DEB3]'
+                          }`}
+                        >
+                          {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="text-3xl font-bold text-[#F5DEB3]">{team2Score}</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Side - Categories Grid */}
+              <div className="flex-1">
+                <div className="grid grid-rows-2 gap-6">
+                  {/* Top Row - First 3 Categories */}
+                  <div className="grid grid-cols-3 gap-6">
+                    {selectedCategories.slice(0, 3).map(category => (
+                      <div key={category.id} className="flex flex-col">
+                        <div className="relative mb-3">
+                          <img 
+                            src={category.image} 
+                            alt={category.name}
+                            className="w-full h-40 object-cover rounded-lg shadow-lg"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-[#800020] bg-opacity-90 p-2 rounded-b-lg">
+                            <h3 className="text-lg font-bold text-[#F5DEB3] text-center drop-shadow-lg">{category.name}</h3>
+                          </div>
+                        </div>
+                        {/* Points Buttons */}
+                        <div className="flex flex-col gap-2">
+                          {/* 300 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 300, 0)}
+                              disabled={usedQuestions.has(`${category.id}-300-0`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-300-0`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              300
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 300, 1)}
+                              disabled={usedQuestions.has(`${category.id}-300-1`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-300-1`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              300
+                            </button>
+                          </div>
+                          {/* 500 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 500, 2)}
+                              disabled={usedQuestions.has(`${category.id}-500-2`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-500-2`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              500
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 500, 3)}
+                              disabled={usedQuestions.has(`${category.id}-500-3`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-500-3`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              500
+                            </button>
+                          </div>
+                          {/* 700 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 700, 4)}
+                              disabled={usedQuestions.has(`${category.id}-700-4`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-700-4`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              700
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 700, 5)}
+                              disabled={usedQuestions.has(`${category.id}-700-5`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-700-5`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              700
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Bottom Row - Last 3 Categories */}
+                  <div className="grid grid-cols-3 gap-6">
+                    {selectedCategories.slice(3).map(category => (
+                      <div key={category.id} className="flex flex-col">
+                        <div className="relative mb-3">
+                          <img 
+                            src={category.image} 
+                            alt={category.name}
+                            className="w-full h-40 object-cover rounded-lg shadow-lg"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-[#800020] bg-opacity-90 p-2 rounded-b-lg">
+                            <h3 className="text-lg font-bold text-[#F5DEB3] text-center drop-shadow-lg">{category.name}</h3>
+                          </div>
+                        </div>
+                        {/* Points Buttons */}
+                        <div className="flex flex-col gap-2">
+                          {/* 300 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 300, 0)}
+                              disabled={usedQuestions.has(`${category.id}-300-0`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-300-0`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              300
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 300, 1)}
+                              disabled={usedQuestions.has(`${category.id}-300-1`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-300-1`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              300
+                            </button>
+                          </div>
+                          {/* 500 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 500, 2)}
+                              disabled={usedQuestions.has(`${category.id}-500-2`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-500-2`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              500
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 500, 3)}
+                              disabled={usedQuestions.has(`${category.id}-500-3`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-500-3`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              500
+                            </button>
+                          </div>
+                          {/* 700 Points Row */}
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 700, 4)}
+                              disabled={usedQuestions.has(`${category.id}-700-4`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-700-4`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              700
+                            </button>
+                            <button
+                              onClick={() => handleQuestionClick(category.id, 700, 5)}
+                              disabled={usedQuestions.has(`${category.id}-700-5`)}
+                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
+                                usedQuestions.has(`${category.id}-700-5`)
+                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
+                              }`}
+                            >
+                              700
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Exit Confirmation Modal */}
+          {showExitConfirm && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
+                <div className="text-xl font-bold text-[#F5DEB3] mb-6">هل أنت متأكد من الخروج من اللعبة؟</div>
+                <div className="flex justify-center gap-4">
                   <button
-                    onClick={handleEndGameConfirm}
-                    className="bg-[#7A288A] text-white px-6 py-2 rounded-lg hover:bg-[#5A1868] transition-colors"
+                    onClick={onHome}
+                    className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
                   >
                     نعم
                   </button>
                   <button
-                    onClick={() => setShowEndGameConfirm(false)}
-                    className="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-300 transition-colors"
+                    onClick={() => setShowExitConfirm(false)}
+                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
                   >
                     لا
                   </button>
@@ -245,193 +537,32 @@ export function GameBoard({
             </div>
           )}
 
-          {/* Game Grid */}
-          <div className="container mx-auto p-4 pb-24">
-            <div className="grid grid-cols-6 gap-4">
-              {selectedCategories.map(category => (
-                <div key={category.id} className="text-center">
-                  <div className="mb-4">
-                    <img 
-                      src={category.image} 
-                      alt={category.name}
-                      className="w-24 h-24 mx-auto rounded-full object-cover border-4 border-[#7A288A]"
-                    />
-                    <h3 className="mt-2 font-bold text-lg text-[#7A288A]">{category.name}</h3>
-                  </div>
-                  
-                  {[300, 500, 700].map((points, index) => {
-                    // Create two buttons for each point value
-                    return Array(2).fill(points).map((pointValue, buttonIndex) => {
-                      const actualButtonIndex = index * 2 + buttonIndex;
-                      const questionId = `${category.id}-${pointValue}-${actualButtonIndex}`;
-                      const isUsed = usedQuestions.has(questionId);
-                      
-                      return (
-                        <button
-                          key={`${category.id}-${pointValue}-${actualButtonIndex}`}
-                          onClick={() => handleQuestionClick(category.id, pointValue, actualButtonIndex)}
-                          disabled={isUsed}
-                          className={`w-full py-2 mb-2 rounded-lg text-lg font-bold transition-colors ${
-                            isUsed
-                              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                              : 'bg-[#7A288A] text-white hover:bg-[#5A1868]'
-                          }`}
-                        >
-                          {pointValue}
-                        </button>
-                      );
-                    });
-                  })}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Footer Score Bar */}
-          <div className="fixed bottom-0 left-0 right-0 bg-[#7A288A] text-white py-4">
-            <div className="container mx-auto px-4">
-              <div className="flex justify-between items-center relative">
-                {/* Team Turn Indicator */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-full">
-                  <div className="bg-[#7A288A] rounded-t-lg px-8 py-3 shadow-lg text-center min-w-[200px]">
-                    <p className="text-sm font-bold opacity-90">دور فريق</p>
-                    <p className="text-xl font-bold">{currentTeamTurn === 1 ? team1Name : team2Name}</p>
-                  </div>
-                </div>
-
-                {/* Vertical Line */}
-                <div className="absolute left-1/2 -translate-x-1/2 h-full w-[2px] bg-[#4A1458]"></div>
-
-                <div className="text-center space-y-2">
-                  <h3 className="text-xl font-bold">{team1Name}</h3>
-                  <div className="flex items-center gap-2">
-                    <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                      <button 
-                        onClick={() => handleScoreAdjust(1, -100)}
-                        className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                      >
-                        -
-                      </button>
-                      <p className="text-2xl font-bold min-w-[80px]">{team1Score}</p>
-                      <button 
-                        onClick={() => handleScoreAdjust(1, 100)}
-                        className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                      >
-                        +
-                      </button>
-                    </div>
-                    {/* Team 1 Help Methods */}
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-sm font-bold text-white">وسائل المساعدة</p>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleUseHelp(1, 'callFriend')}
-                          disabled={!team1Helps.callFriend}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team1Helps.callFriend 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="اتصال بصديق"
-                        >
-                          📞
-                        </button>
-                        <button
-                          onClick={() => handleUseHelp(1, 'doublePoints')}
-                          disabled={!team1Helps.doublePoints}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team1Helps.doublePoints 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="دبل نقاط"
-                        >
-                          ✨
-                        </button>
-                        <button
-                          onClick={() => handleUseHelp(1, 'twoAnswers')}
-                          disabled={!team1Helps.twoAnswers}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team1Helps.twoAnswers 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="جاوب جوابين"
-                        >
-                          🎯
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="text-center space-y-2">
-                  <h3 className="text-xl font-bold">{team2Name}</h3>
-                  <div className="flex items-center gap-2">
-                    {/* Team 2 Help Methods */}
-                    <div className="flex flex-col items-center gap-2">
-                      <p className="text-sm font-bold text-white">وسائل المساعدة</p>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleUseHelp(2, 'callFriend')}
-                          disabled={!team2Helps.callFriend}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team2Helps.callFriend 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="اتصال بصديق"
-                        >
-                          📞
-                        </button>
-                        <button
-                          onClick={() => handleUseHelp(2, 'doublePoints')}
-                          disabled={!team2Helps.doublePoints}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team2Helps.doublePoints 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="دبل نقاط"
-                        >
-                          ✨
-                        </button>
-                        <button
-                          onClick={() => handleUseHelp(2, 'twoAnswers')}
-                          disabled={!team2Helps.twoAnswers}
-                          className={`w-10 h-10 rounded-lg transition-colors flex items-center justify-center ${
-                            team2Helps.twoAnswers 
-                              ? 'bg-[#4A1458] hover:bg-[#3A1048] text-white' 
-                              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                          }`}
-                          title="جاوب جوابين"
-                        >
-                          🎯
-                        </button>
-                      </div>
-                    </div>
-                    <div className="bg-[#5A1868] rounded-lg p-2 flex items-center justify-center space-x-4 rtl:space-x-reverse">
-                      <button 
-                        onClick={() => handleScoreAdjust(2, -100)}
-                        className="bg-red-500 hover:bg-red-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                      >
-                        -
-                      </button>
-                      <p className="text-2xl font-bold min-w-[80px]">{team2Score}</p>
-                      <button 
-                        onClick={() => handleScoreAdjust(2, 100)}
-                        className="bg-green-500 hover:bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg transition-colors"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
+          {/* End Game Confirmation Modal */}
+          {showEndGameConfirm && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+              <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
+                <div className="text-xl font-bold text-[#F5DEB3] mb-6">هل أنت متأكد من إنهاء اللعبة؟</div>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={handleEndGameConfirm}
+                    className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
+                  >
+                    نعم
+                  </button>
+                  <button
+                    onClick={() => setShowEndGameConfirm(false)}
+                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+                  >
+                    لا
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </>
       )}
     </div>
   );
 }
+
+export { GameBoard };

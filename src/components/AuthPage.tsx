@@ -7,19 +7,26 @@ interface AuthPageProps {
   initialMode: 'login' | 'register';
 }
 
-const AuthPage: React.FC<AuthPageProps> = ({ onClose, initialMode }) => {
+const AuthPage: React.FC<AuthPageProps> = ({ onClose, initialMode = 'login' }) => {
+  const [mode, setMode] = useState<'login' | 'register'>(initialMode);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
+    setError('');
     setLoading(true);
 
     try {
-      if (initialMode === 'register') {
+      if (mode === 'register') {
+        if (password !== confirmPassword) {
+          setError('كلمة المرور غير متطابقة');
+          return;
+        }
+
         const { error: signUpError } = await supabase.auth.signUp({
           email,
           password,
@@ -65,72 +72,87 @@ const AuthPage: React.FC<AuthPageProps> = ({ onClose, initialMode }) => {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 relative" dir="rtl">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+      <div className="bg-[#800020] p-8 rounded-2xl shadow-xl max-w-md w-full relative">
         <button
           onClick={onClose}
-          className="absolute left-4 top-4 text-gray-500 hover:text-gray-700"
+          className="absolute top-4 right-4 text-[#F5DEB3] hover:text-[#FFE4E1] transition-colors"
         >
-          ✕
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
 
-        <h2 className="text-3xl font-bold text-[#7A288A] text-center mb-8">
-          {initialMode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'}
+        <h2 className="text-3xl font-bold text-center text-[#F5DEB3] mb-8">
+          {mode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'}
         </h2>
-
-        {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4 text-right">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              البريد الإلكتروني
-            </label>
+            <label htmlFor="email" className="block text-[#F5DEB3] mb-2">البريد الإلكتروني</label>
             <input
               type="email"
+              id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-[#7A288A]"
+              className="w-full px-4 py-2 rounded-lg bg-[#F5DEB3] bg-opacity-20 border-2 border-[#F5DEB3] text-[#F5DEB3] placeholder-[#F5DEB3] placeholder-opacity-50 focus:outline-none focus:border-[#FFE4E1]"
+              placeholder="أدخل بريدك الإلكتروني"
               required
-              dir="ltr"
             />
           </div>
 
           <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              كلمة المرور
-            </label>
+            <label htmlFor="password" className="block text-[#F5DEB3] mb-2">كلمة المرور</label>
             <input
               type="password"
+              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:border-[#7A288A]"
+              className="w-full px-4 py-2 rounded-lg bg-[#F5DEB3] bg-opacity-20 border-2 border-[#F5DEB3] text-[#F5DEB3] placeholder-[#F5DEB3] placeholder-opacity-50 focus:outline-none focus:border-[#FFE4E1]"
+              placeholder="أدخل كلمة المرور"
               required
-              minLength={6}
-              dir="ltr"
             />
           </div>
+
+          {mode === 'register' && (
+            <div>
+              <label htmlFor="confirmPassword" className="block text-[#F5DEB3] mb-2">تأكيد كلمة المرور</label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-2 rounded-lg bg-[#F5DEB3] bg-opacity-20 border-2 border-[#F5DEB3] text-[#F5DEB3] placeholder-[#F5DEB3] placeholder-opacity-50 focus:outline-none focus:border-[#FFE4E1]"
+                placeholder="أعد إدخال كلمة المرور"
+                required
+              />
+            </div>
+          )}
+
+          {error && <p className="text-red-500 text-center">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className={`w-full py-3 rounded-lg bg-[#7A288A] text-white font-bold hover:bg-[#6A1B7A] transition-colors ${
+            className={`w-full bg-[#F5DEB3] text-[#800020] py-2 px-4 rounded-lg font-bold hover:bg-[#FFE4E1] transition-colors ${
               loading ? 'opacity-50 cursor-not-allowed' : ''
             }`}
           >
-            {loading ? 'جاري التحميل...' : initialMode === 'login' ? 'تسجيل الدخول' : 'إنشاء حساب'}
+            {loading ? 'جاري التحميل...' : mode === 'login' ? 'دخول' : 'تسجيل'}
           </button>
+
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => setMode(mode === 'login' ? 'register' : 'login')}
+              className="text-[#F5DEB3] hover:text-[#FFE4E1] transition-colors"
+            >
+              {mode === 'login' ? 'إنشاء حساب جديد' : 'لديك حساب؟ سجل دخول'}
+            </button>
+          </div>
         </form>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -10,19 +10,17 @@ function App() {
     gameName: string;
     team1Name: string;
     team2Name: string;
-    team1Players: number;
-    team2Players: number;
+    helpers: string[];
   } | null>(null);
 
-  const handleStartGame = (
-    categoryIds: number[],
-    gameName: string,
-    team1Name: string,
-    team2Name: string,
-    team1Players: number,
-    team2Players: number
-  ) => {
-    setGameSetup({ categoryIds, gameName, team1Name, team2Name, team1Players, team2Players });
+  const handleStartGame = (gameData: {
+    categoryIds: number[];
+    gameName: string;
+    team1Name: string;
+    team2Name: string;
+    helpers: string[];
+  }) => {
+    setGameSetup(gameData);
     setCurrentPage('game');
   };
 
@@ -32,7 +30,7 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div>
       {currentPage === 'landing' && (
         <LandingPage
           onPlay={() => setCurrentPage('categories')}
@@ -52,8 +50,7 @@ function App() {
           gameName={gameSetup.gameName}
           team1Name={gameSetup.team1Name}
           team2Name={gameSetup.team2Name}
-          team1Players={gameSetup.team1Players}
-          team2Players={gameSetup.team2Players}
+          helpers={gameSetup.helpers}
           onHome={handleHome}
         />
       )}

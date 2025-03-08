@@ -3,7 +3,7 @@ export const questions = [
     id: 1,
     name: "الكويت",
     description: "أسئلة متنوعة عن تاريخ وثقافة وإنجازات دولة الكويت",
-    image: "https://i.postimg.cc/668TSr73/kuwait.webp",
+    image: "https://i.postimg.cc/kGQ2Dd2m/image3.jpg",
     questions: [
       {
         id: 1,
@@ -95,7 +95,7 @@ export const questions = [
     id: 2,
     name: "معلومات عامة",
     description: "أسئلة عامة عن مختلف المجالات",
-    image: "https://i.postimg.cc/W1T2fxJ3/m3lomaticon.webp",
+    image: "https://i.postimg.cc/NF9Wxg13/IMG-3717.jpg",
     questions: [
       {
         id: 1,
@@ -145,7 +145,7 @@ export const questions = [
     id: 3,
     name: "تاريخ",
     description: "أسئلة عن تاريخ العالم وتاريخ الحضارات",
-    image: "https://i.postimg.cc/yxjR3cMX/history.webp",
+    image: "https://i.postimg.cc/dVrZxrs1/IMG-3718.jpg",
     questions: [
       {
         id: 1,
@@ -195,7 +195,7 @@ export const questions = [
     id: 4,
     name: "جغرافيا",
     description: "أسئلة عن جغرافيا العالم ودول العالم",
-    image: "https://i.postimg.cc/GpvHsvY8/g8rafyhicon.webp",
+    image: "https://i.postimg.cc/285PG7xQ/IMG-3719.jpg",
     questions: [
       {
         id: 1,
@@ -245,7 +245,7 @@ export const questions = [
     id: 5,
     name: "أعلام دول",
     description: "أسئلة عن أعلام الدول",
-    image: "https://i.postimg.cc/5tZ70WJq/flagicon.webp",
+    image: "https://i.postimg.cc/nhwyWRkK/IMG-3720.jpg",
     questions: [
       {
         id: 1,
@@ -301,7 +301,7 @@ export const questions = [
     id: 6,
     name: "شعارات",
     description: "أسئلة عن شعارات الشركات والمؤسسات",
-    image: "https://i.postimg.cc/FzSQqtcC/bdgeega.png",
+    image: "https://i.postimg.cc/zvmcn3r4/image-6.png",
     questions: [
       {
         id: 1,
@@ -357,7 +357,7 @@ export const questions = [
     id: 7,
     name: "منتجات ",
     description: "أسئلة عن المنتجات ",
-    image: "https://i.postimg.cc/rwNpVqLx/mntjat.webp",
+    image: "https://i.postimg.cc/KvppcKMx/IMG-3722.jpg",
     questions: [
       {
         id: 1,
@@ -385,23 +385,26 @@ export const questions = [
       },
       {
         id: 4,
-        text: "ما هي شركة هذا المنتج ؟",
-        correctAnswer: "البيت الكويتي",
+        text: "شنو اسم هذا المنتج ؟",
+        correctAnswer: "Carrot",
         points: 500,
+        image: "https://i.postimg.cc/mgqhmY6c/image-removebg-preview.png",
         buttonIndex: 3
       },
       {
         id: 5,
         text: "ما هي شركة هذا المنتج ؟",
-        correctAnswer: "بيت الشوكولاتة",
+        correctAnswer: "Nestle",
         points: 700,
+        image: "https://i.postimg.cc/jSZzQx98/image-8.png",
         buttonIndex: 4
       },
       {
         id: 6,
         text: "ما هي شركة هذا المنتج ؟",
-        correctAnswer: "الكويتية للمثلجات",
+        correctAnswer: "حلويات الشمالي",
         points: 700,
+        image: "https://i.postimg.cc/J038H4xx/image-9.png",
         buttonIndex: 5
       }
     ]
@@ -410,7 +413,7 @@ export const questions = [
     id: 8,
     name: "اماكن",
     description: "أسئلة عن اماكن الكويت",
-    image: "https://i.postimg.cc/KvdVb7Rw/fortnite.webp",
+    image: "https://i.postimg.cc/2SFGt2fc/IMG-3721.jpg",
     questions: [
       {
         id: 1,
@@ -422,7 +425,7 @@ export const questions = [
       },
       {
         id: 2,
-        text: "في اي منطقة يقع هذا الفرع ؟",
+        text: "وين صاير هذا الفرع ؟",
         correctAnswer: "الجهراء",
         points: 300,
         image: "https://i.postimg.cc/QxcDLQs1/image-1.png",
@@ -430,7 +433,7 @@ export const questions = [
       },
       {
         id: 3,
-        text: "اي منطقة يقع هذا الفرع ؟",
+        text: "وين صاير هذا الفرع ؟",
         correctAnswer: "شرق",
         points: 500,
         image: "https://i.postimg.cc/02zfrnrK/image-2.png",
@@ -438,15 +441,15 @@ export const questions = [
       },
       {
         id: 4,
-        text: "اين يقع هذا الفرع ؟",
-        correctAnswer: "المنطقة العشاره (المهبولة)",
+        text: "وين صاير هذا الفرع ؟",
+        correctAnswer: "المنطقة العاشرة",
         points: 500,
         image: "https://i.postimg.cc/SR1fDTN8/image-3.png",
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "ما اسم هذا المطعم ؟",
+        text: "شنو اسم هذا المطعم ؟",
         correctAnswer: "بابل اللبناني",
         points: 700,
         image: "https://i.postimg.cc/hjtBmvJj/image-4.png",
@@ -454,7 +457,7 @@ export const questions = [
       },
       {
         id: 6,
-        text: "ما اسم المكان وفي اي منطقه ؟",
+        text: "شنو اسم المكان وفي اي منطقه ؟",
         correctAnswer: "العبدلي ( Olea )",
         points: 700,
         image: "https://i.postimg.cc/QMLgVKyQ/image-5.png",
@@ -466,7 +469,7 @@ export const questions = [
     id: 9,
     name: "باب الحارة",
     description: "أسئلة عن مسلسل باب الحارة",
-    image: "https://i.postimg.cc/bJ9xj7wv/bab7arah.webp",
+    image: "https://i.postimg.cc/rFXB4Zyz/IMG-3735.jpg",
     questions: [
       {
         id: 1,
@@ -516,7 +519,7 @@ export const questions = [
     id: 10,
     name: "مسيرة لاعب",
     description: "أسئلة عن مسيرة اللاعبين في كرة القدم",
-    image: "https://i.postimg.cc/Bn98ZhP9/footballplayericon.webp",
+    image: "https://i.postimg.cc/TYcWMSpD/IMG-3723.jpg",
     questions: [
       {
         id: 1,
@@ -566,7 +569,7 @@ export const questions = [
     id: 11,
     name: "ميك اب",
     description: "أسئلة عن المكياج ومستحضرات التجميل",
-    image: "https://i.postimg.cc/jqFVf2Tt/makeup.webp",
+    image: "https://i.postimg.cc/hvBhNbns/IMG-3724.jpg",
     questions: [
       {
         id: 1,
@@ -577,37 +580,41 @@ export const questions = [
       },
       {
         id: 2,
-        text: "ما هو الكونسيلر؟",
-        correctAnswer: "مخفي العيوب",
+        text: "ماهي العلامة التجارية لهذا المنتج ؟",
+        correctAnswer: "شانيل",
         points: 300,
+        image: "https://i.postimg.cc/L5Rkq869/ZMBx-Sfd-TJDzu-Cmy-NO4-E76-JX9y1-L17-C8sb3t0-Hvf-I.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "ما هو الهايلايتر؟",
-        correctAnswer: "مضيء الوجه",
+        text: "ماهي العلامة التجارية لهذا المنتج ؟",
+        correctAnswer: "ماريو",
         points: 500,
+        image: "https://i.postimg.cc/C5xGHM9w/8ud-CRxg-Ap-QF18f-HYKAP7d-P9-Owd-Pg-WFqhw-Gg-Bu-Apt.png",
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "ما هو البلاشر؟",
-        correctAnswer: "أحمر الخدود",
+        text: "من هي الفنانة صاحبة العلامة التجارية -رير بيوتي- ؟",
+        correctAnswer: "Selena Gomez",
         points: 500,
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "ما هو الكونتور؟",
-        correctAnswer: "محدد الوجه",
+        text: "في أي عام أصدرت شركة -ديور- عطرها -عود اصفهان- ؟",
+        correctAnswer: "2012",
         points: 700,
+        image: "https://i.postimg.cc/TYLKgWht/1-HMfq-N1tw-Humx-X9-Uk-YBGAjq-PHd-KVry-LJEU2iw-WWz.png",
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما هو البيوتي بلندر؟",
-        correctAnswer: "اسفنجة المكياج",
+        text: "ماهي العلامة التجارية لهذا المنتج ؟",
+        correctAnswer: "ميكب فور ايفر",
         points: 700,
+        image: "https://i.postimg.cc/Xvkvgff0/v-Ye-Q8-SOjl-Ni-XWHYy-K4i-Nu-BHMJs30z1-CHOxspiw0u.png",
         buttonIndex: 5
       }
     ]
@@ -615,14 +622,15 @@ export const questions = [
   {
     id: 12,
     name: "بنات وبس",
-    description: "أسئلة خاصة بالبنات",
-    image: "https://i.postimg.cc/SNtd47dv/girls.webp",
+    description: "",
+    image: "https://i.postimg.cc/Wb9b7PdX/IMG-3725.jpg",
     questions: [
       {
         id: 1,
-        text: "ما هو أشهر ماركة عباية في الكويت؟",
-        correctAnswer: "عباية الجنة",
+        text: "ما اسم ماركة الشنطة ؟",
+        correctAnswer: "لويس فيتون",
         points: 300,
+        image: "https://i.postimg.cc/4xCyhrBY/bag.png",
         buttonIndex: 0
       },
       {
@@ -634,9 +642,10 @@ export const questions = [
       },
       {
         id: 3,
-        text: "ما هو أشهر صالون نسائي في الكويت؟",
-        correctAnswer: "صالون نوال",
+        text: "شنو اسم هذا المنتج ؟",
+        correctAnswer: "Lip Butter Balm",
         points: 500,
+        image: "https://i.postimg.cc/k4Q7xZHc/575239-swatch.avif",
         buttonIndex: 2
       },
       {
@@ -666,7 +675,7 @@ export const questions = [
     id: 13,
     name: "امثلة والغاز",
     description: "أسئلة عن الأمثال الشعبية والغاز",
-    image: "https://i.postimg.cc/VL61vFsN/l8z.webp",
+    image: "https://i.postimg.cc/6q2z1K9n/IMG-3726.jpg",
     questions: [
       {
         id: 1,
@@ -718,7 +727,7 @@ export const questions = [
     id: 14,
     name: "السعودية",
     description: "أسئلة عن المملكة العربية السعودية",
-    image: "https://i.postimg.cc/sxLhkKzP/ksa.webp",
+    image: "https://i.postimg.cc/bJGF4kgZ/IMG-3727.jpg",
     questions: [
       {
         id: 1,
@@ -768,7 +777,7 @@ export const questions = [
     id: 15,
     name: "أهل البر",
     description: "أسئلة عن البر والتخييم",
-    image: "https://i.postimg.cc/NGd7873j/brcamp.webp",
+    image: "https://i.postimg.cc/t4CkLFC9/IMG-3728.jpg",
     questions: [
       {
         id: 1,
@@ -818,7 +827,7 @@ export const questions = [
     id: 16,
     name: "العاب الفيديو",
     description: "أسئلة عن ألعاب الفيديو وأبطالها",
-    image: "https://i.postimg.cc/TP9M5Pkq/vgamesicon.webp",
+    image: "https://i.postimg.cc/9XdB0LDW/IMG-3729.jpg",
     questions: [
       {
         id: 1,
@@ -874,7 +883,7 @@ export const questions = [
     id: 17,
     name: "فيفا 25",
     description: "أسئلة عن لعبة فيفا 25",
-    image: "https://i.postimg.cc/MpQCfPCz/fifa25.webp",
+    image: "https://i.postimg.cc/vHRHqvh6/IMG-3730.jpg",
     questions: [
       {
         id: 1,
@@ -930,7 +939,7 @@ export const questions = [
     id: 18,
     name: "مبتعثين امريكا",
     description: "أسئلة عن الدراسة والحياة في الولايات المتحدة",
-    image: "https://i.postimg.cc/pXJ6Zdbm/usdkwt.webp",
+    image: "https://i.postimg.cc/VkPyPG0X/IMG-3732.jpg",
     questions: [
       {
         id: 1,
@@ -980,7 +989,7 @@ export const questions = [
     id: 19,
     name: "مبتعثين بريطانيا",
     description: "أسئلة عن الدراسة والحياة في بريطانيا",
-    image: "https://i.postimg.cc/JzmtfP2T/ukkwt.webp",
+    image: "https://i.postimg.cc/dtjMvR2X/IMG-3731.jpg",
     questions: [
       {
         id: 1,
@@ -1020,7 +1029,7 @@ export const questions = [
       {
         id: 6,
         text: "كم تبلغ رسوم NHS للطلاب الدوليين سنوياً؟",
-        correctAnswer: "470 جنيه",
+        correctAnswer: "470 £",
         points: 700,
         buttonIndex: 5
       }
@@ -1030,7 +1039,7 @@ export const questions = [
     id: 20,
     name: "قطر",
     description: "أسئلة عن دولة قطر",
-    image: "https://i.postimg.cc/T29sjwXp/qtr.webp",
+    image: "https://i.postimg.cc/xCMx5Yg7/IMG-3733.jpg",
     questions: [
       {
         id: 1,
@@ -1080,7 +1089,7 @@ export const questions = [
     id: 21,
     name: "السكاريب",
     description: "اسئلة عن سيارات السكاريب جربها !",
-    image: "https://i.postimg.cc/h4d884QV/.webp",
+    image: "https://i.postimg.cc/dVhn9XRG/IMG-3738.jpg",
     questions: [
       {
         id: 1,
@@ -1132,54 +1141,54 @@ export const questions = [
     id: 22,
     name: "اغاني عراقية",
     description: "تحدي معرفة الأغاني العراقية",
-    image: "https://i.postimg.cc/qRwZY1rG/music.webp",
+    image: "https://i.postimg.cc/yx3zKWhN/image-7.png",
     questions: [
       {
         id: 1,
-        text: "من هو مغني هذه الأغنية؟",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
         correctAnswer: "كاظم الساهر - علمني حبك",
         points: 300,
-        audio: "https://example.com/audio/kazem-alamni.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "ما اسم هذه الأغنية؟",
-        correctAnswer: "حاتم العراقي - شكو ماكو",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
+        correctAnswer: "حاتم العراقي - حلالي",
         points: 300,
-        audio: "https://example.com/audio/hatem-shako.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "من يغني هذه الأغنية؟",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
         correctAnswer: "ماجد المهندس - تناديك",
         points: 500,
-        audio: "https://example.com/audio/majid-tonadik.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 2
       },
       {
         id: 4,
-        text: "ما اسم هذه الأغنية ومن يغنيها؟",
-        correctAnswer: "محمد السالم - نعم انته",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
+        correctAnswer: "سيف نبيل - غريبة",
         points: 500,
-        audio: "https://example.com/audio/salem-naam.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 3
       },
       {
         id: 5,
-        text: "من صاحب هذه الأغنية؟",
-        correctAnswer: "سيف نبيل - غريبة",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
+        correctAnswer: "نور الزين - يا منعنع",
         points: 700,
-        audio: "https://example.com/audio/saif-ghariba.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 4
       },
       {
         id: 6,
-        text: "ما اسم الأغنية ومن يغنيها؟",
-        correctAnswer: "نور الزين - يا ربي",
+        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
+        correctAnswer: "محمد السالم - نعم انته",
         points: 700,
-        audio: "https://example.com/audio/noor-yarabi.mp3", // You'll need to replace with actual audio URL
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         buttonIndex: 5
       }
     ]
