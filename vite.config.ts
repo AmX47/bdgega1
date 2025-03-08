@@ -21,8 +21,10 @@ export default defineConfig({
     },
   },
   server: {
-    port: 3000,
-    open: false, // do not automatically open browser
-    host: true, // listen on all local IPs
+    port: 3001,
+    open: true,
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
   }
-})
+});

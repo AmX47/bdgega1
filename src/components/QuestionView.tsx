@@ -7,6 +7,7 @@ interface Question {
   points: number;
   buttonIndex: number;
   image?: string;
+  answerImage?: string;
   audio?: string;
 }
 
@@ -170,7 +171,7 @@ const QuestionView: React.FC<QuestionViewProps> = ({
               <div className="text-2xl font-bold text-[#F5DEB3] mb-4">
                 السؤال ({question.points} نقطة)
               </div>
-              <div className="text-xl text-[#F5DEB3] mb-6">
+              <div className="text-4xl font-extrabold text-[#F5DEB3] mb-6 text-center tracking-wide">
                 {question.text}
               </div>
               {question.image && (
@@ -229,8 +230,17 @@ const QuestionView: React.FC<QuestionViewProps> = ({
             </>
           ) : (
             <>
-              <div className="text-2xl font-bold text-[#F5DEB3] mb-4">الإجابة الصحيحة</div>
-              <div className="text-xl text-[#F5DEB3] mb-6">{question.correctAnswer}</div>
+              <div className="text-3xl font-bold text-[#F5DEB3] mb-4">الإجابة الصحيحة</div>
+              <div className="text-4xl font-extrabold text-[#F5DEB3] mb-6 text-center tracking-wide">{question.correctAnswer}</div>
+              {question.answerImage && (
+                <div className="flex justify-center mb-6">
+                  <img 
+                    src={question.answerImage} 
+                    alt="Answer" 
+                    className="max-w-full max-h-[300px] object-contain rounded-lg shadow-lg"
+                  />
+                </div>
+              )}
               {!showTeamSelection ? (
                 <button
                   onClick={handleShowTeamSelection}

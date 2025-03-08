@@ -1,169 +1,80 @@
 import React from 'react';
 
 interface Team {
+  id: number;
   name: string;
   score: number;
-  players: string[];
 }
 
 interface GameOverProps {
-  gameName: string;
-  team1: Team;
-  team2: Team;
+  teams: Team[];
   onPlayAgain: () => void;
+  onHome: () => void;
 }
 
-export function GameOver({ gameName, team1, team2, onPlayAgain }: GameOverProps) {
-  const isDraw = team1.score === team2.score;
-  const winner = isDraw ? null : team1.score > team2.score ? team1 : team2;
-  const loser = isDraw ? null : team1.score > team2.score ? team2 : team1;
-
-  // تشغيل انيميشن الاحتفال
-  React.useEffect(() => {
-    const confetti = async () => {
-      const module = await import('canvas-confetti');
-      const confetti = module.default;
-
-      const duration = isDraw ? 1000 : 3000; // انيميشن أقصر في حالة التعادل
-      const animationEnd = Date.now() + duration;
-
-      const randomInRange = (min: number, max: number) => {
-        return Math.random() * (max - min) + min;
-      };
-
-      const interval = setInterval(() => {
-        const timeLeft = animationEnd - Date.now();
-
-        if (timeLeft <= 0) {
-          clearInterval(interval);
-          return;
-        }
-
-        confetti({
-          particleCount: isDraw ? 30 : 50,
-          startVelocity: 30,
-          spread: 360,
-          origin: {
-            x: randomInRange(0.1, 0.9),
-            y: Math.random() - 0.2
-          },
-          colors: isDraw 
-            ? ['#7A288A', '#C7B8EA', '#808080'] 
-            : ['#7A288A', '#C7B8EA', '#FFD700', '#FF69B4', '#00FF00'],
-          shapes: ['square', 'circle'],
-          gravity: 1.5,
-          scalar: randomInRange(0.4, 1)
-        });
-      }, 250);
-
-      return () => clearInterval(interval);
-    };
-
-    confetti();
-  }, [isDraw]);
+export const GameOver: React.FC<GameOverProps> = ({ teams, onPlayAgain, onHome }) => {
+  const sortedTeams = [...teams].sort((a, b) => b.score - a.score);
+  const winner = sortedTeams[0];
+  const loser = sortedTeams[1];
+  const isDraw = winner.score === loser.score;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#7A288A] to-[#C7B8EA] py-8 px-4" dir="rtl">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-8 text-center">
-          {/* Game Name */}
-          <h1 className="text-5xl font-bold text-[#7A288A] mb-12">
-            {gameName}
-          </h1>
+    <div className="min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] flex items-center justify-center p-4" dir="rtl">
+      <div className="max-w-4xl w-full bg-[#800020] rounded-lg p-8 shadow-2xl border-4 border-[#F5DEB3]">
+        {/* Game Over Title */}
+        <h1 className="text-4xl font-bold text-center text-[#F5DEB3] mb-8 drop-shadow-lg">
+          انتهت اللعبة!
+        </h1>
 
-          {/* Teams */}
-          <div className="flex justify-between items-center mb-12">
-            {/* Team 1 */}
-            <div className={`flex-1 p-6 rounded-2xl ${
-              isDraw 
-                ? 'bg-gray-100' 
-                : winner === team1 
-                  ? 'bg-green-100' 
-                  : 'bg-red-100'
-            }`}>
-              <h2 className="text-3xl font-bold mb-4">{team1.name}</h2>
-              <p className={`text-4xl font-bold ${
-                isDraw 
-                  ? 'text-[#7A288A]' 
-                  : winner === team1 
-                    ? 'text-[#7A288A]' 
-                    : 'text-[#7A288A]'
-              }`}>
-                {team1.score}
-              </p>
-              {!isDraw && winner === team1 && (
-                <div className="mt-4">
-                  <span className="inline-block animate-bounce text-4xl">🏆</span>
-                </div>
-              )}
-            </div>
-
-            {/* VS */}
-            <div className="px-8">
-              <span className="text-4xl font-bold text-[#7A288A]">VS</span>
-            </div>
-
-            {/* Team 2 */}
-            <div className={`flex-1 p-6 rounded-2xl ${
-              isDraw 
-                ? 'bg-gray-100' 
-                : winner === team2 
-                  ? 'bg-green-100' 
-                  : 'bg-red-100'
-            }`}>
-              <h2 className="text-3xl font-bold mb-4">{team2.name}</h2>
-              <p className={`text-4xl font-bold ${
-                isDraw 
-                  ? 'text-[#7A288A]' 
-                  : winner === team2 
-                    ? 'text-[#7A288A]' 
-                    : 'text-[#7A288A]'
-              }`}>
-                {team2.score}
-              </p>
-              {!isDraw && winner === team2 && (
-                <div className="mt-4">
-                  <span className="inline-block animate-bounce text-4xl">🏆</span>
-                </div>
-              )}
+        {isDraw ? (
+          /* Draw Result */
+          <div className="text-center mb-12">
+            <div className="text-3xl font-bold text-[#F5DEB3] mb-4">تعادل!</div>
+            <div className="text-xl text-[#F5DEB3]">
+              النتيجة النهائية: {winner.score} نقطة
             </div>
           </div>
+        ) : (
+          /* Winner and Loser Display */
+          <div className="grid grid-cols-2 gap-8 mb-12">
+            {/* Winner */}
+            <div className="text-center transform hover:scale-105 transition-transform">
+              <div className="bg-[#F5DEB3] rounded-lg p-6 shadow-lg border-4 border-[#FFD700]">
+                <div className="text-[#800020] text-2xl font-bold mb-2">🏆 الفائز 🏆</div>
+                <div className="text-[#800020] text-xl font-bold">{winner.name}</div>
+                <div className="text-[#800020] text-3xl font-bold mt-4">{winner.score}</div>
+                <div className="text-[#800020] text-lg">نقطة</div>
+              </div>
+            </div>
 
-          {/* Result Announcement */}
-          <div className="mb-12">
-            {isDraw ? (
-              <>
-                <h2 className="text-4xl font-bold text-[#7A288A] mb-4">
-                  🤝 تعادل! 🤝
-                </h2>
-                <p className="text-3xl font-bold text-[#7A288A]">
-                  حصل كلا الفريقين على {team1.score} نقطة
-                </p>
-              </>
-            ) : (
-              <>
-                <h2 className="text-4xl font-bold text-[#7A288A] mb-4">
-                  🎉 الفريق الفائز 🎉
-                </h2>
-                <p className="text-3xl font-bold text-green-600">
-                  {winner?.name}
-                </p>
-                <p className="text-xl text-[#7A288A] mt-2">
-                  بنتيجة {winner?.score} نقطة
-                </p>
-              </>
-            )}
+            {/* Loser */}
+            <div className="text-center transform hover:scale-105 transition-transform">
+              <div className="bg-[#F5DEB3] bg-opacity-80 rounded-lg p-6 shadow-lg">
+                <div className="text-[#800020] text-2xl font-bold mb-2">المركز الثاني</div>
+                <div className="text-[#800020] text-xl font-bold">{loser.name}</div>
+                <div className="text-[#800020] text-3xl font-bold mt-4">{loser.score}</div>
+                <div className="text-[#800020] text-lg">نقطة</div>
+              </div>
+            </div>
           </div>
+        )}
 
-          {/* Play Again Button */}
+        {/* Action Buttons */}
+        <div className="flex justify-center gap-6">
           <button
             onClick={onPlayAgain}
-            className="bg-[#7A288A] text-white px-8 py-4 rounded-full text-xl font-bold hover:bg-[#8A3399] transform hover:scale-105 transition-all"
+            className="bg-[#F5DEB3] text-[#800020] px-8 py-3 rounded-lg text-xl font-bold hover:bg-[#E8D1A0] transition-colors shadow-lg"
           >
-            العب مرة ثانية
+            العب مرة أخرى
+          </button>
+          <button
+            onClick={onHome}
+            className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-8 py-3 rounded-lg text-xl font-bold hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors shadow-lg"
+          >
+            الصفحة الرئيسية
           </button>
         </div>
       </div>
     </div>
   );
-}
+};

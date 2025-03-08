@@ -50,35 +50,35 @@ const GameBoard: React.FC<GameBoardProps> = ({
     twoAnswers: true
   });
   const [activeHelpMethod, setActiveHelpMethod] = useState<HelpType | null>(null);
+  const [showResult, setShowResult] = useState(false);
 
   const selectedCategories = categories.filter(cat => categoryIds.includes(cat.id));
   const totalQuestions = selectedCategories.reduce((total, cat) => total + cat.questions.length, 0);
-  const isGameComplete = usedQuestions.size === totalQuestions;
+  const isGameComplete = usedQuestions.size === 36;
 
-  const handleQuestionClick = (categoryId: number, points: number, buttonIndex: number) => {
-    const questionKey = `${categoryId}-${points}-${buttonIndex}`;
-    
-    // Check if question is already used
-    if (usedQuestions.has(questionKey)) {
-      return;
+  const checkGameCompletion = () => {
+    if (usedQuestions.size === 36) {
+      setShowResult(true);
     }
+  };
 
+  const handleQuestionClick = (categoryId: string, points: number, buttonIndex: number) => {
     const category = selectedCategories.find((c) => c.id === categoryId);
-    if (category) {
-      // Find questions matching the points and button index
-      const availableQuestions = category.questions.filter(q => 
-        q.points === points && 
-        q.buttonIndex === buttonIndex &&
-        !usedQuestions.has(`${categoryId}-${points}-${buttonIndex}`)
-      );
+    if (!category) return;
 
-      if (availableQuestions.length > 0) {
-        const question = availableQuestions[0];
-        setSelectedQuestion({ id: `${categoryId}`, points, isAnswered: false, buttonIndex });
-        setCurrentQuestion(question);
-        setShowQuestionView(true);
-      }
-    }
+    const question = category.questions.find(q => 
+      q.points === points && 
+      q.buttonIndex === buttonIndex
+    );
+
+    if (!question) return;
+
+    const questionKey = `${categoryId}-${points}-${buttonIndex}`;
+    if (usedQuestions.has(questionKey)) return;
+
+    setSelectedQuestion({ id: questionKey, points, buttonIndex });
+    setCurrentQuestion(question);
+    setShowQuestionView(true);
   };
 
   const handleQuestionBack = () => {
@@ -89,38 +89,31 @@ const GameBoard: React.FC<GameBoardProps> = ({
   };
 
   const handleScorePoint = (teamId: number, isCorrect: boolean) => {
-    if (!selectedQuestion) return;
+    const points = selectedQuestion?.points || 0;
+    const multiplier = activeHelpMethod === 'doublePoints' ? 2 : 1;
+    const finalPoints = isCorrect ? points * multiplier : 0;
 
-    const points = selectedQuestion.points;
-    const questionKey = `${selectedQuestion.id}-${points}-${selectedQuestion.buttonIndex}`;
-    
-    // Mark question as used
-    const newUsedQuestions = new Set(usedQuestions);
-    newUsedQuestions.add(questionKey);
-    setUsedQuestions(newUsedQuestions);
+    if (teamId === 1) {
+      setTeam1Score(prev => prev + finalPoints);
+    } else {
+      setTeam2Score(prev => prev + finalPoints);
+    }
 
-    // Award points to team only if they answered correctly
-    if (isCorrect) {
-      if (teamId === 1) {
-        setTeam1Score(prev => prev + points);
-      } else if (teamId === 2) {
-        setTeam2Score(prev => prev + points);
+    if (selectedQuestion) {
+      const questionKey = `${selectedQuestion.id}`;
+      const newUsedQuestions = new Set([...usedQuestions, questionKey]);
+      setUsedQuestions(newUsedQuestions);
+
+      if (newUsedQuestions.size === 36) {
+        setShowResultView(true);
       }
     }
 
-    // Reset question view
+    setActiveHelpMethod(undefined);
     setShowQuestionView(false);
     setCurrentQuestion(null);
     setSelectedQuestion(null);
-    setActiveHelpMethod(null);
-    
-    // Switch turns
     setCurrentTeamTurn(currentTeamTurn === 1 ? 2 : 1);
-
-    // Check if game is complete
-    if (newUsedQuestions.size === totalQuestions) {
-      setShowResultView(true);
-    }
   };
 
   const handleNoAnswer = () => {
@@ -143,7 +136,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
     setCurrentTeamTurn(currentTeamTurn === 1 ? 2 : 1);
 
     // Check if game is complete
-    if (newUsedQuestions.size === totalQuestions) {
+    if (newUsedQuestions.size === 36) {
       setShowResultView(true);
     }
   };
@@ -195,6 +188,18 @@ const GameBoard: React.FC<GameBoardProps> = ({
     setActiveHelpMethod(helpType);
   };
 
+  if (showResult) {
+    return (
+      <ResultView
+        team1Name={team1Name}
+        team2Name={team2Name}
+        team1Score={team1Score}
+        team2Score={team2Score}
+        onHome={onHome}
+      />
+    );
+  }
+
   if (showResultView) {
     return (
       <ResultView
@@ -208,7 +213,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#afafaf] via-[#afafaf] to-[#afafaf]" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] p-4" dir="rtl">
       {showQuestionView && currentQuestion ? (
         <QuestionView
           question={{
@@ -263,10 +268,10 @@ const GameBoard: React.FC<GameBoardProps> = ({
                     <div className="w-full h-2 bg-[#F5DEB3] bg-opacity-20 rounded-full">
                       <div 
                         className="h-full bg-[#F5DEB3] rounded-full shadow-lg"
-                        style={{ width: `${(Array.from(usedQuestions).length / (selectedCategories.length * 6)) * 100}%` }}
+                        style={{ width: `${(Array.from(usedQuestions).length / 36) * 100}%` }}
                       ></div>
                     </div>
-                    <div className="mt-2 font-bold">{Array.from(usedQuestions).length} / {selectedCategories.length * 6}</div>
+                    <div className="mt-2 font-bold">{Array.from(usedQuestions).length} / 36</div>
                   </div>
                 </div>
 
@@ -317,97 +322,52 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
               {/* Right Side - Categories Grid */}
               <div className="flex-1">
-                <div className="grid grid-rows-2 gap-6">
+                <div className="grid grid-rows-2 gap-8">
                   {/* Top Row - First 3 Categories */}
                   <div className="grid grid-cols-3 gap-6">
-                    {selectedCategories.slice(0, 3).map(category => (
-                      <div key={category.id} className="flex flex-col">
-                        <div className="relative mb-3">
-                          <img 
-                            src={category.image} 
+                    {selectedCategories.slice(0, 3).map((category) => (
+                      <div
+                        key={category.id}
+                        className="rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-200"
+                      >
+                        <div className="relative h-48">
+                          <img
+                            src={category.image}
                             alt={category.name}
-                            className="w-full h-40 object-cover rounded-lg shadow-lg"
+                            className="w-full h-full object-cover rounded-t-xl"
                           />
-                          <div className="absolute bottom-0 left-0 right-0 bg-[#800020] bg-opacity-90 p-2 rounded-b-lg">
-                            <h3 className="text-lg font-bold text-[#F5DEB3] text-center drop-shadow-lg">{category.name}</h3>
-                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                          <h3 className="absolute bottom-0 left-0 right-0 p-4 text-2xl font-bold text-white text-center">
+                            {category.name}
+                          </h3>
                         </div>
-                        {/* Points Buttons */}
-                        <div className="flex flex-col gap-2">
-                          {/* 300 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 300, 0)}
-                              disabled={usedQuestions.has(`${category.id}-300-0`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-300-0`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              300
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 300, 1)}
-                              disabled={usedQuestions.has(`${category.id}-300-1`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-300-1`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              300
-                            </button>
-                          </div>
-                          {/* 500 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 500, 2)}
-                              disabled={usedQuestions.has(`${category.id}-500-2`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-500-2`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              500
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 500, 3)}
-                              disabled={usedQuestions.has(`${category.id}-500-3`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-500-3`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              500
-                            </button>
-                          </div>
-                          {/* 700 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 700, 4)}
-                              disabled={usedQuestions.has(`${category.id}-700-4`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-700-4`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              700
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 700, 5)}
-                              disabled={usedQuestions.has(`${category.id}-700-5`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-700-5`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              700
-                            </button>
+
+                        <div className="p-4 bg-[#800020]/10 backdrop-blur-sm rounded-b-xl">
+                          <div className="grid grid-cols-2 gap-2">
+                            {[300, 500, 700].map((points) => (
+                              <React.Fragment key={points}>
+                                {category.questions
+                                  .filter((q) => q.points === points)
+                                  .map((question) => {
+                                    const questionKey = `${category.id}-${points}-${question.buttonIndex}`;
+                                    const isUsed = usedQuestions.has(questionKey);
+                                    return (
+                                      <button
+                                        key={`${question.points}-${question.buttonIndex}`}
+                                        onClick={() => handleQuestionClick(category.id, points, question.buttonIndex)}
+                                        className={`w-full py-3 px-4 rounded-lg text-lg font-extrabold ${
+                                          isUsed
+                                            ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                                            : "bg-[#F5DEB3] text-[#800020] hover:bg-[#E8D1A0] transition-all"
+                                        }`}
+                                        disabled={isUsed}
+                                      >
+                                        {question.points}
+                                      </button>
+                                    );
+                                  })}
+                              </React.Fragment>
+                            ))}
                           </div>
                         </div>
                       </div>
@@ -416,94 +376,49 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
                   {/* Bottom Row - Last 3 Categories */}
                   <div className="grid grid-cols-3 gap-6">
-                    {selectedCategories.slice(3).map(category => (
-                      <div key={category.id} className="flex flex-col">
-                        <div className="relative mb-3">
-                          <img 
-                            src={category.image} 
+                    {selectedCategories.slice(3, 6).map((category) => (
+                      <div
+                        key={category.id}
+                        className="rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-200"
+                      >
+                        <div className="relative h-48">
+                          <img
+                            src={category.image}
                             alt={category.name}
-                            className="w-full h-40 object-cover rounded-lg shadow-lg"
+                            className="w-full h-full object-cover rounded-t-xl"
                           />
-                          <div className="absolute bottom-0 left-0 right-0 bg-[#800020] bg-opacity-90 p-2 rounded-b-lg">
-                            <h3 className="text-lg font-bold text-[#F5DEB3] text-center drop-shadow-lg">{category.name}</h3>
-                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+                          <h3 className="absolute bottom-0 left-0 right-0 p-4 text-2xl font-bold text-white text-center">
+                            {category.name}
+                          </h3>
                         </div>
-                        {/* Points Buttons */}
-                        <div className="flex flex-col gap-2">
-                          {/* 300 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 300, 0)}
-                              disabled={usedQuestions.has(`${category.id}-300-0`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-300-0`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              300
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 300, 1)}
-                              disabled={usedQuestions.has(`${category.id}-300-1`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-300-1`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              300
-                            </button>
-                          </div>
-                          {/* 500 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 500, 2)}
-                              disabled={usedQuestions.has(`${category.id}-500-2`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-500-2`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              500
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 500, 3)}
-                              disabled={usedQuestions.has(`${category.id}-500-3`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-500-3`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              500
-                            </button>
-                          </div>
-                          {/* 700 Points Row */}
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 700, 4)}
-                              disabled={usedQuestions.has(`${category.id}-700-4`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-700-4`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              700
-                            </button>
-                            <button
-                              onClick={() => handleQuestionClick(category.id, 700, 5)}
-                              disabled={usedQuestions.has(`${category.id}-700-5`)}
-                              className={`flex-1 h-12 rounded-lg text-lg font-bold transition-colors ${
-                                usedQuestions.has(`${category.id}-700-5`)
-                                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                  : 'bg-[#636363] text-[#ffffff] hover:bg-[#E8D1A0] hover:shadow-lg'
-                              }`}
-                            >
-                              700
-                            </button>
+
+                        <div className="p-4 bg-[#800020]/10 backdrop-blur-sm rounded-b-xl">
+                          <div className="grid grid-cols-2 gap-2">
+                            {[300, 500, 700].map((points) => (
+                              <React.Fragment key={points}>
+                                {category.questions
+                                  .filter((q) => q.points === points)
+                                  .map((question) => {
+                                    const questionKey = `${category.id}-${points}-${question.buttonIndex}`;
+                                    const isUsed = usedQuestions.has(questionKey);
+                                    return (
+                                      <button
+                                        key={`${question.points}-${question.buttonIndex}`}
+                                        onClick={() => handleQuestionClick(category.id, points, question.buttonIndex)}
+                                        className={`w-full py-3 px-4 rounded-lg text-lg font-extrabold ${
+                                          isUsed
+                                            ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                                            : "bg-[#F5DEB3] text-[#800020] hover:bg-[#E8D1A0] transition-all"
+                                        }`}
+                                        disabled={isUsed}
+                                      >
+                                        {question.points}
+                                      </button>
+                                    );
+                                  })}
+                              </React.Fragment>
+                            ))}
                           </div>
                         </div>
                       </div>

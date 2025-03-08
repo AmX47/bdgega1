@@ -3,7 +3,7 @@ export const questions = [
     id: 1,
     name: "الكويت",
     description: "أسئلة متنوعة عن تاريخ وثقافة وإنجازات دولة الكويت",
-    image: "https://i.postimg.cc/kGQ2Dd2m/image3.jpg",
+    image: "https://i.postimg.cc/QCSSXz2M/IMG-3748.jpg",
     questions: [
       {
         id: 1,
@@ -21,73 +21,31 @@ export const questions = [
       },
       {
         id: 3,
-        text: "متى تم حل مجلس الأمة ؟",
-        correctAnswer: "10 مايو 2024",
-        points: 300,
-        buttonIndex: 2
-      },
-      {
-        id: 4,
-        text: "كم يبلغ طول جسر جابر ؟",
-        correctAnswer: "48.5",
-        points: 300,
-        buttonIndex: 3
-      },
-      {
-        id: 5,
         text: "ما هو الاسم القديم لجزيرة فيلكا؟",
         correctAnswer: "ايكاروس",
         points: 500,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
-        id: 6,
+        id: 4,
         text: "متى تم افتتاح سوق المباركية؟",
         correctAnswer: "1897",
         points: 500,
-        buttonIndex: 5
+        buttonIndex: 1
       },
       {
-        id: 7,
-        text: "ما هو أول بنك تم تأسيسه في الكويت؟",
-        correctAnswer: "البنك الوطني الكويتي",
-        points: 500,
-        buttonIndex: 6
-      },
-      {
-        id: 8,
-        text: "في أي عام تم إصدار أول عملة كويتية؟",
-        correctAnswer: "1961",
-        points: 500,
-        buttonIndex: 7
-      },
-      {
-        id: 9,
+        id: 5,
         text: "متى تم تأسيس شركة نفط الكويت؟",
         correctAnswer: "1934",
         points: 700,
-        buttonIndex: 8
+        buttonIndex: 0
       },
       {
-        id: 10,
+        id: 6,
         text: "ما اسم أول مدرسة نظامية في الكويت؟",
         correctAnswer: "المدرسة المباركية",
         points: 700,
-        buttonIndex: 9
-      },
-      {
-        id: 11,
-        text: "في أي عام تم اكتشاف النفط في الكويت؟",
-        correctAnswer: "1938",
-        points: 700,
-        buttonIndex: 10
-      },
-      {
-        id: 12,
-        text: "متى تم افتتاح أول مستشفى في الكويت؟",
-        correctAnswer: "1911",
-        points: 700,
-        buttonIndex: 11
+        buttonIndex: 1
       }
     ]
   },
@@ -95,7 +53,7 @@ export const questions = [
     id: 2,
     name: "معلومات عامة",
     description: "أسئلة عامة عن مختلف المجالات",
-    image: "https://i.postimg.cc/NF9Wxg13/IMG-3717.jpg",
+    image: "https://i.postimg.cc/25hSPNWn/IMG-3749.jpg",
     questions: [
       {
         id: 1,
@@ -116,28 +74,28 @@ export const questions = [
         text: "ما هي عاصمة اليابان؟",
         correctAnswer: "طوكيو",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "كم عدد العظام في جسم الإنسان؟",
         correctAnswer: "206",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "من هو الشاعر الذي لقب ب(امير الشعراء ) في الأدب العربي ؟",
-        correctAnswer: "احمد شوقتي",
+        correctAnswer: "احمد شوقي",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "ما هي الدولة التي تعتبر مهد الحضارة السومرية ؟",
         correctAnswer: "العراق",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -166,28 +124,28 @@ export const questions = [
         text: "في أي غزوة نزل الملائكة؟",
         correctAnswer: "غزوة بدر",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "من هو مؤسس الدولة العباسية؟",
         correctAnswer: "أبو العباس السفاح",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "متى تم توحيد المملكة العربية السعودية؟",
         correctAnswer: "1932",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "من هو القائد الذي فتح مصر؟",
         correctAnswer: "عمرو بن العاص",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -216,28 +174,28 @@ export const questions = [
         text: "ما هي الدولة التي تمتلك اكبر عدد من الجزر ؟",
         correctAnswer: "السويد , 267,570 جزيرة.",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "كم عدد محافظات الكويت؟",
         correctAnswer: "6",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو أعمق محيط في العالم؟",
         correctAnswer: "المحيط الهادئ",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "ما هي أكبر جزيرة في العالم؟",
         correctAnswer: "GreenLand",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -269,7 +227,7 @@ export const questions = [
         correctAnswer: "اليونان",
         points: 500,
         image: "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -277,7 +235,7 @@ export const questions = [
         correctAnswer: "صربيا",
         points: 500,
         image: "https://upload.wikimedia.org/wikipedia/commons/f/ff/Flag_of_Serbia.svg",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -285,7 +243,7 @@ export const questions = [
         correctAnswer: "بلغاريا",
         points: 700,
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Flag_of_Bulgaria.svg/800px-Flag_of_Bulgaria.svg.png",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -293,7 +251,7 @@ export const questions = [
         correctAnswer: "تنزانيا",
         points: 700,
         image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Flag_of_Tanzania.svg/1200px-Flag_of_Tanzania.svg.png",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -322,18 +280,18 @@ export const questions = [
       {
         id: 3,
         text: "ما اسم الشركة صاحبة هذا الشعار؟",
-        correctAnswer: "عصير الضاحية",
+        correctAnswer: "Paypal",
         points: 500,
-        image: "https://i.postimg.cc/02scQsTf/dahya.png",
-        buttonIndex: 2
+        image: "https://i.postimg.cc/VvWL8w5r/paypal.webp",
+        buttonIndex: 0
       },
       {
         id: 4,
-        text: "ما اسم الشركة صاحبة هذا الشعار؟",
-        correctAnswer: "Trolley",
+        text: "ما اسم البراند صاحب هذا الشعار؟",
+        correctAnswer: "Puff",
         points: 500,
-        image: "https://i.postimg.cc/vTNqpDzM/trolley.png",
-        buttonIndex: 3
+        image: "https://i.postimg.cc/ZqnWtyT3/image-10.png",
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -341,7 +299,7 @@ export const questions = [
         correctAnswer: "صحيفة الرأي",
         points: 700,
         image: "https://assets.misbar.com/logos/2024-12/f0fc94ace23331de7996e9eb57b57bc64402d566.jpg",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -349,7 +307,7 @@ export const questions = [
         correctAnswer: "محطة وقود ألفا",
         points: 700,
         image: "https://i.postimg.cc/wvGxbcSB/alfa.webp",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -370,18 +328,18 @@ export const questions = [
       {
         id: 2,
         text: "ما هي شركة هذا المنتج ؟",
-        correctAnswer: "شكرة مطاحن الدقيق والمخابز الكويتية",
+        correctAnswer: "شركة مطاحن الدقيق والمخابز الكويتية",
         points: 300,
         image: "https://i.postimg.cc/1zTmNNDz/12958b48-8938-4742-bb77-96643792d844-size3840-crop-Center.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "ما هي شركة هذا المنتج ؟",
-        correctAnswer: "فيمتو - vimto",
+        text: "شنو اسم المنتج واسم البراند ؟",
+        correctAnswer: "Ever (Crispy Cup )",
         points: 500,
-        image: "https://i.postimg.cc/rmFHchD0/image.png",
-        buttonIndex: 2
+        image: "https://i.postimg.cc/8Ck1h9KN/78895-DEAE4-FC14-F2-CC572202-FF7-AD5-C5.jpg",
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -389,7 +347,7 @@ export const questions = [
         correctAnswer: "Carrot",
         points: 500,
         image: "https://i.postimg.cc/mgqhmY6c/image-removebg-preview.png",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -397,7 +355,7 @@ export const questions = [
         correctAnswer: "Nestle",
         points: 700,
         image: "https://i.postimg.cc/jSZzQx98/image-8.png",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -405,7 +363,7 @@ export const questions = [
         correctAnswer: "حلويات الشمالي",
         points: 700,
         image: "https://i.postimg.cc/J038H4xx/image-9.png",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -437,7 +395,7 @@ export const questions = [
         correctAnswer: "شرق",
         points: 500,
         image: "https://i.postimg.cc/02zfrnrK/image-2.png",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -445,7 +403,7 @@ export const questions = [
         correctAnswer: "المنطقة العاشرة",
         points: 500,
         image: "https://i.postimg.cc/SR1fDTN8/image-3.png",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -453,7 +411,7 @@ export const questions = [
         correctAnswer: "بابل اللبناني",
         points: 700,
         image: "https://i.postimg.cc/hjtBmvJj/image-4.png",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -461,7 +419,7 @@ export const questions = [
         correctAnswer: "العبدلي ( Olea )",
         points: 700,
         image: "https://i.postimg.cc/QMLgVKyQ/image-5.png",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -490,28 +448,28 @@ export const questions = [
         text: "في أي عام عرض الجزء الأول من المسلسل؟",
         correctAnswer: "2006",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "ما هي مهنة معتز في المسلسل؟",
         correctAnswer: "حلاق",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو اسم زوجة أبو عصام في المسلسل؟",
         correctAnswer: "أم عصام",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "كم عدد أجزاء مسلسل باب الحارة؟",
         correctAnswer: "11",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -523,45 +481,52 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "في أي نادي بدأ كريستيانو رونالدو مسيرته؟",
-        correctAnswer: "سبورتنغ لشبونة",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "Antony",
         points: 300,
+        image: "https://i.postimg.cc/QM60tKKh/image-removebg-preview-1.png",
+        answerImage: "https://ichef.bbci.co.uk/ace/standard/1024/cpsprodpb/7004/live/a66f34b0-f433-11ef-8241-abbb923a0925.jpg",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "مع أي نادي حقق ميسي أول كرة ذهبية؟",
-        correctAnswer: "برشلونة",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "Omar Marmoush",
         points: 300,
+        image: "https://i.postimg.cc/tRSTRqgy/image-11-removebg-preview.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "كم عدد الكرات الذهبية التي حصل عليها زين الدين زيدان؟",
-        correctAnswer: "1",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "João Félix",
         points: 500,
-        buttonIndex: 2
+        image: "https://i.postimg.cc/G2v57hSD/image-removebg-preview-2.png",
+        buttonIndex: 0
       },
       {
         id: 4,
-        text: "في أي نادي اعتزل بيليه؟",
-        correctAnswer: "نيويورك كوزموس",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "Jhon Duran",
         points: 500,
-        buttonIndex: 3
+        image: "https://i.postimg.cc/mDrPVtrX/image-12-removebg-preview.png",
+        buttonIndex: 1
       },
       {
         id: 5,
-        text: "مع أي منتخب لعب جورج وياه؟",
-        correctAnswer: "ليبيريا",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "Carney Cheukwuemeka",
         points: 700,
-        buttonIndex: 4
+        image: "https://i.postimg.cc/9QFrtLQP/image-removebg-preview-3.png",
+        buttonIndex: 0
       },
       {
         id: 6,
-        text: "في أي نادي بدأ محمد صلاح مسيرته الاحترافية؟",
-        correctAnswer: "المقاولون العرب",
+        text: "ما اسم الاعب صاحب هذي الأنتقالات",
+        correctAnswer: "MARCUS RASHFORD",
         points: 700,
-        buttonIndex: 5
+        image: "https://i.postimg.cc/VNqpfWXT/image-removebg-preview-4.png",
+        buttonIndex: 1
       }
     ]
   },
@@ -573,9 +538,10 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "ما هو البرايمر؟",
-        correctAnswer: "أساس ما قبل المكياج",
+        text: "جم عدد درجات الفاونديشن ؟",
+        correctAnswer: "5 درجات",
         points: 300,
+        image: "https://i.postimg.cc/pLQjVm1r/4981098f-83a1-451d-8b3d-bfb59b172de1-7c605762-3cd9-4798-97ce-5d6a5cd24ae4-3-removebg-preview.png",
         buttonIndex: 0
       },
       {
@@ -592,14 +558,14 @@ export const questions = [
         correctAnswer: "ماريو",
         points: 500,
         image: "https://i.postimg.cc/C5xGHM9w/8ud-CRxg-Ap-QF18f-HYKAP7d-P9-Owd-Pg-WFqhw-Gg-Bu-Apt.png",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "من هي الفنانة صاحبة العلامة التجارية -رير بيوتي- ؟",
         correctAnswer: "Selena Gomez",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -607,7 +573,7 @@ export const questions = [
         correctAnswer: "2012",
         points: 700,
         image: "https://i.postimg.cc/TYLKgWht/1-HMfq-N1tw-Humx-X9-Uk-YBGAjq-PHd-KVry-LJEU2iw-WWz.png",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -615,7 +581,7 @@ export const questions = [
         correctAnswer: "ميكب فور ايفر",
         points: 700,
         image: "https://i.postimg.cc/Xvkvgff0/v-Ye-Q8-SOjl-Ni-XWHYy-K4i-Nu-BHMJs30z1-CHOxspiw0u.png",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -646,28 +612,31 @@ export const questions = [
         correctAnswer: "Lip Butter Balm",
         points: 500,
         image: "https://i.postimg.cc/k4Q7xZHc/575239-swatch.avif",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
-        text: "ما هو أشهر مصمم أزياء كويتي؟",
-        correctAnswer: "يوسف الجسمي",
+        text: "شنو نوع جلد هذي الجنطه ؟",
+        correctAnswer: "Ostrich Leather",
         points: 500,
-        buttonIndex: 3
+        image: "https://i.postimg.cc/VvzB1jzY/da62199f-0a53-43d6-ab02-023eb2edae7d-d3d75fd8-4458-4a4d-800e-4de63d2aa84e-IMG-9840-removebg-preview.png",
+        buttonIndex: 1
       },
       {
         id: 5,
-        text: "ما هو أشهر مركز تجميل في الكويت؟",
-        correctAnswer: "مركز هيا كلينك",
+        text: "شنو ماركة هذي الجنطه ؟",
+        correctAnswer: "Louis Vuitton",
         points: 700,
-        buttonIndex: 4
+        image: "https://i.postimg.cc/j2GxPhCT/146194e7-5620-4460-958a-6b644b59051f-248ebf10-1aac-4a77-8d73-e339327c655a-IMG-5785.png",
+        buttonIndex: 0
       },
       {
         id: 6,
-        text: "ما هو أشهر ماركة عطور نسائية؟",
-        correctAnswer: "شانيل",
+        text: "شنو ماركة هذي الجنطه ؟",
+        correctAnswer: "Bottega Veeneta",
         points: 700,
-        buttonIndex: 5
+        image: "https://i.postimg.cc/rsqbb0b4/cf9f6612-0e62-41eb-9a08-19e87a7550d9-3049cfd3-9993-4def-a941-095c6d435755-IMG-9833-removebg-preview.png",
+        buttonIndex: 1
       }
     ]
   },
@@ -698,28 +667,28 @@ export const questions = [
         text: "• شيء صافٍ كالماء ومولود في النار وإذا مات استقرّ على الأرض؟",
         correctAnswer: "الزجاج",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "شيء له أوراق لكنه ليس نبات، وله جلد لكنه ليس حيوان، لديه عِلم لكنه ليس إنسان فما هو؟",
         correctAnswer: "الكتاب",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو الشيء الذي يكون أخضر في الأرض، وأسود في السوق، وأحمر في البيت؟",
         correctAnswer: "الشاي",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "• بيت بلا أبواب ولا نوافذ، فما هو؟",
         correctAnswer: "بيت الشعر",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -748,28 +717,28 @@ export const questions = [
         text: "ما هي عاصمة المملكة العربية السعودية؟",
         correctAnswer: "الرياض",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "كم عدد المناطق الإدارية في السعودية؟",
         correctAnswer: "13",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو أكبر مطار في المملكة العربية السعودية؟",
         correctAnswer: "مطار الملك خالد الدولي",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "ما هو برج الساعة الملكي في مكة المكرمة؟",
         correctAnswer: "برج الساعة",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -798,28 +767,28 @@ export const questions = [
         text: "ما هو أهم شيء يجب أخذه للتخييم في البر؟",
         correctAnswer: "الماء",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "ما هو نوع الخيمة المناسب للتخييم في البر؟",
         correctAnswer: "خيمة مقاومة للرياح",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو أفضل مكان لنصب الخيمة في البر؟",
         correctAnswer: "مكان مرتفع",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "ما هي أفضل طريقة لإشعال النار في البر؟",
         correctAnswer: "الحطب الجاف",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -851,7 +820,7 @@ export const questions = [
         correctAnswer: "ماريو",
         points: 500,
         image: "https://img.freepik.com/free-vector/retro-game-background_23-2148171708.jpg",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -859,7 +828,7 @@ export const questions = [
         correctAnswer: "Epic Games",
         points: 500,
         image: "https://img.freepik.com/free-vector/battle-royale-concept-illustration_114360-5598.jpg",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -867,7 +836,7 @@ export const questions = [
         correctAnswer: "Nintendo Entertainment System",
         points: 700,
         image: "https://img.freepik.com/free-vector/retro-gaming-controller_23-2148086775.jpg",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -875,7 +844,7 @@ export const questions = [
         correctAnswer: "كين كوتاراجي",
         points: 700,
         image: "https://img.freepik.com/free-vector/gaming-company-logo_23-2148227484.jpg",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -907,7 +876,7 @@ export const questions = [
         correctAnswer: "89",
         points: 500,
         image: "https://img.freepik.com/free-vector/player-stats-illustration_23-2148642203.jpg",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -915,7 +884,7 @@ export const questions = [
         correctAnswer: "كيليان مبابي",
         points: 500,
         image: "https://img.freepik.com/free-vector/speed-stats-illustration_23-2148642204.jpg",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -923,7 +892,7 @@ export const questions = [
         correctAnswer: "تيبو كورتوا",
         points: 700,
         image: "https://img.freepik.com/free-vector/goalkeeper-illustration_23-2148642205.jpg",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -931,7 +900,7 @@ export const questions = [
         correctAnswer: "جود بيلينغهام",
         points: 700,
         image: "https://img.freepik.com/free-vector/young-talent-illustration_23-2148642206.jpg",
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -960,28 +929,28 @@ export const questions = [
         text: "ما هو اختبار اللغة الإنجليزية المطلوب للدراسة؟",
         correctAnswer: "TOEFL",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "كم مدة برنامج OPT بعد التخرج؟",
         correctAnswer: "12 شهر",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو الحد الأدنى لدرجة التوفل المطلوبة للقبول؟",
         correctAnswer: "79",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "كم عدد الساعات المطلوبة للتسجيل كطالب دوام كامل؟",
         correctAnswer: "12",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -1010,28 +979,28 @@ export const questions = [
         text: "ما هو اختبار اللغة الإنجليزية المقبول للدراسة؟",
         correctAnswer: "IELTS",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "كم مدة التأشيرة الدراسية بعد انتهاء الدراسة؟",
         correctAnswer: "4 شهور",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو الحد الأدنى لدرجة IELTS المطلوبة للقبول؟",
         correctAnswer: "6.5",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "كم تبلغ رسوم NHS للطلاب الدوليين سنوياً؟",
         correctAnswer: "470 £",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -1060,28 +1029,28 @@ export const questions = [
         text: "ما هو اسم المطار الرئيسي في قطر؟",
         correctAnswer: "مطار حمد الدولي",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "ما هو اسم العملة القطرية؟",
         correctAnswer: "الريال القطري",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "ما هو اسم أكبر جزيرة اصطناعية في قطر؟",
         correctAnswer: "اللؤلؤة",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "ما هو اسم المتحف الوطني في قطر؟",
         correctAnswer: "متحف قطر الوطني",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
@@ -1112,33 +1081,87 @@ export const questions = [
         text: "من هو ملحن أغنية 'علمني حبك'؟",
         correctAnswer: "طلال مداح",
         points: 500,
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
         text: "من هو مؤلف أغنية 'يا دار'؟",
         correctAnswer: "عبدالله الفرج",
         points: 500,
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
         text: "من هو أول مطرب كويتي سجل أغنية؟",
         correctAnswer: "عبداللطيف الكويتي",
         points: 700,
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
         text: "في أي عام تأسست فرقة ميامي الكويتية؟",
         correctAnswer: "1973",
         points: 700,
-        buttonIndex: 5
+        buttonIndex: 1
       }
     ]
   },
   {
     id: 22,
+    name: "شباب البومب",
+    description: "",
+    image: "https://i.postimg.cc/rz6XNvPp/IMG-3747.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "شنو اسم المصارع في هذي الحلقة ؟",
+        correctAnswer: "جون",
+        points: 300,
+        image: "https://i.postimg.cc/9MRJWzLD/image-13.png",
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "تركي بجم باع سيارتة في هذي الحلقة ؟",
+        correctAnswer: "6000 ريال",
+        points: 300,
+        image: "https://i.postimg.cc/KzDrcLnv/image-14.png",
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "بجم انسامت الناقة الي اشتراها عامر وشنو سماها ؟",
+        correctAnswer: "مليون ريال (مجلعد)",
+        points: 500,
+        image: "https://i.postimg.cc/LXP4jBy2/image-15.png",
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "شنو فصيلة الدم الي  يقدر يشيل المطرقة في حلقة - سبايدرمان",
+        correctAnswer: "O-",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "في هذي الحلقة بكم اشتره كفتة اللوحه وبكم بيعت ؟",
+        correctAnswer: "شراها ب 500 ريال وباعها ب200 مليون دولار",
+        points: 700,
+        image: "https://i.postimg.cc/63Tcccg2/image-16.png",
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: " جم كانت المكافئة لمن من يدلي على معلومات عن السفاح ؟ (حلقة السفاح )",
+        correctAnswer: "5 مليون ريال",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 23,
     name: "اغاني عراقية",
     description: "تحدي معرفة الأغاني العراقية",
     image: "https://i.postimg.cc/yx3zKWhN/image-7.png",
@@ -1165,7 +1188,7 @@ export const questions = [
         correctAnswer: "ماجد المهندس - تناديك",
         points: 500,
         audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
-        buttonIndex: 2
+        buttonIndex: 0
       },
       {
         id: 4,
@@ -1173,7 +1196,7 @@ export const questions = [
         correctAnswer: "سيف نبيل - غريبة",
         points: 500,
         audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
-        buttonIndex: 3
+        buttonIndex: 1
       },
       {
         id: 5,
@@ -1181,7 +1204,7 @@ export const questions = [
         correctAnswer: "نور الزين - يا منعنع",
         points: 700,
         audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
-        buttonIndex: 4
+        buttonIndex: 0
       },
       {
         id: 6,
@@ -1189,7 +1212,63 @@ export const questions = [
         correctAnswer: "محمد السالم - نعم انته",
         points: 700,
         audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
-        buttonIndex: 5
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 24,
+    name: "سيارات",
+    description: "",
+    image: "https://i.postimg.cc/C1FdkMPm/IMG-3756.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "شنو شركة السيارة ؟",
+        correctAnswer: "BMW",
+        points: 300,
+        image: "https://i.postimg.cc/ZRF7sHLJ/faacc4d5-94f1-4aac-b904-164add467da4-ec45af62-b5b0-4a87-8ce2-9878e7c40495-4.png",
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "شنو شركة السيارة ؟",
+        correctAnswer: "جيتور تي تو (T2)",
+        points: 300,
+        image: "https://i.postimg.cc/NFFnyT1Y/big-up-198e66816c1614830ccb6359d593ef87.png",
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "شنو شركة السيارة وشنو اسمها ؟",
+        correctAnswer: "Aston Martin Vanquish",
+        points: 500,
+        image: "https://hips.hearstapps.com/hmg-prod/images/2025-aston-martin-vanquish-136-67168a80b769c.jpg?crop=0.605xw:0.510xh;0.0195xw,0.476xh&resize=1200:*",
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "شنو اسم السيارة ؟",
+        correctAnswer: "كورولا 2019",
+        points: 500,
+        image: "https://autozone.com.sa/wp-content/uploads/2019/02/corolla-interior.jpg",
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "شنو شركة السيارة ؟",
+        correctAnswer: "كونيغسيغ CC850",
+        points: 700,
+        image: "https://www.rrarabia.com/sites/default/files/styles/main_image_1000_x_548/public/2022-08/Koenigsegg%20CC850%202-%20credit%20Koenigsegg.jpg",
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "شنو شركة السيارة ؟",
+        correctAnswer: "لوتس اميرا",
+        points: 700,
+        image: "https://arabgt.com/wp-content/uploads/2021/09/%D9%84%D9%88%D8%AA%D8%B3-%D8%A7%D9%85%D9%8A%D8%B1%D8%A7-750x430.jpg",
+        buttonIndex: 1
       }
     ]
   }
