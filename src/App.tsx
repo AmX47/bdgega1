@@ -1,60 +1,92 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import { LandingPage } from './components/LandingPage';
 import { Categories } from './components/Categories';
 import { GameBoard } from './components/GameBoard';
+import { PaymentSuccess } from './components/PaymentSuccess';
+import { PaymentError } from './components/PaymentError';
 
-function App() {
-  const [currentPage, setCurrentPage] = useState<'landing' | 'categories' | 'game'>('landing');
-  const [gameSetup, setGameSetup] = useState<{
-    categoryIds: number[];
-    gameName: string;
-    team1Name: string;
-    team2Name: string;
-    helpers: string[];
-  } | null>(null);
+interface User {
+  username: string;
+  name: string;
+}
 
-  const handleStartGame = (gameData: {
-    categoryIds: number[];
-    gameName: string;
-    team1Name: string;
-    team2Name: string;
-    helpers: string[];
-  }) => {
-    setGameSetup(gameData);
-    setCurrentPage('game');
+interface GameSetup {
+  categoryIds: number[];
+  gameName: string;
+  team1Name: string;
+  team2Name: string;
+  helpers: string[];
+}
+
+function AppContent() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+  const [gameSetup, setGameSetup] = useState<GameSetup | null>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  const handleStartGame = (setup: GameSetup) => {
+    setGameSetup(setup);
+    navigate('/game');
   };
 
-  const handleHome = () => {
-    setCurrentPage('landing');
-    setGameSetup(null);
+  const handleLogin = (userData: User) => {
+    setUser(userData);
+    localStorage.setItem('user', JSON.stringify(userData));
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('user');
   };
 
   return (
-    <div>
-      {currentPage === 'landing' && (
+    <Routes>
+      <Route path="/" element={
         <LandingPage
-          onPlay={() => setCurrentPage('categories')}
-          onLogin={() => console.log('Login clicked')}
-          onRegister={() => console.log('Register clicked')}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+          currentUser={user}
         />
-      )}
-      {currentPage === 'categories' && (
+      } />
+      <Route path="/categories" element={
         <Categories
           onStartGame={handleStartGame}
-          onHome={handleHome}
+          onHome={() => navigate('/')}
+          onPlay={() => navigate('/game')}
+          currentUser={user}
         />
-      )}
-      {currentPage === 'game' && gameSetup && (
-        <GameBoard
-          categoryIds={gameSetup.categoryIds}
-          gameName={gameSetup.gameName}
-          team1Name={gameSetup.team1Name}
-          team2Name={gameSetup.team2Name}
-          helpers={gameSetup.helpers}
-          onHome={handleHome}
-        />
-      )}
-    </div>
+      } />
+      <Route path="/game" element={
+        gameSetup && (
+          <GameBoard
+            categoryIds={gameSetup.categoryIds}
+            gameName={gameSetup.gameName}
+            team1Name={gameSetup.team1Name}
+            team2Name={gameSetup.team2Name}
+            helpers={gameSetup.helpers}
+            onHome={() => navigate('/')}
+            currentUser={user}
+          />
+        )
+      } />
+      <Route path="/payment/success" element={<PaymentSuccess />} />
+      <Route path="/payment/error" element={<PaymentError />} />
+    </Routes>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

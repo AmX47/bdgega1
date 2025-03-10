@@ -315,7 +315,7 @@ export const questions = [
     id: 7,
     name: "منتجات ",
     description: "أسئلة عن المنتجات ",
-    image: "https://i.postimg.cc/KvppcKMx/IMG-3722.jpg",
+    image: "https://i.postimg.cc/kMTfwkbJ/IMG-3722.jpg",
     questions: [
       {
         id: 1,
@@ -534,7 +534,7 @@ export const questions = [
     id: 11,
     name: "ميك اب",
     description: "أسئلة عن المكياج ومستحضرات التجميل",
-    image: "https://i.postimg.cc/hvBhNbns/IMG-3724.jpg",
+    image: "https://i.postimg.cc/3JQZxYmx/IMG-3724.jpg",
     questions: [
       {
         id: 1,
@@ -696,7 +696,7 @@ export const questions = [
     id: 14,
     name: "السعودية",
     description: "أسئلة عن المملكة العربية السعودية",
-    image: "https://i.postimg.cc/bJGF4kgZ/IMG-3727.jpg",
+    image: "https://i.postimg.cc/YCtpzLKL/IMG-37217.jpg",
     questions: [
       {
         id: 1,

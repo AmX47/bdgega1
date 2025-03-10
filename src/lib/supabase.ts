@@ -1,3 +1,5 @@
+// This file is no longer needed and can be deleted
+
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://hlzpthhnjbyrjfwzfynd.supabase.co';
