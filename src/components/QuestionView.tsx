@@ -9,6 +9,7 @@ interface Question {
   image?: string;
   answerImage?: string;
   audio?: string;
+  video?: string;
 }
 
 interface Team {
@@ -40,6 +41,7 @@ const QuestionView: React.FC<QuestionViewProps> = ({
   const [timer, setTimer] = useState(60);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
   const audioRef = useRef<HTMLAudioElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -86,15 +88,39 @@ const QuestionView: React.FC<QuestionViewProps> = ({
     }
   }, [question.audio]);
 
+  useEffect(() => {
+    if (videoRef.current && question.video) {
+      videoRef.current.addEventListener('timeupdate', handleTimeUpdate);
+      videoRef.current.addEventListener('loadedmetadata', handleLoadedMetadata);
+      videoRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(error => {
+        console.error('Auto-play failed:', error);
+      });
+      
+      return () => {
+        if (videoRef.current) {
+          videoRef.current.pause();
+          videoRef.current.removeEventListener('timeupdate', handleTimeUpdate);
+          videoRef.current.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        }
+      };
+    }
+  }, [question.video]);
+
   const handleTimeUpdate = () => {
     if (audioRef.current) {
       setCurrentTime(audioRef.current.currentTime);
+    } else if (videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
     }
   };
 
   const handleLoadedMetadata = () => {
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
+    } else if (videoRef.current) {
+      setDuration(videoRef.current.duration);
     }
   };
 
@@ -103,6 +129,8 @@ const QuestionView: React.FC<QuestionViewProps> = ({
     setCurrentTime(time);
     if (audioRef.current) {
       audioRef.current.currentTime = time;
+    } else if (videoRef.current) {
+      videoRef.current.currentTime = time;
     }
   };
 
@@ -118,6 +146,13 @@ const QuestionView: React.FC<QuestionViewProps> = ({
         audioRef.current.pause();
       } else {
         audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    } else if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
       }
       setIsPlaying(!isPlaying);
     }
@@ -151,21 +186,51 @@ const QuestionView: React.FC<QuestionViewProps> = ({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] flex items-center justify-center p-4" dir="rtl">
-      {/* Timer */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-[#800020] px-6 py-2 rounded-lg shadow-lg flex items-center gap-3">
-        <span className="text-2xl font-bold text-[#F5DEB3]">{formatTime(timer)}</span>
-        <button
-          onClick={toggleTimer}
-          className="text-[#F5DEB3] text-xl hover:text-[#E8D1A0] transition-colors"
-        >
-          {isTimerRunning ? '⏸' : '▶'}
-        </button>
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-4xl w-full">
+      <div className="max-w-4xl w-full relative">
+        {/* Timer */}
+        <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
+          <div className="relative">
+            {/* Play/Pause Button */}
+            <button
+              onClick={toggleTimer}
+              className="absolute -top-9 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-[#F5DEB3] hover:bg-[#E8D1A0] flex items-center justify-center shadow-lg transition-all duration-300 border border-[#800020] group"
+            >
+              {isTimerRunning ? (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#800020] group-hover:text-[#600018]">
+                  <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 01.75-.75H9a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75V5.25zm7 0a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v13.5a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75V5.25z" clipRule="evenodd" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-[#800020] group-hover:text-[#600018]">
+                  <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+                </svg>
+              )}
+            </button>
+
+            {/* Timer Circle */}
+            <div className={`w-24 h-24 rounded-t-full flex items-center justify-center ${
+              timer <= 10 ? 'bg-red-600' : timer <= 30 ? 'bg-yellow-600' : 'bg-[#800020]'
+            } border-t-4 border-x-4 border-b-0 border-[#F5DEB3] shadow-lg transform transition-all duration-300 ${
+              timer <= 10 ? 'scale-110' : ''
+            }`}>
+              <div className="text-[#F5DEB3] text-3xl font-bold">{formatTime(timer)}</div>
+            </div>
+          </div>
+        </div>
+
         {/* Question/Answer Box */}
-        <div className="bg-[#800020] rounded-lg p-8 mb-6 text-center">
+        <div className="min-h-[300px] bg-[#800020] rounded-xl rounded-t-none p-8 text-center relative">
+          {/* Right Border */}
+          <div className="absolute top-0 right-0 w-[45%] h-4 border-t-4 border-r-4 border-[#F5DEB3]"></div>
+          {/* Left Border */}
+          <div className="absolute top-0 left-0 w-[45%] h-4 border-t-4 border-l-4 border-[#F5DEB3]"></div>
+          {/* Right Side Border */}
+          <div className="absolute top-0 right-0 w-4 h-full border-r-4 border-[#F5DEB3]"></div>
+          {/* Left Side Border */}
+          <div className="absolute top-0 left-0 w-4 h-full border-l-4 border-[#F5DEB3]"></div>
+          {/* Bottom Border */}
+          <div className="absolute bottom-0 left-0 w-full h-4 border-b-4 border-[#F5DEB3]"></div>
+
           {!showAnswer ? (
             <>
               <div className="text-2xl font-bold text-[#F5DEB3] mb-4">
@@ -174,6 +239,20 @@ const QuestionView: React.FC<QuestionViewProps> = ({
               <div className="text-4xl font-extrabold text-[#F5DEB3] mb-6 text-center tracking-wide">
                 {question.text}
               </div>
+              {question.video && (
+                <div className="mb-6 relative">
+                  <video
+                    ref={videoRef}
+                    className="w-full max-w-2xl mx-auto rounded-lg shadow-lg"
+                    controls
+                    autoPlay
+                    playsInline
+                  >
+                    <source src={question.video} type="video/mp4" />
+                    متصفحك لا يدعم تشغيل الفيديو
+                  </video>
+                </div>
+              )}
               {question.image && (
                 <div className="flex justify-center mb-6">
                   <img 
@@ -197,7 +276,7 @@ const QuestionView: React.FC<QuestionViewProps> = ({
                         onClick={handlePlayPause}
                         className="w-14 h-14 bg-[#F5DEB3] rounded-full flex items-center justify-center text-[#800020] text-2xl font-bold hover:bg-[#E8D1A0] transition-colors shadow-lg"
                       >
-                        {isPlaying ? "⏸" : "▶"}
+                        {isPlaying ? "||" : "▶︎"}
                       </button>
                     </div>
                     <div className="w-full flex items-center gap-2">
@@ -271,6 +350,21 @@ const QuestionView: React.FC<QuestionViewProps> = ({
               )}
             </>
           )}
+        </div>
+
+        {/* Report Button */}
+        <div className="mb-4 flex justify-center">
+          <a 
+            href="https://www.instagram.com/bdgeegakw" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-[#F5DEB3] hover:text-white transition-colors border border-[#800020] hover:border-[#600018] px-4 py-2 rounded-full"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+            </svg>
+            <span>الإبلاغ عن مشكلة</span>
+          </a>
         </div>
 
         {/* Back Button */}

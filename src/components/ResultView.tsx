@@ -7,7 +7,7 @@ interface ResultViewProps {
   team2Name: string;
   team1Score: number;
   team2Score: number;
-  onHome: () => void;
+  onBackToHome: () => void;
 }
 
 export function ResultView({
@@ -15,7 +15,7 @@ export function ResultView({
   team2Name,
   team1Score,
   team2Score,
-  onHome
+  onBackToHome
 }: ResultViewProps) {
   const isTie = team1Score === team2Score;
   const winner = team1Score > team2Score ? team1Name : team2Name;
@@ -97,12 +97,11 @@ export function ResultView({
         initial={{ y: 50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 1 }}
-        onClick={onHome}
+        onClick={onBackToHome}
         className="bg-[#800020] text-white px-10 py-4 rounded-xl text-xl hover:bg-[#600018] transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1 mb-8"
       >
         العودة للصفحة الرئيسية
       </motion.button>
-
 
       <motion.div
         initial={{ y: 50, opacity: 0 }}

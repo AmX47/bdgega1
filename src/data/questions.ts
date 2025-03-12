@@ -1168,50 +1168,55 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "كاظم الساهر - علمني حبك",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "قائد حلمي و نصرت البدر - ويلي",
         points: 300,
         audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        answerImage: "https://i.postimg.cc/Y0cJBbm6/hq720.avif",
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "حاتم العراقي - حلالي",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "خالد الحنين - ماتبت",
         points: 300,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2OTg5Njlf/%D9%85%D8%A7%D8%AA%D8%A8%D8%AA.mp3",
+        answerImage: "https://i.postimg.cc/CM4bnJFd/image-26.png",
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "ماجد المهندس - تناديك",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "قائد حلمي - الله لايجعلني شامت",
         points: 500,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2OTg5ODBf/%D8%A7%D9%84%D9%84%D9%87-%D9%84%D8%A7%D9%8A%D8%AC%D8%B9%D9%84%D9%86%D9%8A-%D8%B4%D8%A7%D9%85%D8%AA.mp3",
+        answerImage: "https://i.postimg.cc/MTY28g1y/image-27.png",
         buttonIndex: 0
       },
       {
         id: 4,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "سيف نبيل - غريبة",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "خالد الحنين - امتحنتك",
         points: 500,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2OTkwMDBf/%D8%A7%D9%85%D8%AA%D8%AD%D9%86%D8%AA%D9%83-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2014.mp3",
+        answerImage: "https://i.postimg.cc/Hk7LCsnX/hq720.avif",
         buttonIndex: 1
       },
       {
         id: 5,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "نور الزين - يا منعنع",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "محمد السالم - الو ها ياحبيبي البارحه شلونك",
         points: 700,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2OTkwNThf/%D9%85%D8%AD%D9%85%D8%AF-%D8%A7%D9%84%D8%B3%D8%A7%D9%84%D9%85-%D9%81%D9%8A--%D8%A7%D9%84%D9%88-%D9%87%D8%A7-%D9%8A%D8%A7%D8%AD%D8%A8%D9%8A%D8%A8%D9%8A-%D8%A7%D9%84%D8%A8%D8%A7%D8%B1%D8%AD%D9%87-%D8%B4%D9%84%D9%88%D9%86%D9%83.mp3",
         buttonIndex: 0
       },
       {
         id: 6,
-        text: "استمع للأغنية وحدد اسم المطرب وعنوان الأغنية",
-        correctAnswer: "محمد السالم - نعم انته",
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "صباح محمود - زعلان",
         points: 700,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2OTkwMTdf/%D8%B2%D8%B9%D9%84%D8%A7%D9%86--%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2014.mp3",
+        answerImage: "https://i.postimg.cc/P5GMHJKk/hq720.avif",
         buttonIndex: 1
       }
     ]
@@ -1269,6 +1274,540 @@ export const questions = [
         points: 700,
         image: "https://arabgt.com/wp-content/uploads/2021/09/%D9%84%D9%88%D8%AA%D8%B3-%D8%A7%D9%85%D9%8A%D8%B1%D8%A7-750x430.jpg",
         buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 25,
+    name: "سجون العالم",
+    description: "أسئلة عن أشهر السجون في العالم وقصصها",
+    image: "https://i.postimg.cc/g2zrq7JR/image-17.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما السجن الذي يُعرف بأنه الأسوأ سمعة في العالم بسبب التعذيب وظروفه القاسية في سوريا؟",
+        correctAnswer: "سجن صيدنايا",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/4ff4/live/3a714320-ba86-11ef-946d-abbb923a0925.jpg.webp"
+      },
+      {
+        id: 2,
+        text: "جم سجن انتقل إلية ياسر البحري ؟",
+        correctAnswer: "7 سجون",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "ما هو اسم السجن الأمريكي الشهير الذي يقع في خليج سان فرانسيسكو وكان يُعرف بأنه لا يمكن الهروب منه؟",
+        correctAnswer: "سجن ألكاتراز.",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://i.pinimg.com/736x/9d/67/15/9d6715df5d0bd6148ec3fffa7e0dce92.jpg"
+      },
+      {
+        id: 4,
+        text: "ما هو أكبر سجن في العالم من حيث عدد النزلاء؟",
+        correctAnswer: "سجن رايكرز آيلاند في نيويورك، الولايات المتحدة",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/USGS_Rikers_Island.png/1098px-USGS_Rikers_Island.png"
+      },
+      {
+        id: 5,
+        text: "أي دولة تضم سجن (لا موديلو) الشهير بتمرده العنيف؟",
+        correctAnswer: "كولومبيا",
+        points: 700,
+        buttonIndex: 0,
+        answerImage: "https://abunawaf.com/media/%D8%B3%D8%AC%D9%86-2302161?amp"
+      },
+      {
+        id: 6,
+        text: "ما الدولة التي يوجد بها سجن الباستيل الشهير؟",
+        correctAnswer: "فرنسا",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://www.mozaweb.hu/ar_SA/mozaik3D/TOR/ujkor/bastille/960.jpg"
+      }
+    ]
+  },
+  {
+    id: 26,
+    name: "قصص الأنبياء",
+    description: "أسئلة عن قصص الأنبياء عليهم السلام",
+    image: "https://i.postimg.cc/yNMMrQM1/qss.webp",
+    questions: [
+      {
+        id: 1,
+        text: "كم سنة لبث نوح عليه السلام في قومه يدعوهم؟",
+        correctAnswer: "950 سنة",
+        points: 300,
+        buttonIndex: 0,
+      },
+      {
+        id: 2,
+        text: "ما هو النبي الذي ذكر في القرآن 25 مرة وسميت سورة باسمه؟",
+        correctAnswer: "يونس عليه السلام",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "من هو النبي الذي كان يصنع الدروع؟",
+        correctAnswer: "داود عليه السلام",
+        points: 500,
+        buttonIndex: 0,
+      },
+      {
+        id: 4,
+        text: "ما اسم الطير الذي أرسله نوح عليه السلام لمعرفة وجود اليابسة؟",
+        correctAnswer: "الغراب ثم الحمامة",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://i.postimg.cc/MHBmffYx/94371025-547580822568575-464831056177004544-n.jpg"
+      },
+      {
+        id: 5,
+        text: "من هو النبي الذي عاش أطول عمر في التاريخ؟",
+        correctAnswer: "نوح عليه السلام (950 سنة في الدعوة + عمره قبل وبعد)",
+        points: 700,
+        buttonIndex: 0,
+      },
+      {
+        id: 6,
+        text: "ما هو عدد السنين التي قضاها يوسف عليه السلام في السجن؟",
+        correctAnswer: "7 سنوات",
+        points: 700,
+        buttonIndex: 1,
+      }
+    ]
+  },
+  {
+    id: 27,
+    name: "مجمعات الكويت",
+    description: "أسئلة عن مجمعات وأسواق الكويت",
+    image: "https://i.postimg.cc/nhfY0MGQ/image-25.png",
+    questions: [
+      {
+        id: 1,
+        text: "في أي سنة تم افتتاح مجمع الأفنيوز؟",
+        correctAnswer: "2007",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/3wCMmWnX/30c0aea0-76e2-4f6a-b4de-df5148b4e630.jpg"
+      },
+      {
+        id: 2,
+        text: "كم يبلغ عدد مداخل مجمع 360؟",
+        correctAnswer: "6 مداخل رئيسية",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "شنو اسم هالمكان ؟",
+        correctAnswer: "فوروم - The Forum",
+        points: 500,
+        image: "https://i.postimg.cc/BQLnDcD2/epdkKfJ.jpg",
+        buttonIndex: 0,
+      },
+      {
+        id: 4,
+        text: "ما هو أول مجمع تجاري في الكويت؟",
+        correctAnswer: "مجمع الصالحية (1973)",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://i.postimg.cc/P503JhHm/salhia-commercial-center-1.jpg"
+      },
+      {
+        id: 5,
+        text: "كم تبلغ المساحة الإجمالية لمجمع الأفنيوز؟",
+        correctAnswer: "مليون و800 ألف متر مربع",
+        points: 700,
+        buttonIndex: 0,
+      },
+      {
+        id: 6,
+        text: "ما اسم أكبر سينما في الكويت وفي أي مجمع تقع؟",
+        correctAnswer: "سينسكيب - مجمع 360",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://i.postimg.cc/1RYpsBsF/189681026-584777829094926-5556805451892423137-n.jpg"
+      }
+    ]
+  },
+  {
+    id: 28,
+    name: "إسلامي",
+    description: "أسئلة متنوعة عن الإسلام وتعاليمه",
+    image: "https://i.postimg.cc/jqPxKNc3/isl.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي أول سورة نزلت في القرآن الكريم؟",
+        correctAnswer: "سورة العلق",
+        points: 300,
+        buttonIndex: 0,
+      },
+      {
+        id: 2,
+        text: "كم عدد أركان الإسلام؟",
+        correctAnswer: "خمسة أركان",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "من هو أول مؤذن في الإسلام؟",
+        correctAnswer: "بلال بن رباح رضي الله عنه",
+        points: 500,
+        buttonIndex: 0,
+      },
+      {
+        id: 4,
+        text: "في أي غزوة نزل قول الله تعالى: (إذ يغشيكم النعاس أمنة منه)؟",
+        correctAnswer: "غزوة بدر",
+        points: 500,
+        buttonIndex: 1,
+      },
+      {
+        id: 5,
+        text: "ما هي السورة التي تعدل ثلث القرآن؟",
+        correctAnswer: "سورة الإخلاص",
+        points: 700,
+        buttonIndex: 0,
+      },
+      {
+        id: 6,
+        text: "كم عدد الصحابة الذين شهدوا بيعة الرضوان؟",
+        correctAnswer: "1400 صحابي",
+        points: 700,
+        buttonIndex: 1,
+      }
+    ]
+  },
+  {
+    id: 29,
+    name: "القرآن",
+    description: "أسئلة عن القرآن الكريم وعلومه",
+    image: "https://i.postimg.cc/2Sv3KJJy/image-19.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي أطول سورة في القرآن الكريم؟",
+        correctAnswer: "سورة البقرة",
+        points: 300,
+        buttonIndex: 0,
+      },
+      {
+        id: 2,
+        text: "كم عدد أجزاء القرآن الكريم؟",
+        correctAnswer: "30 جزء",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "ما هي السورة التي نزلت كاملة؟",
+        correctAnswer: "سورة المدثر",
+        points: 500,
+        buttonIndex: 0,
+      },
+      {
+        id: 4,
+        text: "كم عدد سور القرآن الكريم؟",
+        correctAnswer: "114 سورة",
+        points: 500,
+        buttonIndex: 1,
+      },
+      {
+        id: 5,
+        text: "ما هي أقصر سورة في القرآن الكريم؟",
+        correctAnswer: "سورة الكوثر",
+        points: 700,
+        buttonIndex: 0,
+      },
+      {
+        id: 6,
+        text: "في أي سورة ذكرت البسملة مرتين؟",
+        correctAnswer: "سورة النمل",
+        points: 700,
+        buttonIndex: 1,
+      }
+    ]
+  },
+  {
+    id: 30,
+    name: "عالم الطيران",
+    description: "أسئلة عن الطيران والطائرات",
+    image: "https://i.postimg.cc/KYNwcGVW/image-18.png",
+    questions: [
+      {
+        id: 1,
+        text: "من هما الأخوان اللذان صنعا أول طائرة في التاريخ؟",
+        correctAnswer: "الأخوان رايت (ويلبر وأورفيل)",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/RV4Nrnnt/e61d266c-a827-401b-bf7c-08a092d0.webp"
+      },
+      {
+        id: 2,
+        text: "ما هي أكبر شركة تصنيع طائرات في العالم؟",
+        correctAnswer: "شركة بوينق",
+        points: 300,
+        buttonIndex: 1,
+        answerImage: "https://static.srpcdigital.com/styles/1037xauto/public/2024-03/581170.jpeg.webp"
+      },
+      {
+        id: 3,
+        text: "ما هو أكبر طائرة ركاب في العالم؟",
+        correctAnswer: "إيرباص A380",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://almashhadonline.com/uploads/article/thumbs/ARTICLE_5c65b06770ef2.jpeg"
+      },
+      {
+        id: 4,
+        text: "كم يبلغ متوسط ارتفاع الطيران التجاري؟",
+        correctAnswer: "35,000 قدم (10.7 كم)",
+        points: 500,
+        buttonIndex: 1,
+      },
+      {
+        id: 5,
+        text: "ما هو أسرع طائرة ركاب في التاريخ؟",
+        correctAnswer: "كونكورد",
+        points: 700,
+        buttonIndex: 0,
+        answerImage: "https://www.aeroflap.com.br/wp-content/uploads/2018/10/concorde-f-btsd-sierra-delta-en-vol_04.jpg"
+      },
+      {
+        id: 6,
+        text: "متى تأسست شركة الخطوط الجوية الكويتية؟",
+        correctAnswer: "1954",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://www.aljarida.com/uploads/imported_images/images/1489563101814228800/1489563234000/1280x960.jpg"
+      }
+    ]
+  },
+  {
+    id: 31,
+    name: "رياضة",
+    description: "أسئلة عن الرياضة والرياضيين",
+    image: "https://i.postimg.cc/7h0gDVYn/image-21.png",
+    questions: [
+      {
+        id: 1,
+        text: "من هو أكثر لاعب تسجيلاً للأهداف في تاريخ كرة القدم؟",
+        correctAnswer: "كريستيانو رونالدو (850+ هدف)",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/rm9zz8Bs/cris.webp"
+      },
+      {
+        id: 2,
+        text: "كم عدد كؤوس العالم التي فازت بها البرازيل؟",
+        correctAnswer: "5 كؤوس (1958، 1962، 1970، 1994، 2002)",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "من هو أول منتخب عربي وصل لنصف نهائي كأس العالم؟",
+        correctAnswer: "المغرب (2022)",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://cnn-arabic-images.cnn.io/cloudinary/image/upload/w_1280,h_720,c_fill,q_auto,g_center/cnnarabic/2022/12/07/images/227891.jpg"
+      },
+      {
+        id: 4,
+        text: "في أي سنة تأسس نادي القادسية الكويتي؟",
+        correctAnswer: "1960",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://img.kooora.com/?i=00%2F6%2Fcvmbktwxeaaekxb.jpg"
+      },
+      {
+        id: 5,
+        text: "من هو الهداف التاريخي لكأس العالم؟",
+        correctAnswer: "ميروسلاف كلوزه (16 هدف)",
+        points: 700,
+        buttonIndex: 0,
+        answerImage: "https://o.kooora.com/ophotos/articlephoto/342564?size=0&v=1"
+      },
+      {
+        id: 6,
+        text: "من هو أكثر لاعب فوزاً بالكرة الذهبية؟",
+        correctAnswer: "ليونيل ميسي (8 مرات)",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://www.emaratalyoum.com/polopoly_fs/1.1607851.1646737343!/image/image.jpeg"
+      }
+    ]
+  },
+  {
+    id: 32,
+    name: "UFC",
+    description: "أسئلة عن بطولة UFC للفنون القتالية المختلطة",
+    image: "https://i.postimg.cc/R0H8f1Nj/image-20.png",
+    questions: [
+      {
+        id: 1,
+        text: "من هو أول بطل عربي في تاريخ UFC؟",
+        correctAnswer: "بلال محمد",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://ar.esquireme.com/cloud/2023/04/20/1302032817.0.jpg"
+      },
+      {
+        id: 2,
+        text: "كم عدد الأوزان في بطولة UFC للرجال؟",
+        correctAnswer: "8 أوزان",
+        points: 300,
+        buttonIndex: 1,
+      },
+      {
+        id: 3,
+        text: "من هو صاحب أطول سلسلة انتصارات في تاريخ UFC؟",
+        correctAnswer: "أندرسون سيلفا (16 انتصار متتالي)",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://arabic.sport360.com/wp-content/uploads/2016/02/SILVA4.jpg"
+      },
+      {
+        id: 4,
+        text: "في أي سنة أقيمت أول بطولة UFC؟",
+        correctAnswer: "1993",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://m.media-amazon.com/images/M/MV5BY2QwNDAyYTItMjcwNi00ODY1LWFmNmYtYWNjODM2YmVkNjNiXkEyXkFqcGc@._V1_.jpg"
+      },
+      {
+        id: 5,
+        text: "من هو المقاتل الوحيد الذي فاز بحزامين في وزنين مختلفين في نفس الوقت؟",
+        correctAnswer: "كونور مكجريجور",
+        points: 700,
+        buttonIndex: 0,
+        answerImage: "https://media.filgoal.com/news/verylarge/220971_0.jpg"
+      },
+      {
+        id: 6,
+        text: "من هو أكثر مقاتل دفاعاً عن لقبه في تاريخ UFC؟",
+        correctAnswer: "ديميتريوس جونسون (11 دفاع)",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://cdn.onefc.com/wp-content/uploads/sites/9/2022/07/Demetrious-Johnson.jpg"
+      }
+    ]
+  },
+  {
+    id: 33,
+    name: "الكلاسيكو",
+    description: "أسئلة عن مباريات الكلاسيكو بين ريال مدريد وبرشلونة",
+    image: "https://i.postimg.cc/X79W5yzG/image-22.png",
+    questions: [
+      {
+        id: 1,
+        text: "من هو الهداف التاريخي للكلاسيكو؟",
+        correctAnswer: "ليونيل ميسي (26 هدف)",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://www.emaratalyoum.com/polopoly_fs/1.1607851.1646737343!/image/image.jpeg"
+      },
+      {
+        id: 2,
+        text: "متى أقيم أول كلاسيكو رسمي بين الفريقين؟",
+        correctAnswer: "1929",
+        points: 300,
+        buttonIndex: 1,
+        answerImage: "https://cdn.al-ain.com/images/2017/4/22/100-174943-clasico-barcelona-real-madrid_700x400.jpeg"
+      },
+      {
+        id: 3,
+        text: "ما هي أكبر نتيجة في تاريخ الكلاسيكو؟",
+        correctAnswer: "ريال مدريد 11-1 برشلونة (1943)",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://upload.wikimedia.org/wikipedia/commons/3/39/Marca_portada_rmadrid_11_vs_1_barcelona.jpg"
+      },
+      {
+        id: 4,
+        text: "من هو أكثر لاعب مشاركة في الكلاسيكو؟",
+        correctAnswer: "سيرجيو راموس (45 مباراة)",
+        points: 500,
+        buttonIndex: 1,
+        answerImage: "https://img.btolat.com/news/large/191426.jpg"
+      },
+      {
+        id: 5,
+        text: "كم عدد مباريات الكلاسيكو الرسمية التي لُعبت حتى عام 2023؟",
+        correctAnswer: "186 - 28-10-2023",
+        points: 700,
+        buttonIndex: 0,
+      },
+      {
+        id: 6,
+        text: "من هو أكثر مدرب فوزاً في تاريخ الكلاسيكو؟",
+        correctAnswer: "ميغيل مونيوز (13 فوز)",
+        points: 700,
+        buttonIndex: 1,
+        answerImage: "https://i.postimg.cc/PrLp6gL7/108371298-3417919998241603-1933028228976536645-n.jpg"
+      }
+    ]
+  },
+  {
+    id: 34,
+    name: "Prision Break",
+    description: "أسئلة عن المسلسل الشهير Prison Break",
+    image: "https://i.postimg.cc/90MphTwx/image-23.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما اسم السجن الذي سُجن فيه لينكولن بيروز في الموسم الأول؟",
+        correctAnswer: "سجن فوكس ريفر",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://i.pinimg.com/736x/d5/89/83/d589831d40f20482de251f25d2d3c542.jpg"
+      },
+      {
+        id: 2,
+        text: "ما اسم ولد لينكون بوروز ؟",
+        correctAnswer: "إل. جي",
+        points: 300,
+        buttonIndex: 1,
+        answerImage: "https://i.postimg.cc/fb0kCmJ0/MV5-BMTIx-ODc1-MDk5-M15-BMl5-Ban-Bn-Xk-Ft-ZTYw-Mjcz-Mzg3-V1-FMjpg-UX450.jpg"
+      },
+      {
+        id: 3,
+        text: "ما اسم ام مايكل سكوفيلد ؟",
+        correctAnswer: "كريستينا سكوفيلد",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/JzH1Cmmf/416-sunshinestate-0012.webp"
+      },
+      {
+        id: 4,
+        text: "كم عدد مواسم مسلسل Prison Break؟",
+        correctAnswer: "5 مواسم",
+        points: 500,
+        buttonIndex: 1,
+      },
+      {
+        id: 5,
+        text: "ما هو رقم زنزانة مايكل سكوفيلد في سجن فوكس ريفر؟",
+        correctAnswer: "40",
+        points: 700,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/JzxSF2Hf/image-28.png"
+      },
+      {
+        id: 6,
+        text: "ما اسم العملية التي خطط لها مايكل للهروب من سجن سونا؟",
+        correctAnswer: "عملية الطائر الحر (Operation Free Bird)",
+        points: 700,
+        buttonIndex: 1,
       }
     ]
   }

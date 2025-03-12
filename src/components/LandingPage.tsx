@@ -1,46 +1,287 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import AuthPage from './AuthPage';
-import { motion } from 'framer-motion';
-import { addUser, findUser } from '../data/users';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Box, Button, Container, Typography } from "@mui/material";
-import { initiatePayment, executePayment } from '../services/myFatoorah';
+import { Instagram } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import AuthComponent from './Auth';
+import { isValidCode, markCodeAsUsed } from '../data/redeemCodes';
 
 interface LandingPageProps {
-  onPlay: () => void;
-  onLogin: () => void;
-  onRegister: () => void;
-  onLogout: () => void;
-  currentUser: any;
+  onStartGame: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onLogin, onLogout, currentUser }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   const navigate = useNavigate();
-  const [showAuth, setShowAuth] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-  const [gamesToPurchase, setGamesToPurchase] = useState(1);
-  const [remainingGames, setRemainingGames] = useState(0);
   const [error, setError] = useState('');
+  const [session, setSession] = useState(null);
+  const [showAuth, setShowAuth] = useState(false);
+  const [gamesRemaining, setGamesRemaining] = useState(0);
+  const [showRedeemModal, setShowRedeemModal] = useState(false);
+  const [redeemCode, setRedeemCode] = useState('');
+  const [redeemError, setRedeemError] = useState('');
+  const [redeemSuccess, setRedeemSuccess] = useState(false);
 
-  // تعطيل مؤقت لنظام الشراء
-  const PAYMENT_SYSTEM_ENABLED = false;
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) {
+        fetchGamesRemaining(session.user.id);
+      }
+    });
 
-  const startGame = () => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        fetchGamesRemaining(session.user.id);
+      } else {
+        setGamesRemaining(0);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const fetchGamesRemaining = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('user_games')
+      .select('games_remaining')
+      .eq('user_id', userId)
+      .single();
+
+    if (data) {
+      setGamesRemaining(data.games_remaining);
+    }
+  };
+
+  const handleStartGame = async () => {
+    if (!session) {
+      setShowAuth(true);
+      return;
+    }
+
+    // التحقق من عدد الألعاب المتبقية
+    const { data } = await supabase
+      .from('user_games')
+      .select('games_remaining')
+      .eq('user_id', session.user.id)
+      .single();
+
+    if (!data || data.games_remaining <= 0) {
+      setError('عذراً، ليس لديك ألعاب متبقية');
+      setTimeout(() => setError(''), 3000);
+      return;
+    }
+    
+    // الانتقال إلى صفحة الفئات
     navigate('/categories');
   };
 
+  const handleRedeem = async () => {
+    if (!redeemCode) {
+      setRedeemError('الرجاء إدخال كود التفعيل');
+      return;
+    }
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setRedeemError('يجب تسجيل الدخول أولاً');
+        return;
+      }
+
+      // التحقق من صلاحية الكود
+      const isValid = await isValidCode(redeemCode);
+      if (!isValid) {
+        setRedeemError('كود التفعيل غير صالح أو تم استخدامه مسبقاً');
+        setTimeout(() => setRedeemError(''), 3000);
+        return;
+      }
+
+      // تحديث حالة الكود وعدد الألعاب
+      const codeMarked = await markCodeAsUsed(redeemCode, user.id);
+      if (!codeMarked) {
+        setRedeemError('حدث خطأ أثناء تفعيل الكود');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('user_games')
+        .update({ games_remaining: 1 })
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      setGamesRemaining(1);
+      setRedeemSuccess(true);
+      setTimeout(() => {
+        setShowRedeemModal(false);
+        setRedeemSuccess(false);
+        setRedeemCode('');
+      }, 2000);
+    } catch (error) {
+      setRedeemError('حدث خطأ أثناء تفعيل الكود');
+      setTimeout(() => setRedeemError(''), 3000);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col relative bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] p-4 overflow-hidden" dir="rtl">
-      {/* الشعار */}
-      <div className="absolute top-0 right-0 z-50 p-2">
-        <img 
-          src="https://i.postimg.cc/NfP1DWbv/bdgeega-removebg-preview.png" 
-          alt="Bdgeega Logo" 
-          className="w-24 h-auto md:w-32 lg:w-40"
-        />
+    <div className="min-h-screen flex flex-col relative bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] p-4" dir="rtl">
+      {/* الشريط العلوي */}
+      <div className="absolute top-4 left-4 z-50 flex items-center gap-4">
+        {/* عداد الألعاب */}
+        {session && (
+          <div className="bg-white/20 backdrop-blur-md rounded-lg p-2 flex items-center gap-2">
+            <span className="text-white">الألعاب المتبقية:</span>
+            <span className="text-white font-bold">{gamesRemaining}</span>
+            <button
+              onClick={() => setShowRedeemModal(true)}
+              className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white hover:bg-green-600 transition-all"
+              title="تفعيل كود"
+            >
+              +
+            </button>
+          </div>
+        )}
+
+        {/* زر تسجيل الدخول/الخروج */}
+        {session ? (
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-4 bg-white bg-opacity-20 backdrop-blur-md rounded-lg p-2"
+          >
+            <span className="text-white text-sm">مرحباً {session.user.user_metadata.name || session.user.email}</span>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => supabase.auth.signOut()}
+              className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-lg hover:from-red-600 hover:to-red-700 transition-all duration-300"
+            >
+              تسجيل الخروج
+            </motion.button>
+          </motion.div>
+        ) : (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowAuth(true)}
+            className="bg-gradient-to-r from-[#800020] to-[#A0455A] text-white px-6 py-2.5 rounded-lg font-medium shadow-lg hover:from-[#A0455A] hover:to-[#800020] transition-all duration-300"
+          >
+            تسجيل الدخول
+          </motion.button>
+        )}
       </div>
+
+      {/* نافذة تفعيل الكود */}
+      <AnimatePresence>
+        {showRedeemModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+            onClick={() => setShowRedeemModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-xl p-6 w-full max-w-md mx-4"
+              onClick={e => e.stopPropagation()}
+            >
+              <h3 className="text-2xl font-bold text-gray-800 mb-4 text-center">تفعيل كود اللعب</h3>
+              
+              {redeemSuccess ? (
+                <div className="text-center text-green-600 mb-4">
+                  تم تفعيل الكود بنجاح!
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="text"
+                    value={redeemCode}
+                    onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
+                    placeholder="أدخل كود التفعيل"
+                    className="w-full px-4 py-2 rounded-lg border border-gray-300 mb-4 text-center uppercase"
+                    dir="ltr"
+                  />
+                  
+                  {redeemError && (
+                    <div className="text-red-500 text-sm mb-4 text-center">
+                      {redeemError}
+                    </div>
+                  )}
+
+                  <div className="flex justify-center gap-2">
+                    <button
+                      onClick={() => setShowRedeemModal(false)}
+                      className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300 transition-all"
+                    >
+                      إلغاء
+                    </button>
+                    <button
+                      onClick={handleRedeem}
+                      className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all"
+                    >
+                      تفعيل
+                    </button>
+                  </div>
+                </>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* رسالة الخطأ */}
+      <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50"
+          >
+            {error}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Auth Modal */}
+      {showAuth && !session && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        >
+          <motion.div
+            initial={{ scale: 0.9, y: 20 }}
+            animate={{ scale: 1, y: 0 }}
+            exit={{ scale: 0.9, y: 20 }}
+            className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden"
+          >
+            <div className="bg-gradient-to-r from-[#800020] to-[#A0455A] p-4">
+              <div className="flex justify-between items-center">
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setShowAuth(false)}
+                  className="text-white hover:text-gray-200 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              </div>
+            </div>
+            <div className="p-6">
+              <AuthComponent />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Circular Background */}
       <div 
@@ -49,74 +290,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin, onLogout, cur
           background: 'linear-gradient(180deg, #800020 0%, #A0455A 100%)',
         }}
       />
-
-      {PAYMENT_SYSTEM_ENABLED && (
-        <div className="absolute top-4 left-4 bg-[#800020]/40 backdrop-blur-sm rounded-xl p-4 flex flex-col items-center">
-          <div className="text-[#F5DEB3] mb-2">
-            <span className="font-bold">المتبقي من الألعاب: </span>
-            <span className="text-2xl">{remainingGames}</span>
-          </div>
-          <button
-            onClick={() => setShowPurchaseModal(true)}
-            className="bg-[#F5DEB3] text-[#800020] rounded-full w-8 h-8 flex items-center justify-center hover:bg-[#E8D1A0] transition-colors"
-          >
-            +
-          </button>
-        </div>
-      )}
-
-      {PAYMENT_SYSTEM_ENABLED && showPurchaseModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-[#F5DEB3] rounded-2xl p-8 max-w-md w-full mx-4">
-            <h2 className="text-2xl font-bold text-[#800020] mb-6 text-center">شراء ألعاب جديدة</h2>
-            
-            <div className="mb-6">
-              <label className="block text-[#800020] mb-2 font-semibold">عدد الألعاب</label>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => setGamesToPurchase(prev => Math.max(1, prev - 1))}
-                  className="bg-[#800020] text-[#F5DEB3] w-8 h-8 rounded-full flex items-center justify-center"
-                >
-                  -
-                </button>
-                <span className="text-2xl font-bold text-[#800020]">{gamesToPurchase}</span>
-                <button
-                  onClick={() => setGamesToPurchase(prev => prev + 1)}
-                  className="bg-[#800020] text-[#F5DEB3] w-8 h-8 rounded-full flex items-center justify-center"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-8">
-              <div className="flex justify-between text-[#800020] font-semibold mb-2">
-                <span>السعر للعبة الواحدة:</span>
-                <span>1 د.ك</span>
-              </div>
-              <div className="flex justify-between text-[#800020] font-bold text-xl">
-                <span>المجموع:</span>
-                <span>{gamesToPurchase} د.ك</span>
-              </div>
-            </div>
-
-            <div className="flex justify-between gap-4">
-              <button
-                onClick={() => setShowPurchaseModal(false)}
-                className="flex-1 px-6 py-3 rounded-lg border-2 border-[#800020] text-[#800020] hover:bg-[#800020] hover:text-[#F5DEB3] transition-colors"
-              >
-                إلغاء
-              </button>
-              <button
-                onClick={() => console.log('handlePurchase')}
-                className="flex-1 px-6 py-3 rounded-lg bg-[#800020] text-[#F5DEB3] hover:bg-[#600018] transition-colors"
-              >
-                شراء
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       <div className="relative flex flex-col min-h-screen">
         {/* Logo and Title */}
@@ -155,7 +328,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin, onLogout, cur
         {/* Start Game Button */}
         <div className="text-center mb-32">
           <button
-            onClick={startGame}
+            onClick={handleStartGame}
             className="bg-[#F5DEB3] text-[#800020] px-12 py-6 rounded-full text-2xl font-bold hover:bg-[#E8D1A0] transition-colors shadow-lg"
           >
             ابدأ اللعب
@@ -169,7 +342,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin, onLogout, cur
             <div className="max-w-3xl mx-auto bg-[#800020]/30 backdrop-blur-sm rounded-2xl p-8 border-2 border-[#F5DEB3]/30">
               <h2 className="text-3xl font-bold text-[#F5DEB3] mb-6 text-center">ليش بدقيقة؟</h2>
               <p className="text-xl text-[#F5DEB3] text-center leading-relaxed">
-                بدقيقة لعبة اجتماعية ثقافية تتميز عن كل الألعاب بالأسعار والتنوع في الفئات والأفكار الجديدة تناسب جميع الأعمار .
+               لأن بدقيقة لعبة اجتماعية ثقافية تتميز عن كل الألعاب بالأسعار والتنوع في الفئات والأفكار الجديدة تناسب جميع الأعمار .
               </p>
             </div>
           </div>
@@ -447,52 +620,32 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onLogin, onLogout, cur
                 <div>
                   <div className="flex items-center gap-2 text-[#F5DEB3]">
                     <span className="text-lg font-bold">Bdgeega Team</span>
+                    <a 
+                      href="https://instagram.com/bdgeegakw" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="hover:text-[#F5DEB3]/80 transition-colors"
+                    >
+                      <Instagram size={24} />
+                    </a>
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none">
                       <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   <div className="flex items-center gap-2 text-[#F5DEB3]">
-                    <span className="text-sm">Developed by Ali Alenezi</span>
+                    <a 
+                      href="https://instagram.com/xxvur_" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-sm font-bold hover:text-[#F5DEB3]/80 transition-colors"
+                    >
+                      Developed by Ali Alenezi
+                    </a>
                   </div>
                 </div>
               </div>
             </div>
           </footer>
-        </div>
-
-        {/* Auth Buttons */}
-        <div className="absolute top-4 left-4 md:top-6 md:left-6 flex flex-col md:flex-row gap-2 md:gap-4">
-          {currentUser ? (
-            <>
-              <button
-                onClick={() => console.log('handleProfile')}
-                className="bg-[#800020] text-white px-6 py-2 rounded-lg hover:bg-[#600018] transition-colors"
-              >
-                الملف الشخصي
-              </button>
-              <button
-                onClick={onLogout}
-                className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
-              >
-                تسجيل خروج
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={onLogin}
-                className="bg-[#F5DEB3] text-[#800020] rounded-full font-bold hover:bg-[#E8D1A0] transition-colors shadow-lg"
-              >
-                تسجيل الدخول
-              </button>
-              <button
-                onClick={() => console.log('handleRegister')}
-                className="bg-[#800020] text-[#F5DEB3] rounded-full font-bold hover:bg-[#A0455A] transition-colors shadow-lg"
-              >
-                إنشاء حساب
-              </button>
-            </>
-          )}
         </div>
       </div>
     </div>

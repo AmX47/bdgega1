@@ -1,34 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import categories from '../data/questions';
 import QuestionView from './QuestionView';
 import { ResultView } from './ResultView';
+import { Home, LogOut } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface GameBoardProps {
-  categoryIds: number[];
-  gameName: string;
-  team1Name: string;
-  team2Name: string;
-  helpers: string[];
-  onHome: () => void;
+  gameSetup: {
+    categoryIds: number[];
+    gameName: string;
+    team1Name: string;
+    team2Name: string;
+    helpers: string[];
+  };
 }
 
 interface Question {
   id: string;
+  text: string;
+  correctAnswer: string;
   points: number;
-  isAnswered: boolean;
   buttonIndex: number;
+  image?: string;
+  answerImage?: string;
+  audio?: string;
+  video?: string;
 }
 
 type HelpType = 'callFriend' | 'doublePoints' | 'twoAnswers';
 
-const GameBoard: React.FC<GameBoardProps> = ({
-  categoryIds,
-  gameName,
-  team1Name,
-  team2Name,
-  helpers,
-  onHome,
-}) => {
+const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
+  const { categoryIds, gameName, team1Name, team2Name, helpers } = gameSetup;
   const [team1Score, setTeam1Score] = useState(0);
   const [team2Score, setTeam2Score] = useState(0);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
@@ -52,6 +55,8 @@ const GameBoard: React.FC<GameBoardProps> = ({
   const [activeHelpMethod, setActiveHelpMethod] = useState<HelpType | null>(null);
   const [showResult, setShowResult] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
+
+  const navigate = useNavigate();
 
   const selectedCategories = categories.filter(cat => categoryIds.includes(cat.id));
   const totalQuestions = selectedCategories.reduce((total, cat) => total + cat.questions.length, 0);
@@ -77,7 +82,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
     const questionKey = `${categoryId}-${points}-${buttonIndex}`;
     if (usedQuestions.has(questionKey)) return;
 
-    setSelectedQuestion({ id: questionKey, points, buttonIndex });
+    setSelectedQuestion({ id: questionKey, points, buttonIndex, text: question.text, correctAnswer: question.correctAnswer, image: question.image, answerImage: question.answerImage, audio: question.audio, video: question.video });
     setCurrentQuestion(question);
     setShowQuestionView(true);
   };
@@ -158,6 +163,10 @@ const GameBoard: React.FC<GameBoardProps> = ({
     setShowExitConfirm(true);
   };
 
+  const handleConfirmExit = () => {
+    navigate('/');
+  };
+
   const handleEndGameConfirm = () => {
     // Reset game state
     setShowResultView(true);
@@ -203,6 +212,25 @@ const GameBoard: React.FC<GameBoardProps> = ({
     }
   };
 
+  useEffect(() => {
+    const updateGamesRemaining = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        // تحديث عدد الألعاب إلى 0 عند بدء اللعبة
+        const { error } = await supabase
+          .from('user_games')
+          .update({ games_remaining: 0 })
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('خطأ في تحديث عدد الألعاب:', error);
+        }
+      }
+    };
+
+    updateGamesRemaining();
+  }, []); // يتم تنفيذ هذا عند تحميل الصفحة
+
   if (showResult) {
     return (
       <ResultView
@@ -210,7 +238,7 @@ const GameBoard: React.FC<GameBoardProps> = ({
         team2Name={team2Name}
         team1Score={team1Score}
         team2Score={team2Score}
-        onHome={onHome}
+        onBackToHome={() => navigate('/')}
       />
     );
   }
@@ -222,17 +250,17 @@ const GameBoard: React.FC<GameBoardProps> = ({
         team2Name={team2Name}
         team1Score={team1Score}
         team2Score={team2Score}
-        onHome={onHome}
+        onBackToHome={() => navigate('/')}
       />
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] p-4 ${
-      isMobileView ? 'max-w-[390px] mx-auto' : ''
+    <div className={`min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] ${
+      isMobileView ? 'p-2' : 'p-4'
     }`} dir="rtl">
       {showQuestionView && currentQuestion ? (
-        <div className="flex" dir="rtl">
+        <div className={`flex ${isMobileView ? 'flex-col gap-4' : ''}`} dir="rtl">
           {/* Teams Info */}
           <div className="w-[320px] fixed right-0 h-full flex flex-col justify-center gap-4 p-6 bg-[#800020]/10 backdrop-blur-sm border-r-2 border-[#800020]/20">
             {/* Progress Bar */}
@@ -352,15 +380,18 @@ const GameBoard: React.FC<GameBoardProps> = ({
           </div>
 
           {/* Question Content */}
-          <div className="flex-1 mr-[320px]">
+          <div className={`flex-1 ${isMobileView ? 'mt-4' : 'mr-[320px]'}`}>
             <QuestionView
               question={{
                 id: parseInt(selectedQuestion?.id || '0'),
-                text: currentQuestion.text,
-                image: currentQuestion.image,
-                correctAnswer: currentQuestion.correctAnswer,
+                text: selectedQuestion?.text,
+                correctAnswer: selectedQuestion?.correctAnswer,
                 points: selectedQuestion?.points || 0,
-                buttonIndex: selectedQuestion?.buttonIndex || 0
+                buttonIndex: selectedQuestion?.buttonIndex || 0,
+                image: selectedQuestion?.image,
+                answerImage: selectedQuestion?.answerImage,
+                audio: selectedQuestion?.audio,
+                video: selectedQuestion?.video
               }}
               teams={[
                 { id: 1, name: team1Name, score: team1Score },
@@ -376,47 +407,49 @@ const GameBoard: React.FC<GameBoardProps> = ({
         </div>
       ) : (
         <>
-          {/* Top Bar */}
-          <div className="bg-[#800020] shadow-lg py-4 px-6 mb-6">
-            <div className="flex justify-between items-center">
-              <button 
-                onClick={handleExitClick}
-                className="flex items-center gap-2 border-2 border-[#F5DEB3] text-[#F5DEB3] px-4 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+          {/* Game Header */}
+          <div className="flex justify-between items-center p-4 bg-[#800020] text-[#F5DEB3] border-b border-[#F5DEB3]/20">
+            <button
+              onClick={handleExitClick}
+              className="flex items-center gap-2 px-4 py-2 bg-[#F5DEB3]/10 hover:bg-[#F5DEB3]/20 rounded-lg transition-all duration-300 border border-[#F5DEB3]/30"
+            >
+              <span>🚪</span>
+              <span>خروج</span>
+            </button>
+
+            <div className="flex items-center gap-4">
+              <div className="text-3xl font-bold text-[#F5DEB3] drop-shadow-lg">{gameName}</div>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setIsMobileView(!isMobileView)}
+                className="p-3 rounded-full bg-[#F5DEB3]/20 text-[#F5DEB3] hover:bg-[#F5DEB3] hover:text-[#800020] transition-all duration-300 border border-[#F5DEB3]/30"
               >
-                <span>🚪</span>
-                <span>خروج</span>
+                {isMobileView ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                  </svg>
+                )}
               </button>
-              <h1 className="text-3xl font-bold text-[#F5DEB3] drop-shadow-lg">{gameName}</h1>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setIsMobileView(!isMobileView)}
-                  className="p-3 rounded-full bg-[#F5DEB3]/20 text-[#F5DEB3] hover:bg-[#F5DEB3] hover:text-[#800020] transition-all duration-300 border border-[#F5DEB3]/30"
-                >
-                  {isMobileView ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                  )}
-                </button>
-                <button 
-                  onClick={handleEndGameClick}
-                  className="flex items-center gap-2 border-2 border-[#F5DEB3] text-[#F5DEB3] px-4 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
-                >
-                  <span>🏁</span>
-                  <span>إنهاء اللعبة</span>
-                </button>
-              </div>
+              <button 
+                onClick={handleEndGameClick}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-all duration-300 border border-red-500/30"
+              >
+                <span>🏁</span>
+                <span>إنهاء اللعبة</span>
+              </button>
             </div>
           </div>
 
-          <div className="p-4">
-            <div className="flex gap-6">
+          <div className={`${isMobileView ? 'p-2' : 'p-4'}`}>
+            <div className={`${isMobileView ? 'flex flex-col gap-4' : 'flex gap-6'}`}>
               {/* Right Side - Teams and Progress */}
-              <div className="w-[320px] flex flex-col gap-4">
+              <div className={`${isMobileView ? 'w-full' : 'w-[320px]'} flex flex-col gap-4`}>
                 {/* Progress Bar */}
                 <div className="bg-[#800020] bg-opacity-50 rounded-lg p-6 shadow-lg">
                   <div className="text-center text-[#F5DEB3]">
@@ -531,24 +564,43 @@ const GameBoard: React.FC<GameBoardProps> = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Report Button */}
+                <div className="mt-4 flex justify-center">
+                  <a 
+                    href="https://www.instagram.com/bdgeegakw" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-[#F5DEB3] hover:text-white transition-colors border border-[#800020] hover:border-[#600018] px-4 py-2 rounded-full"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                    </svg>
+                    <span>الإبلاغ عن مشكلة</span>
+                  </a>
+                </div>
               </div>
 
               {/* Left Side - Categories Grid */}
               <div className="flex-1">
-                <div className="grid grid-cols-3 gap-6">
+                <div className={`grid ${
+                  isMobileView ? 'grid-cols-2 gap-3' : 'grid-cols-3 gap-6'
+                }`}>
                   {selectedCategories.map((category) => (
                     <div
                       key={category.id}
                       className="rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-200"
                     >
-                      <div className="relative h-48">
+                      <div className={`relative ${isMobileView ? 'h-32' : 'h-48'}`}>
                         <img
                           src={category.image}
                           alt={category.name}
                           className="w-full h-full object-cover rounded-t-xl"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                        <h3 className="absolute bottom-0 left-0 right-0 p-4 text-2xl font-bold text-white text-center">
+                        <h3 className={`absolute bottom-0 left-0 right-0 p-4 ${
+                          isMobileView ? 'text-lg' : 'text-2xl'
+                        } font-bold text-white text-center`}>
                           {category.name}
                         </h3>
                       </div>
@@ -566,7 +618,9 @@ const GameBoard: React.FC<GameBoardProps> = ({
                                     <button
                                       key={`${question.points}-${question.buttonIndex}`}
                                       onClick={() => handleQuestionClick(category.id, points, question.buttonIndex)}
-                                      className={`w-full py-3 px-4 rounded-lg text-lg font-extrabold ${
+                                      className={`w-full ${
+                                        isMobileView ? 'py-2 px-3 text-base' : 'py-3 px-4 text-lg'
+                                      } rounded-lg font-extrabold ${
                                         isUsed
                                           ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                                           : "bg-[#F5DEB3] text-[#800020] hover:bg-[#E8D1A0] transition-all"
@@ -590,19 +644,19 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
           {/* Exit Confirmation Modal */}
           {showExitConfirm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
-                <div className="text-xl font-bold text-[#F5DEB3] mb-6">هل أنت متأكد من الخروج من اللعبة؟</div>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="bg-[#800020] rounded-xl p-6 max-w-md w-full text-center border border-[#F5DEB3]/20 shadow-2xl">
+                <div className="text-xl font-bold text-[#F5DEB3] mb-4">هل أنت متأكد من الخروج من اللعبة؟</div>
                 <div className="flex justify-center gap-4">
                   <button
-                    onClick={onHome}
+                    onClick={handleConfirmExit}
                     className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
                   >
                     نعم
                   </button>
                   <button
                     onClick={() => setShowExitConfirm(false)}
-                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3]/10 transition-colors"
                   >
                     لا
                   </button>
@@ -613,21 +667,22 @@ const GameBoard: React.FC<GameBoardProps> = ({
 
           {/* End Game Confirmation Modal */}
           {showEndGameConfirm && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-              <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
-                <div className="text-xl font-bold text-[#F5DEB3] mb-6">هل أنت متأكد من إنهاء اللعبة؟</div>
+            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="bg-[#800020] rounded-xl p-8 max-w-md w-full text-center border border-[#F5DEB3]/20 shadow-2xl">
+                <div className="text-6xl mb-4">🏁</div>
+                <div className="text-2xl font-bold text-[#F5DEB3] mb-6">هل أنت متأكد من إنهاء اللعبة؟</div>
                 <div className="flex justify-center gap-4">
                   <button
                     onClick={handleEndGameConfirm}
-                    className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
+                    className="bg-[#F5DEB3] text-[#800020] px-8 py-3 rounded-lg font-bold hover:bg-[#E8D1A0] transition-all duration-300 hover:scale-105 active:scale-95"
                   >
-                    نعم
+                    نعم، إنهاء اللعبة
                   </button>
                   <button
                     onClick={() => setShowEndGameConfirm(false)}
-                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+                    className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-8 py-3 rounded-lg hover:bg-[#F5DEB3]/10 transition-all duration-300 hover:scale-105 active:scale-95"
                   >
-                    لا
+                    إلغاء
                   </button>
                 </div>
               </div>
