@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useBalance } from '../hooks/useBalance';
 
 interface BuyGamesModalProps {
   onClose: () => void;
@@ -9,14 +10,25 @@ interface BuyGamesModalProps {
 export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
   const [amount, setAmount] = useState(1);
   const [error, setError] = useState('');
+  const { balance, updateBalance } = useBalance();
+  const [loading, setLoading] = useState(false);
 
-  const handleBuy = () => {
+  const handleBuy = async () => {
     if (amount < 1) {
       setError('يجب شراء لعبة واحدة على الأقل');
       return;
     }
-    onBuy(amount);
-    onClose();
+
+    setLoading(true);
+    const success = await updateBalance(balance + amount);
+    setLoading(false);
+
+    if (success) {
+      onBuy(amount);
+      onClose();
+    } else {
+      setError('حدث خطأ أثناء تحديث الرصيد. الرجاء المحاولة مرة أخرى.');
+    }
   };
 
   return (
@@ -34,6 +46,7 @@ export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
               <button
                 onClick={() => setAmount(prev => Math.max(1, prev - 1))}
                 className="bg-[#800020] text-white px-4 py-2 rounded-lg"
+                disabled={loading}
               >
                 -
               </button>
@@ -41,6 +54,7 @@ export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
               <button
                 onClick={() => setAmount(prev => prev + 1)}
                 className="bg-[#800020] text-white px-4 py-2 rounded-lg"
+                disabled={loading}
               >
                 +
               </button>
@@ -59,13 +73,15 @@ export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
           <div className="flex justify-center gap-4">
             <button
               onClick={handleBuy}
-              className="bg-[#800020] text-white px-6 py-2 rounded-lg hover:bg-[#600018] transition-colors"
+              className="bg-[#800020] text-white px-6 py-2 rounded-lg hover:bg-[#600018] transition-colors disabled:opacity-50"
+              disabled={loading}
             >
-              شراء
+              {loading ? 'جاري الشراء...' : 'شراء'}
             </button>
             <button
               onClick={onClose}
               className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+              disabled={loading}
             >
               إلغاء
             </button>

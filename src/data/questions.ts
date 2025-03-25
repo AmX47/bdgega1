@@ -55,45 +55,48 @@ export const questions = [
     description: "أسئلة عامة عن مختلف المجالات",
     image: "https://i.postimg.cc/25hSPNWn/IMG-3749.jpg",
     questions: [
+      // أسئلة 300 نقطة
       {
         id: 1,
-        text: "ما هي عصامة مصر ؟",
-        correctAnswer: "القاهرة",
-        points: 300,
-        buttonIndex: 0
-      },
-      {
-        id: 2,
-        text: "من هو العالم الذي وضع نظرية النسبية ؟",
+        text: "من هو العالم الذي وضع نظرية النسبية؟",
         correctAnswer: "ألبرت أينشتاين",
         points: 300,
         buttonIndex: 1
       },
       {
+        id: 2,
+        text: "ما هو العنصر الأكثر وفرة في القشرة الأرضية؟",
+        correctAnswer: "الأكسجين",
+        points: 300,
+        buttonIndex: 0
+      },
+      // أسئلة 500 نقطة
+      {
         id: 3,
-        text: "ما هي عاصمة اليابان؟",
-        correctAnswer: "طوكيو",
+        text: "من اخترع المصباح الكهربائي؟",
+        correctAnswer: "توماس إديسون",
         points: 500,
         buttonIndex: 0
       },
       {
         id: 4,
-        text: "كم عدد العظام في جسم الإنسان؟",
-        correctAnswer: "206",
+        text: "ما هو أكبر عضو في جسم الإنسان؟",
+        correctAnswer: "الجلد",
         points: 500,
-        buttonIndex: 1
+        buttonIndex: 0
       },
+      // أسئلة 700 نقطة
       {
         id: 5,
-        text: "من هو الشاعر الذي لقب ب(امير الشعراء ) في الأدب العربي ؟",
-        correctAnswer: "احمد شوقي",
+        text: "ما هو أقدم نظام كتابة معروف في التاريخ؟",
+        correctAnswer: "الكتابة المسمارية",
         points: 700,
         buttonIndex: 0
       },
       {
         id: 6,
-        text: "ما هي الدولة التي تعتبر مهد الحضارة السومرية ؟",
-        correctAnswer: "العراق",
+        text: "من هو مخترع الطباعة المتحركة؟",
+        correctAnswer: "يوهانس غوتنبرغ",
         points: 700,
         buttonIndex: 1
       }
@@ -171,7 +174,7 @@ export const questions = [
       },
       {
         id: 3,
-        text: "ما هي الدولة التي تمتلك اكبر عدد من الجزر ؟",
+        text: "ما هي الدولة التي تمتلك أكبر عدد من الجزر؟",
         correctAnswer: "السويد , 267,570 جزيرة.",
         points: 500,
         buttonIndex: 0
@@ -1171,7 +1174,7 @@ export const questions = [
         text: "شنو اسم الأغنية ؟",
         correctAnswer: "قائد حلمي و نصرت البدر - ويلي",
         points: 300,
-        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
+        audio: "https://od.lk/s/MTlfNjQ2NTI1NzRf/%D9%88%D9%8A%D9%84%D9%8A-%D9%81%D9%8A-%D8%AF%D9%8A%D9%88-%D9%83%D9%84%D9%8A%D8%A8--2015.mp3",
         answerImage: "https://i.postimg.cc/Y0cJBbm6/hq720.avif",
         buttonIndex: 0
       },
@@ -1808,6 +1811,208 @@ export const questions = [
         correctAnswer: "عملية الطائر الحر (Operation Free Bird)",
         points: 700,
         buttonIndex: 1,
+      }
+    ]
+  },
+  {
+    id: 37,
+    name: "كمال أجسام",
+    description: "أسئلة عن رياضة كمال الأجسام",
+    image: "https://i.postimg.cc/JnCsmkmx/Untitled.png",
+    questions: [
+      {
+        id: 1,
+        text: "من هو أسطورة كمال الأجسام الفائز بسبع بطولات مستر أولمبيا؟",
+        correctAnswer: "أرنولد شوارزنيجر",
+        points: 300,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/abc1.png"
+      },
+      {
+        id: 2,
+        text: "ما هو اسم التمرين الأكثر تأثيرًا على عضلات الظهر؟",
+        correctAnswer: "السحب العالي",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "أي من هذه التمارين يستهدف عضلة الصدر بشكل أساسي؟",
+        correctAnswer: "الضغط",
+        points: 500,
+        buttonIndex: 0,
+        answerImage: "https://i.postimg.cc/abc2.png"
+      },
+      {
+        id: 4,
+        text: "كم مرة يجب تدريب العضلة أسبوعيًا للحصول على أفضل النتائج؟",
+        correctAnswer: "مرتين",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر بطولة كمال أجسام في العالم؟",
+        correctAnswer: "مستر أولمبيا",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "ما هي نسبة الدهون المثالية للرياضيين المحترفين؟",
+        correctAnswer: "بين 5-10%",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 39,
+    name: "The Walking Dead",
+    description: "أسئلة عن المسلسل الشهير The Walking Dead",
+    image: "https://i.postimg.cc/FsfXgF2g/Unt1itled.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما هو اسم قائد المجموعة في المواسم الأولى؟",
+        correctAnswer: "ريك غرايمز",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم ابن ريك غرايمز؟",
+        correctAnswer: "كارل غرايمز",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم الشرير الرئيسي في الموسم السابع؟",
+        correctAnswer: "نيغان",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم المدينة التي أقام فيها الناجون مجتمعهم؟",
+        correctAnswer: "ألكسندريا",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو السلاح الشهير الذي يستخدمه نيغان؟",
+        correctAnswer: "مضرب البيسبول لوسيل",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "من هو الطبيب الرئيسي في مجموعة الناجين؟",
+        correctAnswer: "هيرشيل غرين",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 40,
+    name: "Naruto",
+    description: "أسئلة عن أنمي ناروتو",
+    image: "https://i.postimg.cc/KvHdsXn7/image-29.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما هو اسم بطل الأنمي؟",
+        correctAnswer: "ناروتو أوزوماكي",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم القرية التي ينتمي إليها ناروتو؟",
+        correctAnswer: "كونوها",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "من هو معلم ناروتو الأول؟",
+        correctAnswer: "كاكاشي هاتاكي",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم وحش الذيول الموجود داخل ناروتو؟",
+        correctAnswer: "الكيوبي",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هي التقنية النهائية لناروتو؟",
+        correctAnswer: "راسينغان",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "من هو صديق ناروتو المقرب الذي أصبح خصمه؟",
+        correctAnswer: "ساسكي أوتشيها",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 41,
+    name: "One Piece",
+    description: "أسئلة عن أنمي ون بيس",
+    image: "https://i.postimg.cc/52317K2f/image-30.png",
+    questions: [
+      {
+        id: 1,
+        text: "ما هو اسم بطل الأنمي؟",
+        correctAnswer: "مونكي دي لوفي",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم فاكهة الشيطان التي أكلها لوفي؟",
+        correctAnswer: "فاكهة جومو جومو نو",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "من هو السيف الأعظم في طاقم قبعة القش؟",
+        correctAnswer: "رورونوا زورو",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "من هو الطبيب في طاقم قبعة القش؟",
+        correctAnswer: "توني توني تشوبر",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم الكنز الذي يسعى لوفي للحصول عليه؟",
+        correctAnswer: "ون بيس",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "من هو ملك القراصنة السابق؟",
+        correctAnswer: "جول دي روجر",
+        points: 700,
+        buttonIndex: 1
       }
     ]
   }

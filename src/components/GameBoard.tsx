@@ -566,7 +566,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                 </div>
 
                 {/* Report Button */}
-                <div className="mt-4 flex justify-center">
+                <div className="mt-4 flex flex-col items-center gap-4">
                   <a 
                     href="https://www.instagram.com/bdgeegakw" 
                     target="_blank" 
@@ -578,34 +578,43 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                     </svg>
                     <span>الإبلاغ عن مشكلة</span>
                   </a>
+
+                  {/* Bdgeega Logo - Only shown in desktop view */}
+                  {!isMobileView && (
+                    <img 
+                      src="https://i.postimg.cc/DfJ4XbW5/bdgeegalogo-removebg-preview.png"
+                      alt="Bdgeega Logo"
+                      className="h-32 w-auto opacity-70 hover:opacity-100 transition-opacity"
+                    />
+                  )}
                 </div>
               </div>
 
               {/* Left Side - Categories Grid */}
               <div className="flex-1">
                 <div className={`grid ${
-                  isMobileView ? 'grid-cols-2 gap-3' : 'grid-cols-3 gap-6'
+                  isMobileView ? 'grid-cols-2 gap-3' : 'grid-cols-3 gap-4'
                 }`}>
                   {selectedCategories.map((category) => (
                     <div
                       key={category.id}
                       className="rounded-xl overflow-hidden transform hover:scale-105 transition-transform duration-200"
                     >
-                      <div className={`relative ${isMobileView ? 'h-32' : 'h-48'}`}>
+                      <div className={`relative ${isMobileView ? 'h-24' : 'h-36'}`}>
                         <img
                           src={category.image}
                           alt={category.name}
                           className="w-full h-full object-cover rounded-t-xl"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                        <h3 className={`absolute bottom-0 left-0 right-0 p-4 ${
-                          isMobileView ? 'text-lg' : 'text-2xl'
+                        <h3 className={`absolute bottom-0 left-0 right-0 p-3 ${
+                          isMobileView ? 'text-base' : 'text-lg'
                         } font-bold text-white text-center`}>
                           {category.name}
                         </h3>
                       </div>
 
-                      <div className="p-4 bg-[#800020]/10 backdrop-blur-sm rounded-b-xl">
+                      <div className="p-3 bg-[#800020]/10 backdrop-blur-sm rounded-b-xl">
                         <div className="grid grid-cols-2 gap-2">
                           {[300, 500, 700].map((points) => (
                             <React.Fragment key={points}>
@@ -619,8 +628,8 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                                       key={`${question.points}-${question.buttonIndex}`}
                                       onClick={() => handleQuestionClick(category.id, points, question.buttonIndex)}
                                       className={`w-full ${
-                                        isMobileView ? 'py-2 px-3 text-base' : 'py-3 px-4 text-lg'
-                                      } rounded-lg font-extrabold ${
+                                        isMobileView ? 'py-2 px-2 text-sm' : 'py-2 px-3 text-base'
+                                      } rounded-lg font-bold ${
                                         isUsed
                                           ? "bg-gray-400 text-gray-600 cursor-not-allowed"
                                           : "bg-[#F5DEB3] text-[#800020] hover:bg-[#E8D1A0] transition-all"

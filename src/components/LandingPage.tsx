@@ -6,6 +6,8 @@ import { Instagram } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import AuthComponent from './Auth';
 import { isValidCode, markCodeAsUsed } from '../data/redeemCodes';
+import { getGameCategories } from '../utils/gameUtils';
+import PurchaseDialog from './PurchaseDialog';
 
 interface LandingPageProps {
   onStartGame: () => void;
@@ -21,19 +23,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   const [redeemCode, setRedeemCode] = useState('');
   const [redeemError, setRedeemError] = useState('');
   const [redeemSuccess, setRedeemSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [gameCategories, setGameCategories] = useState([]);
+  const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      if (session) {
-        fetchGamesRemaining(session.user.id);
-      }
-    });
+    // Get random categories when component mounts
+    setGameCategories(getGameCategories());
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const checkSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        if (error) throw error;
+        
+        setSession(session);
+        if (session?.user) {
+          await fetchGamesRemaining(session.user.id);
+        }
+      } catch (error) {
+        console.error('Error checking session:', error);
+      }
+    };
+
+    checkSession();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setSession(session);
-      if (session) {
-        fetchGamesRemaining(session.user.id);
+      if (session?.user) {
+        await fetchGamesRemaining(session.user.id);
       } else {
         setGamesRemaining(0);
       }
@@ -43,90 +60,64 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   }, []);
 
   const fetchGamesRemaining = async (userId: string) => {
-    const { data, error } = await supabase
-      .from('user_games')
-      .select('games_remaining')
-      .eq('user_id', userId)
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from('user_games')
+        .select('games_remaining')
+        .eq('user_id', userId)
+        .single();
 
-    if (data) {
-      setGamesRemaining(data.games_remaining);
+      if (error) {
+        if (error.code === 'PGRST116') {
+          // إنشاء سجل جديد للمستخدم
+          const { error: insertError } = await supabase
+            .from('user_games')
+            .insert({
+              user_id: userId,
+              games_remaining: 0,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+
+          if (insertError) {
+            console.error('Error creating user record:', insertError);
+            return;
+          }
+          setGamesRemaining(0);
+          return;
+        }
+        throw error;
+      }
+
+      setGamesRemaining(data?.games_remaining || 0);
+    } catch (error) {
+      console.error('Error fetching games:', error);
     }
   };
 
   const handleStartGame = async () => {
-    if (!session) {
+    if (!session?.user) {
       setShowAuth(true);
       return;
     }
 
-    // التحقق من عدد الألعاب المتبقية
-    const { data } = await supabase
-      .from('user_games')
-      .select('games_remaining')
-      .eq('user_id', session.user.id)
-      .single();
-
-    if (!data || data.games_remaining <= 0) {
-      setError('عذراً، ليس لديك ألعاب متبقية');
-      setTimeout(() => setError(''), 3000);
-      return;
-    }
-    
-    // الانتقال إلى صفحة الفئات
+    // الانتقال إلى صفحة الفئات مباشرة
     navigate('/categories');
   };
 
-  const handleRedeem = async () => {
-    if (!redeemCode) {
-      setRedeemError('الرجاء إدخال كود التفعيل');
-      return;
-    }
-
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setRedeemError('يجب تسجيل الدخول أولاً');
-        return;
-      }
-
-      // التحقق من صلاحية الكود
-      const isValid = await isValidCode(redeemCode);
-      if (!isValid) {
-        setRedeemError('كود التفعيل غير صالح أو تم استخدامه مسبقاً');
-        setTimeout(() => setRedeemError(''), 3000);
-        return;
-      }
-
-      // تحديث حالة الكود وعدد الألعاب
-      const codeMarked = await markCodeAsUsed(redeemCode, user.id);
-      if (!codeMarked) {
-        setRedeemError('حدث خطأ أثناء تفعيل الكود');
-        return;
-      }
-
-      const { error } = await supabase
-        .from('user_games')
-        .update({ games_remaining: 1 })
-        .eq('user_id', user.id);
-
-      if (error) throw error;
-
-      setGamesRemaining(1);
-      setRedeemSuccess(true);
-      setTimeout(() => {
-        setShowRedeemModal(false);
-        setRedeemSuccess(false);
-        setRedeemCode('');
-      }, 2000);
-    } catch (error) {
-      setRedeemError('حدث خطأ أثناء تفعيل الكود');
-      setTimeout(() => setRedeemError(''), 3000);
-    }
+  const handlePurchaseComplete = (gamesCount: number) => {
+    // Update remaining games count in your database/state
+    // This is where you'll integrate with your backend
+    console.log(`Purchased ${gamesCount} games`);
   };
 
   return (
     <div className="min-h-screen flex flex-col relative bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] p-4" dir="rtl">
+      <img 
+        src="https://i.postimg.cc/DfJ4XbW5/bdgeegalogo-removebg-preview.png" 
+        alt="Bdgeega Logo" 
+        className="absolute top-4 right-4 w-[120px] h-auto z-50"
+      />
       {/* الشريط العلوي */}
       <div className="absolute top-4 left-4 z-50 flex items-center gap-4">
         {/* عداد الألعاب */}
@@ -140,6 +131,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
               title="تفعيل كود"
             >
               +
+            </button>
+            <button
+              onClick={() => setShowPurchaseDialog(true)}
+              className="w-6 h-6 rounded-full bg-[#800020] text-[#F5DEB3] hover:bg-[#600018] transition-colors flex items-center justify-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
             </button>
           </div>
         )}
@@ -202,7 +201,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
                     type="text"
                     value={redeemCode}
                     onChange={(e) => setRedeemCode(e.target.value.toUpperCase())}
-                    placeholder="أدخل كود التفعيل"
+                    placeholder="أدخل كود اللعب"
                     className="w-full px-4 py-2 rounded-lg border border-gray-300 mb-4 text-center uppercase"
                     dir="ltr"
                   />
@@ -221,8 +220,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
                       إلغاء
                     </button>
                     <button
-                      onClick={handleRedeem}
-                      className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 transition-all"
+                      onClick={() => handleRedeemCode()}
+                      className={`px-4 py-2 rounded-lg text-white transition-all ${
+                        redeemCode 
+                          ? 'bg-green-500 hover:bg-green-600' 
+                          : 'bg-gray-400 cursor-not-allowed'
+                      }`}
                     >
                       تفعيل
                     </button>
@@ -282,6 +285,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
           </motion.div>
         </motion.div>
       )}
+
+      {/* Purchase Dialog */}
+      <PurchaseDialog
+        isOpen={showPurchaseDialog}
+        onClose={() => setShowPurchaseDialog(false)}
+        onPurchaseComplete={handlePurchaseComplete}
+      />
 
       {/* Circular Background */}
       <div 
@@ -424,7 +434,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
             
             {/* شريط متحرك للفئات - يمين لليسار */}
             <div className="relative overflow-hidden w-full py-4">
-              <style jsx>{`
+              <style>{`
                 @keyframes slideRight {
                   0% { transform: translateX(0); }
                   100% { transform: translateX(-50%); }
