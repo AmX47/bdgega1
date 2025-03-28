@@ -28,7 +28,7 @@ interface Question {
   video?: string;
 }
 
-type HelpType = 'callFriend' | 'doublePoints' | 'twoAnswers';
+type HelpType = 'callFriend' | 'doublePoints' | 'firstLetter';
 
 const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
   const { categoryIds, gameName, team1Name, team2Name, helpers } = gameSetup;
@@ -45,12 +45,12 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
   const [team1Helps, setTeam1Helps] = useState({
     callFriend: true,
     doublePoints: true,
-    twoAnswers: true
+    firstLetter: true
   });
   const [team2Helps, setTeam2Helps] = useState({
     callFriend: true,
     doublePoints: true,
-    twoAnswers: true
+    firstLetter: true
   });
   const [activeHelpMethod, setActiveHelpMethod] = useState<HelpType | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -231,6 +231,21 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
     updateGamesRemaining();
   }, []); // يتم تنفيذ هذا عند تحميل الصفحة
 
+  const helpMethodIcons = {
+    callFriend: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      </svg>
+    ),
+    doublePoints: <span className="text-base font-medium">2x</span>,
+    firstLetter: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <text x="8.5" y="16" className="text-[10px] font-bold" fill="currentColor">أ</text>
+      </svg>
+    ),
+  };
+
   if (showResult) {
     return (
       <ResultView
@@ -315,15 +330,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                           key={help}
                           onClick={() => handleUseHelp(1, help as HelpType)}
                           disabled={!isAvailable || currentTeamTurn !== 1}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all hover:scale-110 ${
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-medium transition-all hover:scale-105 ${
                             isAvailable 
                               ? currentTeamTurn === 1
-                                ? 'bg-[#800020] text-white hover:bg-[#600018] cursor-pointer' 
-                                : 'bg-[#800020]/10 text-[#800020] cursor-not-allowed'
-                              : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                ? 'bg-[#A0455A] text-[#F5DEB3] hover:bg-opacity-90 cursor-pointer' 
+                                : 'bg-[#A0455A]/50 text-[#F5DEB3]/50 cursor-not-allowed'
+                              : 'bg-[#A0455A]/30 text-[#F5DEB3]/30 cursor-not-allowed'
                           }`}
                         >
-                          {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                          {helpMethodIcons[help as keyof typeof helpMethodIcons]}
                         </button>
                       ))}
                     </div>
@@ -361,15 +376,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                           key={help}
                           onClick={() => handleUseHelp(2, help as HelpType)}
                           disabled={!isAvailable || currentTeamTurn !== 2}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all hover:scale-110 ${
+                          className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-medium transition-all hover:scale-105 ${
                             isAvailable 
                               ? currentTeamTurn === 2
-                                ? 'bg-[#800020] text-white hover:bg-[#600018] cursor-pointer' 
-                                : 'bg-[#800020]/10 text-[#800020] cursor-not-allowed'
-                              : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                ? 'bg-[#A0455A] text-[#F5DEB3] hover:bg-opacity-90 cursor-pointer' 
+                                : 'bg-[#A0455A]/50 text-[#F5DEB3]/50 cursor-not-allowed'
+                              : 'bg-[#A0455A]/30 text-[#F5DEB3]/30 cursor-not-allowed'
                           }`}
                         >
-                          {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                          {helpMethodIcons[help as keyof typeof helpMethodIcons]}
                         </button>
                       ))}
                     </div>
@@ -502,15 +517,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                               key={help}
                               onClick={() => handleUseHelp(1, help as HelpType)}
                               disabled={!isAvailable || currentTeamTurn !== 1}
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all hover:scale-110 ${
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-medium transition-all hover:scale-105 ${
                                 isAvailable 
                                   ? currentTeamTurn === 1
-                                    ? 'bg-[#800020] text-white hover:bg-[#600018] cursor-pointer' 
-                                    : 'bg-[#800020]/10 text-[#800020] cursor-not-allowed'
-                                  : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                    ? 'bg-[#A0455A] text-[#F5DEB3] hover:bg-opacity-90 cursor-pointer' 
+                                    : 'bg-[#A0455A]/50 text-[#F5DEB3]/50 cursor-not-allowed'
+                                  : 'bg-[#A0455A]/30 text-[#F5DEB3]/30 cursor-not-allowed'
                               }`}
                             >
-                              {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                              {helpMethodIcons[help as keyof typeof helpMethodIcons]}
                             </button>
                           ))}
                         </div>
@@ -548,15 +563,15 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameSetup }) => {
                               key={help}
                               onClick={() => handleUseHelp(2, help as HelpType)}
                               disabled={!isAvailable || currentTeamTurn !== 2}
-                              className={`w-10 h-10 rounded-full flex items-center justify-center text-lg transition-all hover:scale-110 ${
+                              className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-medium transition-all hover:scale-105 ${
                                 isAvailable 
                                   ? currentTeamTurn === 2
-                                    ? 'bg-[#800020] text-white hover:bg-[#600018] cursor-pointer' 
-                                    : 'bg-[#800020]/10 text-[#800020] cursor-not-allowed'
-                                  : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                                    ? 'bg-[#A0455A] text-[#F5DEB3] hover:bg-opacity-90 cursor-pointer' 
+                                    : 'bg-[#A0455A]/50 text-[#F5DEB3]/50 cursor-not-allowed'
+                                  : 'bg-[#A0455A]/30 text-[#F5DEB3]/30 cursor-not-allowed'
                               }`}
                             >
-                              {help === 'callFriend' ? '📞' : help === 'doublePoints' ? '2x' : '2A'}
+                              {helpMethodIcons[help as keyof typeof helpMethodIcons]}
                             </button>
                           ))}
                         </div>

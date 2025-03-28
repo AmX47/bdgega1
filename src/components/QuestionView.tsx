@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { ReportDialog } from './ReportDialog';
 
 interface Question {
   id: number;
@@ -21,11 +22,46 @@ interface Team {
 interface QuestionViewProps {
   question: Question;
   teams: Team[];
-  onScorePoint: (teamId: number, isCorrect: boolean) => void;
+  onScorePoint: (teamId: number, isCorrect: boolean, doublePoints?: boolean) => void;
   onBack: () => void;
-  activeHelpMethod: 'callFriend' | 'doublePoints' | 'twoAnswers' | null;
+  activeHelpMethod: 'callFriend' | 'doublePoints' | 'firstLetter' | null;
   currentTeam: number;
 }
+
+interface CallFriendDialogProps {
+  open: boolean;
+  onClose: () => void;
+  onStart: () => void;
+}
+
+const CallFriendDialog: React.FC<CallFriendDialogProps> = ({ open, onClose, onStart }) => {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
+        <div className="text-xl font-bold text-[#F5DEB3] mb-6">عندك 30 ثانية تدق على شخص جاهزززززز ؟</div>
+        <div className="flex justify-center gap-4">
+          <button
+            onClick={() => {
+              onStart();
+              onClose();
+            }}
+            className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
+          >
+            اي
+          </button>
+          <button
+            onClick={onClose}
+            className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+          >
+            لا
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const QuestionView: React.FC<QuestionViewProps> = ({
   question,
@@ -40,11 +76,19 @@ const QuestionView: React.FC<QuestionViewProps> = ({
   const [showAnswer, setShowAnswer] = useState(false);
   const [timer, setTimer] = useState(60);
   const [isTimerRunning, setIsTimerRunning] = useState(true);
+  const [showCallFriendDialog, setShowCallFriendDialog] = useState(false);
+  const [callFriendTimer, setCallFriendTimer] = useState(30);
+  const [isCallFriendActive, setIsCallFriendActive] = useState(false);
+  const [callFriendMessage, setCallFriendMessage] = useState<string>("");
+  const [isCallFriendTimerStarted, setIsCallFriendTimerStarted] = useState(false);
+  const [showFirstLetter, setShowFirstLetter] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [showReportDialog, setShowReportDialog] = useState(false);
+  const [isImageEnlarged, setIsImageEnlarged] = useState(false);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -67,6 +111,33 @@ const QuestionView: React.FC<QuestionViewProps> = ({
       }
     };
   }, [isTimerRunning, timer]);
+
+  useEffect(() => {
+    let timerInterval: NodeJS.Timeout;
+    let closeTimeout: NodeJS.Timeout;
+
+    if (isCallFriendActive && isCallFriendTimerStarted) {
+      timerInterval = setInterval(() => {
+        setCallFriendTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(timerInterval);
+            setCallFriendMessage("خلص الوقت !");
+            closeTimeout = setTimeout(() => {
+              setShowCallFriendDialog(false);
+              setIsCallFriendActive(false);
+            }, 5000);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(timerInterval);
+      clearTimeout(closeTimeout);
+    };
+  }, [isCallFriendActive, isCallFriendTimerStarted]);
 
   useEffect(() => {
     if (audioRef.current && question.audio) {
@@ -178,15 +249,40 @@ const QuestionView: React.FC<QuestionViewProps> = ({
     onScorePoint(0, false);
   };
 
+  const startCallFriend = () => {
+    setIsCallFriendActive(true);
+    setShowCallFriendMessage(false);
+  };
+
   const helpMethodDescriptions = {
     callFriend: "اتصل بصديق: يمكنك الاتصال بصديق للمساعدة في الإجابة",
     doublePoints: "دبل نقاط: ستحصل على ضعف النقاط إذا كانت إجابتك صحيحة",
-    twoAnswers: "جاوب جوابين: لديك فرصتان للإجابة على هذا السؤال"
+    firstLetter: "الحرف الأول: سيظهر لك الحرف الأول من الإجابة"
+  };
+
+  const helpMethodIcons = {
+    callFriend: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      </svg>
+    ),
+    doublePoints: <span className="text-base font-medium">2x</span>,
+    firstLetter: (
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <text x="8.5" y="16" className="text-[10px] font-bold" fill="currentColor">أ</text>
+      </svg>
+    ),
+  };
+
+  const helpMethodLabels = {
+    callFriend: "اتصل بصديق",
+    doublePoints: "دبل النقاط",
+    firstLetter: "الحرف الأول"
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#800020] via-[#A0455A] to-[#F5DEB3] flex items-center justify-center p-4" dir="rtl">
-      {/* Main Content */}
       <div className="max-w-4xl w-full relative">
         {/* Timer */}
         <div className="absolute -top-24 left-1/2 transform -translate-x-1/2">
@@ -220,22 +316,39 @@ const QuestionView: React.FC<QuestionViewProps> = ({
 
         {/* Question/Answer Box */}
         <div className="min-h-[300px] bg-[#800020] rounded-xl rounded-t-none p-8 text-center relative">
-          {/* Right Border */}
-          <div className="absolute top-0 right-0 w-[45%] h-4 border-t-4 border-r-4 border-[#F5DEB3]"></div>
-          {/* Left Border */}
-          <div className="absolute top-0 left-0 w-[45%] h-4 border-t-4 border-l-4 border-[#F5DEB3]"></div>
-          {/* Right Side Border */}
-          <div className="absolute top-0 right-0 w-4 h-full border-r-4 border-[#F5DEB3]"></div>
-          {/* Left Side Border */}
-          <div className="absolute top-0 left-0 w-4 h-full border-l-4 border-[#F5DEB3]"></div>
-          {/* Bottom Border */}
-          <div className="absolute bottom-0 left-0 w-full h-4 border-b-4 border-[#F5DEB3]"></div>
+          {/* Points and Question Title */}
+          <div className="text-center mb-8">
+            <div className="text-2xl font-bold text-[#F5DEB3] mb-2">
+              السؤال ({question.points} نقطة)
+            </div>
+          </div>
+
+          {/* Help Method Button */}
+          {activeHelpMethod && (
+            <div className="absolute top-4 right-4">
+              <button
+                onClick={() => {
+                  if (activeHelpMethod === 'callFriend') {
+                    setShowCallFriendDialog(true);
+                  } else if (activeHelpMethod === 'firstLetter') {
+                    setShowFirstLetter(true);
+                  }
+                }}
+                disabled={activeHelpMethod === 'doublePoints'}
+                className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all ${
+                  activeHelpMethod === 'doublePoints'
+                    ? 'bg-[#A0455A]/50 cursor-not-allowed'
+                    : 'bg-[#A0455A] hover:bg-opacity-90 cursor-pointer'
+                } text-[#F5DEB3] border border-[#F5DEB3]/20 shadow-lg`}
+              >
+                {helpMethodIcons[activeHelpMethod]}
+                <span className="text-lg font-medium">{helpMethodLabels[activeHelpMethod]}</span>
+              </button>
+            </div>
+          )}
 
           {!showAnswer ? (
             <>
-              <div className="text-2xl font-bold text-[#F5DEB3] mb-4">
-                السؤال ({question.points} نقطة)
-              </div>
               <div className="text-4xl font-extrabold text-[#F5DEB3] mb-6 text-center tracking-wide">
                 {question.text}
               </div>
@@ -258,7 +371,10 @@ const QuestionView: React.FC<QuestionViewProps> = ({
                   <img 
                     src={question.image} 
                     alt="Question" 
-                    className="max-w-full max-h-[300px] object-contain rounded-lg"
+                    className={`rounded-lg cursor-pointer transition-transform duration-300 ${
+                      !isImageEnlarged ? 'max-w-full max-h-[300px] object-contain hover:scale-105' : ''
+                    }`}
+                    onClick={() => setIsImageEnlarged(true)}
                   />
                 </div>
               )}
@@ -304,7 +420,7 @@ const QuestionView: React.FC<QuestionViewProps> = ({
                 onClick={() => setShowAnswer(true)}
                 className="bg-[#F5DEB3] text-[#800020] px-8 py-3 rounded-lg text-xl font-bold hover:bg-[#E8D1A0] transition-colors"
               >
-                اظهر الإجابة
+                شنو الإجابة ؟
               </button>
             </>
           ) : (
@@ -352,30 +468,34 @@ const QuestionView: React.FC<QuestionViewProps> = ({
           )}
         </div>
 
-        {/* Report Button */}
-        <div className="mb-4 flex justify-center">
-          <a 
-            href="https://www.instagram.com/bdgeegakw" 
-            target="_blank" 
-            rel="noopener noreferrer"
+        {/* Back and Report Buttons */}
+        <div className="mt-6 flex flex-col items-center gap-4">
+          <button 
+            onClick={() => setShowReportDialog(true)}
             className="inline-flex items-center gap-2 text-[#F5DEB3] hover:text-white transition-colors border border-[#800020] hover:border-[#600018] px-4 py-2 rounded-full"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
             </svg>
             <span>الإبلاغ عن مشكلة</span>
-          </a>
-        </div>
-
-        {/* Back Button */}
-        <div className="mt-6 text-center">
+          </button>
+          
           <button
             onClick={handleBack}
-            className="border-2 border-[#F5DEB3] text-[#F5DEB3] px-6 py-2 rounded-lg hover:bg-[#F5DEB3] hover:text-[#800020] transition-colors"
+            className="inline-flex items-center gap-2 text-[#F5DEB3] hover:text-white transition-colors border border-[#800020] hover:border-[#600018] px-4 py-2 rounded-full"
           >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+            </svg>
             رجوع
           </button>
         </div>
+
+        <ReportDialog
+          open={showReportDialog}
+          onClose={() => setShowReportDialog(false)}
+          currentPage="صفحة السؤال"
+        />
 
         {/* Back Confirmation Modal */}
         {showConfirmBack && (
@@ -396,6 +516,95 @@ const QuestionView: React.FC<QuestionViewProps> = ({
                   لا
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* نافذة الصورة المكبرة */}
+        {isImageEnlarged && question.image && (
+          <div 
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80"
+            onClick={() => setIsImageEnlarged(false)}
+          >
+            <div className="relative max-w-[90vw] max-h-[90vh]">
+              <button
+                className="absolute -top-4 -right-4 bg-white rounded-full p-1 hover:bg-gray-200 transition-colors"
+                onClick={() => setIsImageEnlarged(false)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <img
+                src={question.image}
+                alt="صورة السؤال"
+                className="rounded-lg max-h-[90vh] object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Call Friend Dialog */}
+        {showCallFriendDialog && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
+              {!isCallFriendTimerStarted ? (
+                <>
+                  <div className="text-xl font-bold text-[#F5DEB3] mb-6">
+                    عندك 30 ثانية
+                    <div className="text-sm mt-2 text-[#F5DEB3]/80">
+                      وقت الي يعرف كل شي 😉
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setIsCallFriendTimerStarted(true);
+                      setIsCallFriendActive(true);
+                      setCallFriendMessage("");
+                    }}
+                    className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
+                  >
+                    يلا
+                  </button>
+                </>
+              ) : (
+                <div className="text-xl font-bold text-[#F5DEB3] mb-6">
+                  {callFriendMessage || (
+                    <>
+                      الوقت المتبقي
+                      <div className="text-6xl mt-4 font-bold tabular-nums">
+                        {callFriendTimer}
+                      </div>
+                      <div className="text-sm mt-2 text-[#F5DEB3]/80">
+                        ثانية
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* First Letter Dialog */}
+        {showFirstLetter && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div className="bg-[#800020] rounded-lg p-6 max-w-md w-full text-center">
+              <div className="text-xl font-bold text-[#F5DEB3] mb-6">
+                الحرف الأول من الإجابة هو:
+                <div className="text-4xl mt-4 font-bold flex items-center justify-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-[#A0455A] flex items-center justify-center border-2 border-[#F5DEB3]">
+                    <span className="text-[#F5DEB3]">{question.correctAnswer.charAt(0)}</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowFirstLetter(false)}
+                className="bg-[#F5DEB3] text-[#800020] px-6 py-2 rounded-lg font-bold hover:bg-[#E8D1A0] transition-colors"
+              >
+                تمام
+              </button>
             </div>
           </div>
         )}

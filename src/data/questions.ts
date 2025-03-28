@@ -1058,58 +1058,6 @@ export const questions = [
     ]
   },
   {
-    id: 21,
-    name: "السكاريب",
-    description: "اسئلة عن سيارات السكاريب جربها !",
-    image: "https://i.postimg.cc/dVhn9XRG/IMG-3738.jpg",
-    questions: [
-      {
-        id: 1,
-        text: "شنو نوع الموتر (الموديل)",
-        correctAnswer: "جيتي 1980",
-        points: 300,
-        image: "https://i.postimg.cc/HxMkRmQy/image.webp",
-        buttonIndex: 0
-      },
-      {
-        id: 2,
-        text: "شنو اسم (نوع) الرنق ؟",
-        correctAnswer: "رنق الفراشة",
-        points: 300,
-        image: "https://i.postimg.cc/ZRPxmGmW/image.webp",
-        buttonIndex: 1
-      },
-      {
-        id: 3,
-        text: "من هو ملحن أغنية 'علمني حبك'؟",
-        correctAnswer: "طلال مداح",
-        points: 500,
-        buttonIndex: 0
-      },
-      {
-        id: 4,
-        text: "من هو مؤلف أغنية 'يا دار'؟",
-        correctAnswer: "عبدالله الفرج",
-        points: 500,
-        buttonIndex: 1
-      },
-      {
-        id: 5,
-        text: "من هو أول مطرب كويتي سجل أغنية؟",
-        correctAnswer: "عبداللطيف الكويتي",
-        points: 700,
-        buttonIndex: 0
-      },
-      {
-        id: 6,
-        text: "في أي عام تأسست فرقة ميامي الكويتية؟",
-        correctAnswer: "1973",
-        points: 700,
-        buttonIndex: 1
-      }
-    ]
-  },
-  {
     id: 22,
     name: "شباب البومب",
     description: "",

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import categories from '../data/questions';
 import { CategorySuggestionDialog } from './CategorySuggestionDialog';
-import { AddCircleOutline } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
+import { AddCircleOutline, Favorite, FavoriteBorder } from '@mui/icons-material';
+import { IconButton, Tooltip, Badge, Snackbar, Alert } from '@mui/material';
+import { supabase } from '../lib/supabase';
 
 interface CategoriesProps {
   onGameSetup: (gameData: {
@@ -14,13 +15,25 @@ interface CategoriesProps {
     helpers: string[];
   }) => void;
   onHome: () => void;
-  onNext: (categoryIds: string[]) => void;
+  onNext?: (categoryIds: string[]) => void;
   currentUser: any;
+}
+
+interface FavoriteCategory {
+  category_id: string;
+  user_id: string;
+}
+
+interface CategoryLikes {
+  category_id: string;
+  likes_count: number;
 }
 
 export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, currentUser }) => {
   const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [favoriteCategories, setFavoriteCategories] = useState<string[]>([]);
+  const [categoryLikes, setCategoryLikes] = useState<Record<string, number>>({});
   const [team1Name, setTeam1Name] = useState('');
   const [team2Name, setTeam2Name] = useState('');
   const [gameName, setGameName] = useState('');
@@ -30,6 +43,103 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
   const [helpers, setHelpers] = useState<string[]>([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [hoveredInfo, setHoveredInfo] = useState<string | null>(null);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchFavorites();
+      fetchCategoryLikes();
+    }
+  }, [currentUser]);
+
+  const fetchFavorites = async () => {
+    if (!currentUser) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from('favorite_categories')
+        .select('category_id')
+        .eq('user_id', currentUser.id);
+
+      if (error) throw error;
+
+      setFavoriteCategories(data?.map(fav => fav.category_id) || []);
+    } catch (error) {
+      showMessage('حدث خطأ في جلب المفضلة', 'error');
+    }
+  };
+
+  const fetchCategoryLikes = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('category_likes')
+        .select('*');
+
+      if (error) throw error;
+
+      const likesMap = data?.reduce((acc: Record<string, number>, curr: CategoryLikes) => {
+        acc[curr.category_id] = curr.likes_count;
+        return acc;
+      }, {}) || {};
+
+      setCategoryLikes(likesMap);
+    } catch (error) {
+      showMessage('حدث خطأ في جلب عدد الإعجابات', 'error');
+    }
+  };
+
+  const showMessage = (message: string, severity: 'success' | 'error') => {
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setShowSnackbar(true);
+  };
+
+  const toggleFavorite = async (categoryId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!currentUser) {
+      showMessage('يجب تسجيل الدخول لإضافة الفئات إلى المفضلة', 'error');
+      return;
+    }
+
+    try {
+      const isFavorited = favoriteCategories.includes(categoryId);
+
+      if (isFavorited) {
+        const { error } = await supabase
+          .from('favorite_categories')
+          .delete()
+          .eq('user_id', currentUser.id)
+          .eq('category_id', categoryId);
+
+        if (error) throw error;
+
+        setFavoriteCategories(prev => prev.filter(id => id !== categoryId));
+        showMessage('تم إزالة الفئة من المفضلة', 'success');
+      } else {
+        const { error } = await supabase
+          .from('favorite_categories')
+          .insert([
+            { user_id: currentUser.id, category_id: categoryId }
+          ]);
+
+        if (error) throw error;
+
+        setFavoriteCategories(prev => [...prev, categoryId]);
+        showMessage('تم إضافة الفئة إلى المفضلة', 'success');
+      }
+
+      // Refresh category likes after a short delay
+      setTimeout(() => {
+        fetchCategoryLikes();
+      }, 500);
+    } catch (error: any) {
+      showMessage(error.message || 'حدث خطأ أثناء تحديث المفضلة', 'error');
+    }
+  };
 
   const availableHelpers = [
     'استشارة صديق',
@@ -198,8 +308,8 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
             >
               <div
                 className={`bg-[#800020] rounded-2xl p-2 text-center cursor-pointer transform hover:scale-105 transition-all duration-300 border-4 ${
-                  selectedCategories.includes(category.id) 
-                    ? 'border-[#00FF00]' 
+                  selectedCategories.includes(category.id)
+                    ? 'border-[#00FF00]'
                     : 'border-[#F5DEB3]'
                 }`}
                 onClick={() => handleCategorySelect(category.id)}
@@ -220,20 +330,51 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
                   </div>
                 </div>
                 <div className="flex items-center justify-between px-2">
-                  <h2 className="text-lg font-bold text-[#F5DEB3] truncate">{category.name}</h2>
                   {category.icon && (
-                    <span className="text-2xl">{category.icon}</span>
+                    <span className="text-2xl invisible">
+                      {category.icon}
+                    </span>
                   )}
+                  <h2 className="text-lg font-bold text-[#F5DEB3] truncate text-center flex-1">{category.name}</h2>
+                  <IconButton
+                    onClick={(e) => toggleFavorite(category.id, e)}
+                    className="text-[#F5DEB3] p-1"
+                    size="small"
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: 'rgba(245, 222, 179, 0.1)',
+                      },
+                    }}
+                  >
+                    <Badge 
+                      badgeContent={categoryLikes[category.id] || 0} 
+                      color="primary"
+                      sx={{
+                        '& .MuiBadge-badge': {
+                          backgroundColor: '#F5DEB3',
+                          color: '#800020',
+                        },
+                      }}
+                    >
+                      {favoriteCategories.includes(category.id) ? (
+                        <Favorite 
+                          className="text-red-500" 
+                          fontSize="small"
+                          sx={{ transition: 'all 0.2s ease-in-out' }}
+                        />
+                      ) : (
+                        <FavoriteBorder 
+                          fontSize="small"
+                          sx={{ 
+                            color: '#F5DEB3',
+                            transition: 'all 0.2s ease-in-out',
+                          }}
+                        />
+                      )}
+                    </Badge>
+                  </IconButton>
                 </div>
               </div>
-
-              {/* Description Tooltip */}
-              {hoveredInfo === category.id && category.description && (
-                <div className="absolute -top-16 left-0 right-0 bg-[#800020]/90 text-[#F5DEB3] p-3 rounded-lg shadow-lg backdrop-blur-sm z-10 text-sm">
-                  {category.description}
-                  <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-4 h-4 bg-[#800020]/90 rotate-45"></div>
-                </div>
-              )}
             </div>
           ))}
         </div>
@@ -420,6 +561,20 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
           open={isSuggestionDialogOpen}
           onClose={() => setIsSuggestionDialogOpen(false)}
         />
+        <Snackbar 
+          open={showSnackbar} 
+          autoHideDuration={3000} 
+          onClose={() => setShowSnackbar(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <Alert 
+            onClose={() => setShowSnackbar(false)} 
+            severity={snackbarSeverity}
+            sx={{ width: '100%' }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </div>
     </div>
   );

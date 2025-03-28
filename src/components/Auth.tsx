@@ -4,7 +4,11 @@ import { supabase } from '../lib/supabase'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-export default function AuthComponent() {
+interface AuthComponentProps {
+  onClose: () => void;
+}
+
+export default function AuthComponent({ onClose }: AuthComponentProps) {
   const [isSignUp, setIsSignUp] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -29,7 +33,6 @@ export default function AuthComponent() {
           throw new Error('كلمات المرور غير متطابقة')
         }
 
-        // إنشاء حساب جديد
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -54,19 +57,22 @@ export default function AuthComponent() {
               phone: '',
               confirmPassword: ''
             })
+            onClose()
           }, 2000)
         }
       } else {
-        // تسجيل الدخول
-        const { error: signInError } = await supabase.auth.signInWithPassword({
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
           email: formData.email,
           password: formData.password,
         })
 
         if (signInError) throw signInError
+
+        if (signInData.user) {
+          onClose()
+        }
       }
     } catch (error: any) {
-      console.error('Auth error:', error)
       if (error.message.includes('Password should be at least 6 characters')) {
         setError('كلمة المرور يجب أن تكون 6 أحرف على الأقل')
       } else if (error.message.includes('User already registered')) {

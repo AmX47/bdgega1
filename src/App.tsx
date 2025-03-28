@@ -5,7 +5,6 @@ import { Categories } from './components/Categories';
 import { GameBoard } from './components/GameBoard';
 import { PaymentSuccess } from './components/PaymentSuccess';
 import { PaymentError } from './components/PaymentError';
-import { sendDiscordNotification } from './services/discord';
 import { supabase } from './lib/supabase';
 
 interface GameSetup {
@@ -18,31 +17,33 @@ interface GameSetup {
 
 function AppContent() {
   const [gameSetup, setGameSetup] = useState<GameSetup | null>(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   useEffect(() => {
-    checkAuth();
-    
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_IN') {
-        setIsAuthenticated(true);
-      } else if (event === 'SIGNED_OUT') {
-        setIsAuthenticated(false);
-        navigate('/');
+    checkUser();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setCurrentUser(session.user);
+      } else {
+        setCurrentUser(null);
       }
     });
 
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
-  const checkAuth = async () => {
+  const checkUser = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      setIsAuthenticated(!!session);
+      if (session?.user) {
+        setCurrentUser(session.user);
+      }
     } catch (error) {
-      console.error('Error checking auth status:', error);
-      setIsAuthenticated(false);
+      setCurrentUser(null);
     }
   };
 
@@ -53,24 +54,36 @@ function AppContent() {
 
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route 
+        path="/" 
+        element={
+          <LandingPage 
+            currentUser={currentUser}
+          />
+        } 
+      />
       <Route 
         path="/categories" 
         element={
-          isAuthenticated ? (
-            <Categories onGameSetup={handleGameSetup} />
-          ) : (
-            <LandingPage />
-          )
+          <Categories 
+            onGameSetup={handleGameSetup} 
+            onHome={() => navigate('/')} 
+            currentUser={currentUser}
+          />
         } 
       />
       <Route 
         path="/game" 
         element={
-          isAuthenticated && gameSetup ? (
-            <GameBoard gameSetup={gameSetup} />
+          gameSetup ? (
+            <GameBoard 
+              gameSetup={gameSetup}
+              currentUser={currentUser}
+            />
           ) : (
-            <LandingPage />
+            <LandingPage 
+              currentUser={currentUser}
+            />
           )
         } 
       />
