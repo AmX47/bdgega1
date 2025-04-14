@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import UPayment from './UPayment';
+import React, { useState, useEffect } from 'react';
+import { PayPalButton } from './PayPalButton/PayPalButton';
 
 interface PurchaseDialogProps {
     isOpen: boolean;
@@ -16,7 +16,6 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
     const [selectedOption, setSelectedOption] = React.useState<PurchaseOption | null>(null);
     const [error, setError] = React.useState<string | null>(null);
     const [promoCode, setPromoCode] = useState('');
-    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<'KNET' | 'VISA' | 'MASTERCARD' | 'APPLEPAY' | null>(null);
 
     const purchaseOptions: PurchaseOption[] = [
         { games: 1, priceKWD: 1 },
@@ -25,78 +24,17 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
         { games: 10, priceKWD: 10 }
     ];
 
-    const paymentMethods = [
-        { id: 'KNET', name: 'KNET' },
-        { id: 'VISA', name: 'VISA'},
-        { id: 'MASTERCARD', name: 'MASTERCARD' },
-        { id: 'APPLEPAY', name: 'Apple Pay'}
-    ];
-
-    // Check for payment status when component mounts
-    React.useEffect(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const reference = urlParams.get('reference');
-        const status = urlParams.get('status');
-
-        if (reference && status) {
-            const verifyPayment = async () => {
-                try {
-                    const response = await fetch('https://sandboxapi.upayments.com/api/v1/charge/status', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Bearer e66a94d579cf75fba327ff716ad68c53aae11528',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            reference: reference
-                        })
-                    });
-
-                    const data = await response.json();
-                    console.log('Payment verification response:', data);
-
-                    if (data.status === 'success' && data.charge.status === 'Captured') {
-                        // Get the saved games count
-                        const savedGames = localStorage.getItem('upayments_amount');
-                        if (savedGames) {
-                            const gamesCount = Math.floor(parseFloat(savedGames));
-                            onPurchaseComplete(gamesCount);
-                            
-                            // Clean up localStorage
-                            localStorage.removeItem('upayments_amount');
-                            localStorage.removeItem('upayments_reference');
-                            
-                            // Close the dialog
-                            onClose();
-                        }
-                    } else {
-                        setError(`حالة الدفع: ${data.charge?.status || 'فشل'}`);
-                    }
-
-                    // Clean up URL parameters
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } catch (error) {
-                    console.error('Error verifying payment:', error);
-                    setError('حدث خطأ أثناء التحقق من حالة الدفع');
-                }
-            };
-
-            verifyPayment();
+    const handlePayPalSuccess = async (details: any) => {
+        console.log('Payment successful:', details);
+        if (selectedOption) {
+            onPurchaseComplete(selectedOption.games);
+            onClose();
         }
-    }, [onPurchaseComplete, onClose]);
-
-    const handlePaymentSuccess = () => {
-        setError(null);
     };
 
-    const handlePaymentError = (error: any) => {
-        console.error('Payment error:', error);
-        setError('حدث خطأ أثناء عملية الدفع');
-    };
-
-    const handleApplyPromoCode = () => {
-        // هنا يمكنك إضافة منطق التحقق من كود الخصم
-        console.log('Applying promo code:', promoCode);
+    const handlePayPalError = (error: any) => {
+        setError('حدث خطأ في عملية الدفع. يرجى المحاولة مرة أخرى.');
+        console.error('PayPal error:', error);
     };
 
     if (!isOpen) return null;
@@ -128,18 +66,18 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
                         <h3 className="text-lg font-semibold text-[#F5DEB3] mb-4">اختر الباقة المناسبة</h3>
                         <div className="grid grid-cols-2 gap-4">
                             {purchaseOptions.map((option) => (
-                                <button
+                                <div
                                     key={option.games}
-                                    onClick={() => setSelectedOption(option)}
-                                    className={`p-4 rounded-lg border-2 transition-all ${
-                                        selectedOption?.games === option.games
-                                            ? 'border-[#800020] bg-[#800020]/20'
-                                            : 'border-[#F5DEB3]/20 hover:border-[#F5DEB3]/40'
+                                    className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                                        selectedOption?.games === option.games 
+                                        ? 'border-[#F5DEB3] bg-[#F5DEB3]/10 text-[#F5DEB3]' 
+                                        : 'border-[#F5DEB3]/20 text-[#F5DEB3]/80 hover:border-[#F5DEB3]/50'
                                     }`}
+                                    onClick={() => setSelectedOption(option)}
                                 >
-                                    <div className="text-lg font-bold text-[#F5DEB3]">{option.games} {option.games === 1 ? 'لعبة' : 'ألعاب'}</div>
-                                    <div className="text-sm text-[#F5DEB3]/80">{option.priceKWD} د.ك</div>
-                                </button>
+                                    <div className="text-lg font-bold">{option.games} ألعاب</div>
+                                    <div className="opacity-80">{option.priceKWD} د.ك</div>
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -149,11 +87,11 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
                         <div className="bg-[#2a2a2a] rounded-lg p-4">
                             <h3 className="text-lg font-semibold text-[#F5DEB3] mb-4">ملخص الطلب</h3>
                             
-                            {selectedOption && (
+                            {selectedOption ? (
                                 <div className="space-y-4">
                                     <div className="flex justify-between text-[#F5DEB3]">
                                         <span>الباقة المختارة:</span>
-                                        <span>{selectedOption.games} {selectedOption.games === 1 ? 'لعبة' : 'ألعاب'}</span>
+                                        <span>{selectedOption.games} ألعاب</span>
                                     </div>
                                     <div className="flex justify-between text-[#F5DEB3]">
                                         <span>السعر:</span>
@@ -171,7 +109,7 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
                                                 className="flex-1 px-3 py-2 bg-[#1a1a1a] border border-[#F5DEB3]/20 rounded-lg text-[#F5DEB3] placeholder-[#F5DEB3]/50"
                                             />
                                             <button
-                                                onClick={handleApplyPromoCode}
+                                                onClick={() => console.log('Applying promo code:', promoCode)}
                                                 className="px-4 py-2 bg-[#800020] text-[#F5DEB3] rounded-lg hover:bg-[#600018] transition-colors"
                                             >
                                                 تطبيق
@@ -180,41 +118,25 @@ const PurchaseDialog: React.FC<PurchaseDialogProps> = ({ isOpen, onClose, onPurc
                                     </div>
 
                                     <div className="border-t border-[#F5DEB3]/20 pt-4">
-                                        <div className="flex justify-between text-[#F5DEB3] font-bold">
+                                        <div className="flex justify-between text-[#F5DEB3] font-bold mb-4">
                                             <span>الإجمالي:</span>
                                             <span>{selectedOption.priceKWD} د.ك</span>
                                         </div>
-                                    </div>
-
-                                    {/* Payment Methods */}
-                                    <div className="space-y-2">
-                                        <h4 className="text-[#F5DEB3] font-semibold">اختر طريقة الدفع</h4>
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {paymentMethods.map((method) => (
-                                                <button
-                                                    key={method.id}
-                                                    onClick={() => setSelectedPaymentMethod(method.id as any)}
-                                                    className={`p-2 rounded-lg border transition-all flex items-center justify-center gap-2 ${
-                                                        selectedPaymentMethod === method.id
-                                                            ? 'border-[#800020] bg-[#800020]/20 text-[#F5DEB3]'
-                                                            : 'border-[#F5DEB3]/20 text-[#F5DEB3]/80 hover:border-[#F5DEB3]/40'
-                                                    }`}
-                                                >
-                                                    <span>{method.icon}</span>
-                                                    <span>{method.name}</span>
-                                                </button>
-                                            ))}
+                                        
+                                        {/* PayPal Button */}
+                                        <div className="mt-4">
+                                            <PayPalButton
+                                                amount={selectedOption.priceKWD.toString()}
+                                                description={`شراء ${selectedOption.games} ${selectedOption.games === 1 ? 'لعبة' : 'ألعاب'}`}
+                                                onSuccess={handlePayPalSuccess}
+                                                onError={handlePayPalError}
+                                            />
                                         </div>
                                     </div>
-
-                                    {selectedPaymentMethod && (
-                                        <UPayment
-                                            amount={selectedOption.priceKWD}
-                                            onSuccess={handlePaymentSuccess}
-                                            onError={handlePaymentError}
-                                            paymentMethod={selectedPaymentMethod}
-                                        />
-                                    )}
+                                </div>
+                            ) : (
+                                <div className="text-[#F5DEB3]/60 text-center">
+                                    الرجاء اختيار باقة للمتابعة
                                 </div>
                             )}
                         </div>

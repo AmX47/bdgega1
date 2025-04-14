@@ -307,12 +307,12 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
               className="relative"
             >
               <div
-                className={`bg-[#800020] rounded-2xl p-2 text-center cursor-pointer transform hover:scale-105 transition-all duration-300 border-4 ${
+                className={`bg-[#800020] rounded-2xl p-2 text-center transform hover:scale-105 transition-all duration-300 border-4 ${
                   selectedCategories.includes(category.id)
                     ? 'border-[#00FF00]'
                     : 'border-[#F5DEB3]'
-                }`}
-                onClick={() => handleCategorySelect(category.id)}
+                } ${category.name === "عبدالمجيد عبدالله" ? "cursor-not-allowed" : "cursor-pointer"}`}
+                onClick={() => category.name !== "عبدالمجيد عبدالله" && handleCategorySelect(category.id)}
               >
                 <div className="relative w-full aspect-square mb-2">
                   <img 
@@ -320,6 +320,11 @@ export const Categories: React.FC<CategoriesProps> = ({ onGameSetup, onHome, cur
                     alt={category.name} 
                     className="absolute inset-0 w-full h-full object-cover rounded-xl"
                   />
+                  {category.name === "عبدالمجيد عبدالله" && (
+                    <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                      <span className="text-white text-2xl font-bold">Soon</span>
+                    </div>
+                  )}
                   {/* Info Icon */}
                   <div 
                     className="absolute top-2 right-2 w-6 h-6 bg-[#87CEEB] rounded-full flex items-center justify-center cursor-help hover:bg-[#87CEEB]/80 transition-colors"

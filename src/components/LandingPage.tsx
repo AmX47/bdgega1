@@ -233,8 +233,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
       <div className="relative flex flex-col min-h-screen">
         {/* Logo and Title */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-6xl font-bold text-[#FFE4E1] mb-4">العب بدقيقة</h1>
-          <p className="text-xl text-[#FFE4E1] opacity-90">تقدر تجاوب بدقيقة ؟</p>
+          <h1 className="text-4xl md:text-6xl font-bold text-[#F5DEB3] mb-4" style={{ fontFamily: "'Amiri', serif" }}> بدقيقة</h1>
+          <p className="text-xl text-[#F5DEB3] opacity-90">تقدر تجاوب بدقيقة ؟</p>
         </div>
 
         {/* Feature Cards */}
@@ -279,7 +279,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
           {/* قسم "ليش بدقيقة؟" */}
           <div className="mb-32">
             <div className="max-w-3xl mx-auto bg-[#800020]/30 backdrop-blur-sm rounded-2xl p-8 border-2 border-[#F5DEB3]/30">
-              <h2 className="text-3xl font-bold text-[#F5DEB3] mb-6 text-center">ليش بدقيقة؟</h2>
+              <h2 className="text-3xl font-bold text-center text-[#F5DEB3]">ليش بدقيقة؟</h2>
               <p className="text-xl text-[#F5DEB3] text-center leading-relaxed">
                لأن بدقيقة لعبة اجتماعية ثقافية تتميز عن كل الألعاب بالأسعار والتنوع في الفئات والأفكار الجديدة تناسب جميع الأعمار .
               </p>

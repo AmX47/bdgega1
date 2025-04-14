@@ -1,3 +1,5 @@
+import { image } from "framer-motion/client";
+
 export const questions = [
   {
     id: 1,
@@ -434,43 +436,43 @@ export const questions = [
     questions: [
       {
         id: 1,
-        text: "من هو مؤلف مسلسل باب الحارة؟",
-        correctAnswer: "مروان قاووق",
+        text: "كم عدد زوجات عصام ؟",
+        correctAnswer: "3",
         points: 300,
         buttonIndex: 0
       },
       {
         id: 2,
-        text: "من يلعب دور أبو عصام؟",
-        correctAnswer: "بسام كوسا",
+        text: "منو سبب خلافات حارة الضبع وحارة ابن لام",
+        correctAnswer: "ابو غالب",
         points: 300,
         buttonIndex: 1
       },
       {
         id: 3,
-        text: "في أي عام عرض الجزء الأول من المسلسل؟",
-        correctAnswer: "2006",
+        text: "شنو سبب طلاق ابو عصام من ام عصام ؟",
+        correctAnswer: "بسبب قولها لأبو عصام (خسئت)",
         points: 500,
         buttonIndex: 0
       },
       {
         id: 4,
         text: "ما هي مهنة معتز في المسلسل؟",
-        correctAnswer: "حلاق",
+        correctAnswer: "عطار",
         points: 500,
         buttonIndex: 1
       },
       {
         id: 5,
-        text: "ما هو اسم زوجة أبو عصام في المسلسل؟",
-        correctAnswer: "أم عصام",
+        text: "ماهي الدكانة التي كان يريدها ابو غالب ؟",
+        correctAnswer: "دكان ابو سمير الحمصاني" ,
         points: 700,
         buttonIndex: 0
       },
       {
         id: 6,
-        text: "كم عدد أجزاء مسلسل باب الحارة؟",
-        correctAnswer: "11",
+        text: "كم مره دخل ابو جودت الحاره وهي محاصره ؟",
+        correctAnswer: "مرتين",
         points: 700,
         buttonIndex: 1
       }
@@ -806,7 +808,7 @@ export const questions = [
         text: "ما هي أكثر لعبة مبيعاً في التاريخ؟",
         correctAnswer: "ماينكرافت",
         points: 300,
-        image: "https://img.freepik.com/free-vector/pixel-game-landscape_23-2148082566.jpg",
+        image: "https://m.media-amazon.com/images/M/MV5BNjQzMDlkNDctYmE3Yi00ZWFiLTlmOWYtMjI4MzQ4Y2JhZjY2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
         buttonIndex: 0
       },
       {
@@ -814,7 +816,7 @@ export const questions = [
         text: "في أي عام تم إطلاق أول جهاز بلايستيشن؟",
         correctAnswer: "1994",
         points: 300,
-        image: "https://img.freepik.com/free-vector/game-controller-illustration_1284-12646.jpg",
+        image: "https://i5.walmartimages.com/seo/Restored-Sony-PlayStation-1-Console-Refurbished_0064527a-5484-4282-b3a4-7e83e3f9c6d3.4c7170e3ee39c53d56a3d497587f5275.jpeg",
         buttonIndex: 1
       },
       {
@@ -835,10 +837,10 @@ export const questions = [
       },
       {
         id: 5,
-        text: "ما هو أول جهاز ألعاب من نينتندو؟",
-        correctAnswer: "Nintendo Entertainment System",
+        text: "في اي عام اصدر اول جزء من لعبة (Final Fantasy)",
+        correctAnswer: "اصدرت اول جزء عام 1987",
         points: 700,
-        image: "https://img.freepik.com/free-vector/retro-gaming-controller_23-2148086775.jpg",
+        image: "https://upload.wikimedia.org/wikipedia/en/d/d8/FF1_USA_boxart.jpg",
         buttonIndex: 0
       },
       {
@@ -1686,10 +1688,10 @@ export const questions = [
       {
         id: 4,
         text: "من هو أكثر لاعب مشاركة في الكلاسيكو؟",
-        correctAnswer: "سيرجيو راموس (45 مباراة)",
+        correctAnswer: "سيرجيو بوسكيتس",
         points: 500,
         buttonIndex: 1,
-        answerImage: "https://img.btolat.com/news/large/191426.jpg"
+        answerImage: "https://assets.goal.com/images/v3/blte444fae9ff94ff34/GOAL_-_Blank_WEB_-_Facebook_-_2023-04-09T144650.275.png?auto=webp&format=pjpg&width=3840&quality=60"
       },
       {
         id: 5,
@@ -1959,6 +1961,172 @@ export const questions = [
         id: 6,
         text: "من هو ملك القراصنة السابق؟",
         correctAnswer: "جول دي روجر",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 42,
+    name: "ولا كلمة",
+    description: ".",
+    image: "https://i.postimg.cc/BZz3QF9q/wlaklma.webp",
+    questions: [
+      {
+        id: 1,
+        image: "https://i.postimg.cc/1thT98Qz/200qrQ.png",
+        correctAnswer: "اغنية اطق اصبع - شمس",
+        answerImage: "https://i.postimg.cc/QtvpL7G6/200Q.png",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        image: "https://i.postimg.cc/288JGqFs/300qrQ2.png",
+        answerImage: "https://i.postimg.cc/y8CRBRQ5/image.png",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        image: "https://i.postimg.cc/jSCdfFJ7/400qrQ.png",
+        correctAnswer: "مسرحية البيت المسكون",
+        answerImage: "https://i.postimg.cc/28Z05z0b/QR400.webp",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        image: "https://i.postimg.cc/tT50R8Hf/500qr2Q.png",
+        correctAnswer: "تلوي ذراعي - حسين الجسمي",
+        answerImage: "https://i.postimg.cc/FRPPBvv9/500qr2.png",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        image: "https://i.postimg.cc/QdS42f60/600qrQ.png",
+        correctAnswer: "مسلسل إش إش",
+        answerImage: "https://i.postimg.cc/BQPJQKWT/qr600.png",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        image: "https://i.postimg.cc/J7DhtgZH/600qrQ2.png",
+        correctAnswer: "مسرحية صادوه",
+        answerImage: "https://i.postimg.cc/wT5gmdvM/qr6002.png",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 43,
+    name: "راشد الماجد",
+    description: ".",
+    image: "https://i.postimg.cc/7ZSjNXHm/rashid.png",
+    questions: [
+      {
+        id: 1,
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "راشد الماجد - يا حبي أفهم",
+        points: 300,
+        audio: "https://od.lk/s/MTlfNjU0OTkzNzFf/%D9%8A%D8%A7-%D8%AD%D8%A8%D9%8A-%D8%A3%D9%81%D9%87%D9%85-%D8%A7%D9%84%D9%86%D8%B3%D8%AE%D8%A9-%D8%A7%D9%84%D8%A3%D8%B5%D9%84%D9%8A%D8%A9--2008.mp3",
+        buttonIndex: 1
+      },
+      {
+        id: 2,
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "راشد الماجد - تحدونا",
+        points: 300,
+        audio: "https://od.lk/s/MTlfNjU0OTkzODlf/%D8%AA%D8%AD%D8%AF%D9%88%D9%86%D8%A7--rashed-almajid.mp3",
+        buttonIndex: 0
+      },
+      {
+        id: 3,
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "راشد الماجد - يسلم راسك",
+        points: 500,
+        audio: "https://od.lk/s/MTlfNjU0OTkzOTZf/%D8%B1%D8%A7%D8%B4%D8%AF-%D8%A7%D9%84%D9%85%D8%A7%D8%AC%D8%AF--2005.mp3",
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "شنو كان اول ألبوم نزل لراشد الماجد ؟",
+        correctAnswer: "آه يا قلبي",
+        points: 500,
+        answerImage: "https://cdn.discordapp.com/attachments/1004516710067478560/1361426508467405004/image.png?ex=67feb6bd&is=67fd653d&hm=9deabe19b83889c2ddb838a2ddc688b2dfb6952c3fc99c16a9ee4be310d60597&",
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "راشد الماجد - المحبه",
+        points: 700,
+        audio: "https://od.lk/s/MTlfNjU0OTk0MjRf/%D8%A7%D9%84%D9%85%D8%AD%D8%A8%D8%A9-%D8%A7%D9%84%D9%86%D8%B3%D8%AE%D8%A9-%D8%A7%D9%84%D8%A3%D8%B5%D9%84%D9%8A%D8%A9--1996.mp3",
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "شنو اسم الأغنية ؟",
+        correctAnswer: "راشد الماجد - انا السما",
+        points: 700,
+        audio: "https://od.lk/s/MTlfNjU0OTk0Mjhf/%D8%A7%D9%86%D8%A7-%D8%A7%D9%84%D8%B3%D9%85%D8%A7-%D8%A7%D9%84%D9%86%D8%B3%D8%AE%D8%A9-%D8%A7%D9%84%D8%A3%D8%B5%D9%84%D9%8A%D8%A9--2011.mp3",
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 44,
+    name: "عبدالمجيد عبدالله",
+    description: ".",
+    image: "https://i.postimg.cc/NfsDKcLs/3mdalmgedcat.png",
+    questions: [
+      {
+        id: 1,
+        image: "https://i.postimg.cc/1thT98Qz/200qrQ.png",
+        correctAnswer: "اغنية اطق اصبع - شمس",
+        answerImage: "https://i.postimg.cc/QtvpL7G6/200Q.png",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        image: "https://i.postimg.cc/288JGqFs/300qrQ2.png",
+        answerImage: "https://i.postimg.cc/y8CRBRQ5/image.png",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        image: "https://i.postimg.cc/jSCdfFJ7/400qrQ.png",
+        correctAnswer: "مسرحية البيت المسكون",
+        answerImage: "https://i.postimg.cc/28Z05z0b/QR400.webp",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        image: "https://i.postimg.cc/tT50R8Hf/500qr2Q.png",
+        correctAnswer: "تلوي ذراعي - حسين الجسمي",
+        answerImage: "https://i.postimg.cc/FRPPBvv9/500qr2.png",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        image: "https://i.postimg.cc/QdS42f60/600qrQ.png",
+        correctAnswer: "مسلسل إش إش",
+        answerImage: "https://i.postimg.cc/BQPJQKWT/qr600.png",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        image: "https://i.postimg.cc/J7DhtgZH/600qrQ2.png",
+        correctAnswer: "مسرحية صادوه",
+        answerImage: "https://i.postimg.cc/wT5gmdvM/qr6002.png",
         points: 700,
         buttonIndex: 1
       }

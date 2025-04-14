@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useBalance } from '../hooks/useBalance';
+import { PayPalButton } from './PayPalButton/PayPalButton';
 
 interface BuyGamesModalProps {
   onClose: () => void;
@@ -12,13 +13,9 @@ export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
   const [error, setError] = useState('');
   const { balance, updateBalance } = useBalance();
   const [loading, setLoading] = useState(false);
+  const pricePerGame = 5; // سعر اللعبة الواحدة بالريال
 
-  const handleBuy = async () => {
-    if (amount < 1) {
-      setError('يجب شراء لعبة واحدة على الأقل');
-      return;
-    }
-
+  const handlePayPalSuccess = async (details: any) => {
     setLoading(true);
     const success = await updateBalance(balance + amount);
     setLoading(false);
@@ -65,22 +62,24 @@ export function BuyGamesModal({ onClose, onBuy }: BuyGamesModalProps) {
           )}
           <div className="mt-6">
             <p className="text-center text-gray-700 mb-4">
-              سعر اللعبة الواحدة: 5 ريال
+              سعر اللعبة الواحدة: {pricePerGame} ريال
               <br />
-              المجموع: {amount * 5} ريال
+              المجموع: {amount * pricePerGame} ريال
             </p>
           </div>
-          <div className="flex justify-center gap-4">
-            <button
-              onClick={handleBuy}
-              className="bg-[#800020] text-white px-6 py-2 rounded-lg hover:bg-[#600018] transition-colors disabled:opacity-50"
-              disabled={loading}
-            >
-              {loading ? 'جاري الشراء...' : 'شراء'}
-            </button>
+          <div className="flex flex-col items-center gap-4">
+            <PayPalButton
+              amount={(amount * pricePerGame).toString()}
+              description={`شراء ${amount} ${amount === 1 ? 'لعبة' : 'ألعاب'}`}
+              onSuccess={handlePayPalSuccess}
+              onError={(error) => {
+                setError('حدث خطأ في عملية الدفع. الرجاء المحاولة مرة أخرى.');
+                console.error('PayPal Error:', error);
+              }}
+            />
             <button
               onClick={onClose}
-              className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors"
+              className="bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition-colors w-full"
               disabled={loading}
             >
               إلغاء
