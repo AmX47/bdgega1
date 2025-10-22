@@ -740,7 +740,7 @@ export const questions = [
       },
       {
         id: 6,
-        text: "ما هو برج الساعة الملكي في مكة المكرمة؟",
+        text: "ما هو البرج الملكي في مكة المكرمة؟",
         correctAnswer: "برج الساعة",
         points: 700,
         buttonIndex: 1
@@ -808,7 +808,7 @@ export const questions = [
         text: "ما هي أكثر لعبة مبيعاً في التاريخ؟",
         correctAnswer: "ماينكرافت",
         points: 300,
-        image: "https://m.media-amazon.com/images/M/MV5BNjQzMDlkNDctYmE3Yi00ZWFiLTlmOWYtMjI4MzQ4Y2JhZjY2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+        answerImage: "https://m.media-amazon.com/images/M/MV5BNjQzMDlkNDctYmE3Yi00ZWFiLTlmOWYtMjI4MzQ4Y2JhZjY2XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
         buttonIndex: 0
       },
       {
@@ -2127,6 +2127,314 @@ export const questions = [
         image: "https://i.postimg.cc/J7DhtgZH/600qrQ2.png",
         correctAnswer: "مسرحية صادوه",
         answerImage: "https://i.postimg.cc/wT5gmdvM/qr6002.png",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 45,
+    name: "محمد عبده",
+    description: ".",
+    image: "https://i.postimg.cc/7ZSrcjwL/m7md3bdh.png",
+    questions: [
+      {
+        id: 1,
+        image: "https://i.postimg.cc/1thT98Qz/200qrQ.png",
+        correctAnswer: "اغنية اطق اصبع - شمس",
+        answerImage: "https://i.postimg.cc/QtvpL7G6/200Q.png",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        image: "https://i.postimg.cc/288JGqFs/300qrQ2.png",
+        answerImage: "https://i.postimg.cc/y8CRBRQ5/image.png",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        image: "https://i.postimg.cc/jSCdfFJ7/400qrQ.png",
+        correctAnswer: "مسرحية البيت المسكون",
+        answerImage: "https://i.postimg.cc/28Z05z0b/QR400.webp",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        image: "https://i.postimg.cc/tT50R8Hf/500qr2Q.png",
+        correctAnswer: "تلوي ذراعي - حسين الجسمي",
+        answerImage: "https://i.postimg.cc/FRPPBvv9/500qr2.png",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        image: "https://i.postimg.cc/QdS42f60/600qrQ.png",
+        correctAnswer: "مسلسل إش إش",
+        answerImage: "https://i.postimg.cc/BQPJQKWT/qr600.png",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        image: "https://i.postimg.cc/J7DhtgZH/600qrQ2.png",
+        correctAnswer: "مسرحية صادوه",
+        answerImage: "https://i.postimg.cc/wT5gmdvM/qr6002.png",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 46,
+    name: "الهند",
+    description: "أسئلة عن دولة الهند وثقافتها وتاريخها",
+    image: "https://i.postimg.cc/4dd8k9HC/images.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي عاصمة الهند؟",
+        correctAnswer: "نيودلهي",
+        answerImage: "https://i.postimg.cc/yNSmFyRV/dlhy-2.jpg",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم العملة الهندية؟",
+        correctAnswer: "الروبية الهندية",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم أشهر نهر في الهند؟",
+        correctAnswer: "نهر الغانج",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "من هو المهاتما غاندي؟",
+        correctAnswer: "زعيم حركة الاستقلال الهندية",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر معبد في الهند؟",
+        correctAnswer: "تاج محل",
+        answerImage: "https://i.postimg.cc/85XTNMyK/1200px-Taj-Mahal-Agra-India-edit3.jpg",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "كم عدد الولايات في الهند؟",
+        correctAnswer: "28 ولاية",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 47,
+    name: "المغرب",
+    description: "أسئلة عن المملكة المغربية وثقافتها وتاريخها",
+    image: "https://i.postimg.cc/vTnkkVCs/alswrt-althanyt-1.webp",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي عاصمة المغرب؟",
+        correctAnswer: "الرباط",
+        answerImage: "https://i.postimg.cc/P5KX2gmM/rabat-png.webp",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم العملة المغربية؟",
+        correctAnswer: "الدرهم المغربي",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم أشهر مدينة في المغرب؟",
+        correctAnswer: "مراكش",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم أشهر جبل في المغرب؟",
+        correctAnswer: "جبل توبقال",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر مطبخ في المغرب؟",
+        correctAnswer: "الطاجين",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "كم عدد المناطق في المغرب؟",
+        correctAnswer: "12 منطقة",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 48,
+    name: "اسكوتلندا",
+    description: "أسئلة عن اسكوتلندا وثقافتها وتاريخها",
+    image: "https://i.postimg.cc/L5Z5WxHP/e2120d491ebb0f4a901589dadf4e844b.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي عاصمة اسكوتلندا؟",
+        correctAnswer: "إدنبرة",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم العملة المستخدمة في اسكوتلندا؟",
+        correctAnswer: "الجنيه الإسترليني",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم أشهر بحيرة في اسكوتلندا؟",
+        correctAnswer: "بحيرة لوخ نيس",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم أشهر قلعة في اسكوتلندا؟",
+        correctAnswer: "قلعة إدنبرة",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر رياضة في اسكوتلندا؟",
+        correctAnswer: "الغولف",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "ما هو اسم أشهر نهر في اسكوتلندا؟",
+        correctAnswer: "نهر تاي",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 49,
+    name: "ألمانيا",
+    description: "أسئلة عن ألمانيا وثقافتها وتاريخها",
+    image: "https://i.postimg.cc/vHrfHmsD/images-2020-10-23T180952-824-scaled.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي عاصمة ألمانيا؟",
+        correctAnswer: "برلين",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم العملة الألمانية؟",
+        correctAnswer: "اليورو",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم أشهر نهر في ألمانيا؟",
+        correctAnswer: "نهر الراين",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم أشهر قلعة في ألمانيا؟",
+        correctAnswer: "قلعة نويشفانشتاين",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر مطبخ في ألمانيا؟",
+        correctAnswer: "النقانق الألمانية",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "ما هو اسم أشهر شركة سيارات ألمانية؟",
+        correctAnswer: "مرسيدس بنز",
+        points: 700,
+        buttonIndex: 1
+      }
+    ]
+  },
+  {
+    id: 50,
+    name: "أوكرانيا",
+    description: "أسئلة عن أوكرانيا وثقافتها وتاريخها",
+    image: "https://i.postimg.cc/fLdk2HWS/ukraine-flag.jpg",
+    questions: [
+      {
+        id: 1,
+        text: "ما هي عاصمة أوكرانيا؟",
+        correctAnswer: "كييف",
+        points: 300,
+        buttonIndex: 0
+      },
+      {
+        id: 2,
+        text: "ما هو اسم العملة الأوكرانية؟",
+        correctAnswer: "الهريفنيا الأوكرانية",
+        points: 300,
+        buttonIndex: 1
+      },
+      {
+        id: 3,
+        text: "ما هو اسم أشهر نهر في أوكرانيا؟",
+        correctAnswer: "نهر دنيبر",
+        points: 500,
+        buttonIndex: 0
+      },
+      {
+        id: 4,
+        text: "ما هو اسم أشهر مدينة في أوكرانيا؟",
+        correctAnswer: "خاركيف",
+        points: 500,
+        buttonIndex: 1
+      },
+      {
+        id: 5,
+        text: "ما هو اسم أشهر مطبخ في أوكرانيا؟",
+        correctAnswer: "البورش",
+        points: 700,
+        buttonIndex: 0
+      },
+      {
+        id: 6,
+        text: "ما هو اسم أشهر رياضة في أوكرانيا؟",
+        correctAnswer: "كرة القدم",
         points: 700,
         buttonIndex: 1
       }

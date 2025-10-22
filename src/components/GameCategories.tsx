@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Card, CardContent, CardMedia, Typography } from '@mui/material';
+import { Box, Grid, Card, CardContent, CardMedia, Typography, Button, useToast } from '@mui/material';
 import { motion } from 'framer-motion';
 import { getGameCategories, getNewRandomQuestion } from '../utils/gameUtils';
+import { getUserGameStats } from '../lib/gameSystem';
 
 interface GameCategoriesProps {
   onSelectCategory: (categoryId: number, question: any) => void;
@@ -9,14 +10,35 @@ interface GameCategoriesProps {
 
 const GameCategories: React.FC<GameCategoriesProps> = ({ onSelectCategory }) => {
   const [categories, setCategories] = useState<any[]>([]);
+  const [remainingGames, setRemainingGames] = useState<number>(0);
+  const toast = useToast();
 
   useEffect(() => {
     // Get initial random categories
     const initialCategories = getGameCategories();
     setCategories(initialCategories);
+    
+    // Get remaining games
+    const fetchRemainingGames = async () => {
+      const stats = await getUserGameStats();
+      setRemainingGames(stats?.remaining_games ?? 0);
+    };
+    fetchRemainingGames();
   }, []);
 
-  const handleCategoryClick = (categoryId: number, pointLevel: number) => {
+  const handleCategoryClick = async (categoryId: number, pointLevel: number) => {
+    if (remainingGames === 0) {
+      toast({
+        title: 'ليس لديك رصيد',
+        description: 'الرجاء إضافة رصيد للمتابعة',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true,
+        position: 'top',
+      });
+      return;
+    }
+
     const question = getNewRandomQuestion(categoryId, pointLevel);
     if (question) {
       onSelectCategory(categoryId, question);

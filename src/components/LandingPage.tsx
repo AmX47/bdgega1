@@ -5,18 +5,27 @@ import { Box, Button, Container, Typography } from "@mui/material";
 import { Instagram } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import AuthComponent from './Auth';
-import { isValidCode, markCodeAsUsed } from '../data/redeemCodes';
 import { getGameCategories } from '../utils/gameUtils';
 import PurchaseDialog from './PurchaseDialog';
+import GameCodeModal from './GameCodeModal';
+import { Session } from '@supabase/supabase-js';
 
 interface LandingPageProps {
   onStartGame: () => void;
 }
 
+interface Category {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+  questions: any[];
+}
+
 export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   const navigate = useNavigate();
   const [error, setError] = useState('');
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [showAuth, setShowAuth] = useState(false);
   const [gamesRemaining, setGamesRemaining] = useState(0);
   const [showRedeemModal, setShowRedeemModal] = useState(false);
@@ -24,8 +33,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   const [redeemError, setRedeemError] = useState('');
   const [redeemSuccess, setRedeemSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [gameCategories, setGameCategories] = useState([]);
+  const [gameCategories, setGameCategories] = useState<Category[]>([]);
   const [showPurchaseDialog, setShowPurchaseDialog] = useState(false);
+  const [showGameCodeModal, setShowGameCodeModal] = useState(false);
 
   useEffect(() => {
     // Get random categories when component mounts
@@ -96,11 +106,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
   };
 
   const handleStartGame = async () => {
-    if (!session?.user) {
-      setShowAuth(true);
-      return;
-    }
-
     // الانتقال إلى صفحة الفئات مباشرة
     navigate('/categories');
   };
@@ -109,6 +114,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
     // Update remaining games count in your database/state
     // This is where you'll integrate with your backend
     console.log(`Purchased ${gamesCount} games`);
+  };
+
+  const handleGameCodeSuccess = async () => {
+    if (session?.user) {
+      await fetchGamesRemaining(session.user.id);
+    }
   };
 
   return (
@@ -124,15 +135,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
         {session && (
           <div className="bg-white/20 backdrop-blur-md rounded-lg p-2 flex items-center gap-2">
             <span className="text-white">الألعاب المتبقية:</span>
-            <span className="text-white font-bold">{gamesRemaining}</span>
-            <button
-              onClick={() => setShowPurchaseDialog(true)}
-              className="w-6 h-6 rounded-full bg-[#800020] text-[#F5DEB3] hover:bg-[#600018] transition-colors flex items-center justify-center"
+            <motion.span 
+              className="text-white font-bold"
+              key={gamesRemaining}
+              initial={{ scale: 1 }}
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 0.3 }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+              {gamesRemaining}
+            </motion.span>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowGameCodeModal(true)}
+              className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F5DEB3] to-[#800020] text-white hover:from-[#800020] hover:to-[#F5DEB3] transition-all duration-300 flex items-center justify-center shadow-lg hover:shadow-xl"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
-            </button>
+            </motion.button>
           </div>
         )}
 
@@ -209,7 +230,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
               </div>
             </div>
             <div className="p-6">
-              <AuthComponent />
+              <AuthComponent onClose={() => setShowAuth(false)} />
             </div>
           </motion.div>
         </motion.div>
@@ -220,6 +241,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
         isOpen={showPurchaseDialog}
         onClose={() => setShowPurchaseDialog(false)}
         onPurchaseComplete={handlePurchaseComplete}
+      />
+
+      {/* Game Code Modal */}
+      <GameCodeModal
+        isOpen={showGameCodeModal}
+        onClose={() => setShowGameCodeModal(false)}
+        onSuccess={handleGameCodeSuccess}
       />
 
       {/* Circular Background */}
@@ -251,8 +279,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
             <div className="flex justify-center mb-4">
               <span className="text-4xl">🏆</span>
             </div>
-            <h3 className="text-xl font-semibold mb-2">تنافس على المراكز</h3>
-            <p className="text-sm opacity-90">اجمع النقاط وتنافس على المراكز الأولى</p>
+            <h3 className="text-xl font-semibold mb-2">تنافس </h3>
+            <p className="text-sm opacity-90">اجمع النقاط وتنافس على الفوز </p>
           </div>
 
           <div className="bg-[#800020] bg-opacity-70 p-6 rounded-lg text-center text-[#F5DEB3] shadow-lg transform hover:scale-105 transition-transform border-2 border-[#F5DEB3]">
@@ -279,9 +307,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
           {/* قسم "ليش بدقيقة؟" */}
           <div className="mb-32">
             <div className="max-w-3xl mx-auto bg-[#800020]/30 backdrop-blur-sm rounded-2xl p-8 border-2 border-[#F5DEB3]/30">
-              <h2 className="text-3xl font-bold text-center text-[#F5DEB3]">ليش بدقيقة؟</h2>
+              <h2 className="text-3xl font-bold text-center text-[#F5DEB3]">ليش بدقيقة</h2>
               <p className="text-xl text-[#F5DEB3] text-center leading-relaxed">
-               لأن بدقيقة لعبة اجتماعية ثقافية تتميز عن كل الألعاب بالأسعار والتنوع في الفئات والأفكار الجديدة تناسب جميع الأعمار .
+               لأن  بدقيقة لعبة اجتماعية ثقافية تتميز عن كل الألعاب بالأسعار والتنوع في الفئات والأفكار الجديدة تناسب جميع الأعمار .
               </p>
             </div>
           </div>
@@ -555,11 +583,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStartGame }) => {
             <div className="container mx-auto px-4">
               <div className="flex flex-row-reverse items-center justify-between">
                 <div className="text-sm text-[#F5DEB3]">
-                  &copy; {new Date().getFullYear()} Bdgeega - جميع الحقوق محفوظة
+                  &copy; {new Date().getFullYear()} bdgeega - جميع الحقوق محفوظة
                 </div>
                 <div>
                   <div className="flex items-center gap-2 text-[#F5DEB3]">
-                    <span className="text-lg font-bold">Bdgeega Team</span>
+                    <span className="text-lg font-bold">bdgeega Team</span>
                     <a 
                       href="https://instagram.com/bdgeegakw" 
                       target="_blank" 
